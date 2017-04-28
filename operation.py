@@ -8,24 +8,14 @@ import logging
 
 class Operation(object):
     def __init__(self, driver):
-        self.driver = WebDriver
-        # self.driver = driver
+        #self.driver = WebDriver
+        self.driver = driver
 
-    def open_page(self, url):
-        self.driver.get(url)
+####################### For Test Action################
+    def open_page(self, url_):
+        self.driver.get(url_)
         self.driver.maximize_window()
-        logging.info("Open page:{0}".format(url))
-
-    def get_element(self, *loc):
-        try:
-            # 注意：以下入参为元组的元素，需要加*。Python存在这种特性，就是将入参放在元组里。
-            # WebDriverWait(self.driver,10).until(lambda driver: driver.find_element(*loc).is_displayed())
-            # 注意：以下入参本身是元组，不需要加*
-            WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(loc))
-            return self.driver.find_element(*loc)
-        except NoSuchElementException:
-            logging.error("Fail to find element: {0} {1}".format(*loc))
-            assert False, "Fail to find element: {0} {1}".format(*loc)
+        logging.info("Open page:{0}".format(url_))
 
     def input_value(self, value, *loc):
         self.get_element(*loc).send_keys(value)
@@ -35,12 +25,36 @@ class Operation(object):
         self.get_element(*loc).click()
         logging.info("Click element: {0} {1}".format(*loc))
 
-    def fetch(self, value, *loc):
-        if self.driver.find_element(*loc).text == value:
+
+
+####################### For Expected Result Validation################
+    def verify(self, value, property, *loc):
+        actual_result = None
+
+        if property.upper() == "TEXT":
+            actual_result = self.get_element(*loc).text
+        elif property.upper() == "":
+            pass
+
+        else:
+            raise Exception
+
+        if actual_result == value:
             logging.info("Get string: {0}".format(value))
         else:
-            assert self.driver.find_element(*loc).text == value
-            logging.error("Can not find string: {0}".format(value))
+            assert False, logging.error("Get wrong value:{0}. Expected:{1}".format(actual_result, value))
+
+    def compare(self,):
+        pass
 
 
-
+####################### For Public Function################
+    def get_element(self, *loc):
+        try:
+            # 注意：以下入参为元组的元素，需要加*。Python存在这种特性，就是将入参放在元组里。
+            # WebDriverWait(self.driver,10).until(lambda driver: driver.find_element(*loc).is_displayed())
+            # 注意：以下入参本身是元组，不需要加*
+            WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(loc))
+            return self.driver.find_element(*loc)
+        except NoSuchElementException:
+            assert False, "Fail to find element: {0} {1}".format(*loc)
