@@ -1,4 +1,5 @@
 import os
+import platform
 import unittest
 from selenium.webdriver.chrome.webdriver import WebDriver
 
@@ -10,7 +11,10 @@ class TestRun(unittest.TestCase):
     def setUpClass(cls):
         super(TestRun, cls).setUpClass()
         path = os.getcwd()
-        chromedriver = path + "/browser_driver/chromedriver.exe"
+        if platform.platform().startswith("Darwin"):
+            chromedriver = path + "/browser_driver/chromedriver"
+        else:
+            chromedriver = path + "/browser_driver/chromedriver.exe"
         os.environ["webdriver.chrome.driver"] = chromedriver
         cls.chrome_driver = WebDriver(chromedriver)
         cls.chrome_driver.implicitly_wait(10)
@@ -24,7 +28,11 @@ class TestRun(unittest.TestCase):
 
     def test_1(self):
         test = Test(self.chrome_driver)
-        test.execute_tc(r"D:\study\general_automation_framework\testcase.csv")
+        if platform.platform().startswith("Darwin"):
+            testcase_path = r"/testcase.csv"
+        else:
+            testcase_path = r"\testcase.csv"
+        test.execute_tc(os.getcwd() + testcase_path)
 
 
 if __name__ == '__main__':
