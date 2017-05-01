@@ -1,5 +1,5 @@
 TestCase,Step,Action,ActionBy,ActionLocation,ActionValue,Expect,ExpectBy,ExpectLocation,ExpectProperty,ExpectValue
 test_0_0_1,0,OPENPAGE,,,http://baidu.com,,,,,
-test_0_0_1,1,,,,,verify,id,su,text,�ٶ�һ��
+test_0_0_1,1,,,,,verify,id,su,value,百度一下
 test_0_0_1,2,inputvalue,name,wd,abc,,,,,
-test_0_0_1,3,click,id,su,�ٶ�һ��,verify,LINK_TEXT,ABC_�ٶȰٿ�,text,ABC_�ٶȰٿ�
+test_0_0_1,3,click,id,su,百度一下,verify,LINK_TEXT,ABC_百度百科,text,ABC_百度百科
