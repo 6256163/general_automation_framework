@@ -4,20 +4,25 @@ class Analysis(object):
     
     def get_loc(self, by_, loc):
         if by_.upper() == "XPATH":
-            return (By.XPATH,loc)
+            return {'by':By.XPATH,'value':loc}
         elif by_.upper() == "ID":
-            return (By.ID,loc)
+            return {'by':By.ID,'value':loc}
         elif by_.upper() == "CSS_SELECTOR":
-            return (By.CSS_SELECTOR,loc)
+            return {'by':By.CSS_SELECTOR,'value':loc}
         elif by_.upper() == "TAG_NAME":
-            return (By.TAG_NAME,loc)
+            return {'by':By.TAG_NAME,'value':loc}
         elif by_.upper() == "LINK_TEXT":
-            return (By.LINK_TEXT,loc)
+            return {'by':By.LINK_TEXT,'value':loc}
         elif by_.upper() == "NAME":
-            return (By.NAME,loc)
+            return {'by':By.NAME,'value':loc}
         elif by_.upper() == "CLASS_NAME":
-            return (By.CLASS_NAME,loc)
+            return {'by':By.CLASS_NAME,'value':loc}
         elif by_.upper() == "PARTIAL_LINK_TEXT":
-            return (By.PARTIAL_LINK_TEXT,loc)
+            return {'by':By.PARTIAL_LINK_TEXT,'value':loc}
         else:
             pass
+
+    def get_compare(self, expectBy, expectLocation):
+        bys = expectBy.split(';')
+        locs = expectLocation.split(';')
+        return [self.get_loc(bys[0],locs[0]),self.get_loc(bys[1],locs[1])]
