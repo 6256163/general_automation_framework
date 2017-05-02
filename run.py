@@ -3,6 +3,7 @@ import platform
 import unittest
 from selenium.webdriver.chrome.webdriver import WebDriver
 
+
 from test import Test
 
 class TestRun(unittest.TestCase):
@@ -28,11 +29,12 @@ class TestRun(unittest.TestCase):
 
     def test_1(self):
         test = Test(self.chrome_driver)
+        testcase = r'testcase.csv'
         if platform.platform().startswith("Darwin"):
-            testcase_path = r"/testcase.csv"
+            folder = r"/"
         else:
-            testcase_path = r"\testcase.csv"
-        test.execute_tc(os.getcwd() + testcase_path)
+            folder = '\\'
+        test.execute_tc(os.getcwd() + folder+testcase)
 
 
 if __name__ == '__main__':
