@@ -1,3 +1,5 @@
+import os
+import platform
 from operation import Operation
 from analysis import Analysis
 import codecs
@@ -29,14 +31,29 @@ class Test(object):
         analysis = Analysis()
         loc = analysis.get_loc(datas['ActionBy'],datas['ActionLocation'])
 
-        if datas['Action'].upper() == "INPUTVALUE":
+        if datas['Action'].upper() == "INPUT_VALUE":
             operation.input_value(datas['ActionValue'], loc)
-        elif datas['Action'].upper() == "OPENPAGE":
-            operation.open_page(datas['ActionValue'])
+        elif datas['Action'].upper() == "OPEN_PAGE":
+            if datas['ActionLocation'] == '':
+                operation.open_page(datas['ActionValue'])
+            else:
+                if platform.platform().startswith("Darwin"):
+                    folder = r"/"
+                else:
+                    folder = '\\'
+                path = os.getcwd()+folder+datas['ActionLocation']+folder+datas['ActionValue']
+                operation.open_page(path)
         elif datas['Action'].upper() == "CLICK":
             operation.click(loc)
-        elif datas['Action'].upper() == "SWITCHFRAME":
-            pass
+        elif datas['Action'].upper() == "SWITCH_FRAME":
+            if datas['ActionBy'] == '':
+                self.driver.switch_to.frame(datas['ActionLocation'])
+            else:
+                self.driver.switch_to.frame(operation.get_element(loc))
+        elif datas['Action'].upper() == "SWITCH_DEFAULT_CONTENT":
+            self.driver.switch_to.default_content()
+        elif datas['Action'].upper() == "SWITCH_PARENT_FRAME":
+            self.driver.switch_to.parent_frame()
         else:
             pass
 

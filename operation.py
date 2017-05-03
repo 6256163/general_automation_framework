@@ -1,5 +1,7 @@
 # coding=utf-8
 import logging
+
+import time
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -44,7 +46,7 @@ class Operation(object):
     def compare(self, bys, locations, properties):
         analysis = Analysis()
         values = list()
-
+        time.sleep(3)
         for by, location, property in zip(bys, locations, properties):
             loc = analysis.get_loc(by, location)
             value = self.get_property_value(property,loc)
@@ -58,8 +60,6 @@ class Operation(object):
 
     ####################### For Public Function################
     def get_element(self, loc):
-        if self.frame_driver != self.driver:
-            self.driver = self.frame_driver
         try:
             WebDriverWait(self.driver, 10).until(lambda driver: driver.find_element(**loc).is_displayed())
             return self.driver.find_element(**loc)
