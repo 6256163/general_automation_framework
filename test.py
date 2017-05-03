@@ -54,6 +54,12 @@ class Test(object):
             self.driver.switch_to.default_content()
         elif datas['Action'].upper() == "SWITCH_PARENT_FRAME":
             self.driver.switch_to.parent_frame()
+        elif datas['Action'].upper() == "SWITCH_WINDOW":
+            operation.switch_window(datas['ActionValue'])
+        elif datas['Action'].upper() == "OPEN_NEW_PAGE":
+            if datas['ActionValue'] != '':
+                loc = datas['ActionValue']
+            operation.open_new_page(loc)
         else:
             pass
 

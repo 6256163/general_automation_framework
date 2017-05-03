@@ -31,8 +31,19 @@ class Operation(object):
         self.get_element(loc).click()
         logging.info("Click element: {0} {1}".format(loc['by'], loc['value']))
 
-    def switch_to_frame(self, loc):
-        pass
+    def switch_window(self, title):
+        handles = self.driver.window_handles
+        for handle in handles:
+            self.driver.switch_to_window(handle)
+            if self.driver.title == title:
+                break
+
+
+    def open_new_page(self, href):
+        if isinstance(href, dict):
+            href = self.get_element(href).get_attribute('href')
+        js = 'window.open("{0}");'.format(href)
+        self.driver.execute_script(js)
 
     ####################### For Expected Result Validation################
     def verify(self, value, property, loc):
