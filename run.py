@@ -1,6 +1,8 @@
 import os
 import platform
 import unittest
+
+import setting
 from selenium.webdriver.chrome.webdriver import WebDriver
 
 
@@ -15,7 +17,7 @@ class TestRun(unittest.TestCase):
         if platform.platform().startswith("Darwin"):
             chromedriver = path + "/browser_driver/chromedriver"
         else:
-            chromedriver = path + "/browser_driver/chromedriver.exe"
+            chromedriver = path + "\\browser_driver\\chromedriver.exe"
         os.environ["webdriver.chrome.driver"] = chromedriver
         cls.chrome_driver = WebDriver(chromedriver)
         cls.chrome_driver.implicitly_wait(10)
@@ -27,15 +29,24 @@ class TestRun(unittest.TestCase):
         super(TestRun, cls).tearDownClass()
 
 
-    def test_1(self):
-        test = Test(self.chrome_driver)
-        testcase = r'testcase.csv'
-        if platform.platform().startswith("Darwin"):
-            folder = r"/"
-        else:
-            folder = '\\'
-        test.execute_tc(os.getcwd() + folder+testcase)
+    def test(self):
+        file_list = self.GetFileList(setting.TESTCASE_FOLDER, [])
+        for f in file_list:
+            test = Test(self.chrome_driver,f)
+            test.execute_tc(os.path.join(os.getcwd(), f))
+
+    def GetFileList(self, dir, fileList):
+        if os.path.isfile(dir):
+            fileList.append(dir.decode('gbk'))
+        elif os.path.isdir(dir):
+            for s in os.listdir(dir):
+                # 如果需要忽略某些文件夹，使用以下代码
+                # if s == "xxx":
+                # continue
+                newDir = os.path.join(dir, s)
+                self.GetFileList(newDir, fileList)
+        return fileList.sort()
 
 
 if __name__ == '__main__':
-    testresult = TestRun('test_1')
+    testresult = TestRun('test')
