@@ -1,15 +1,27 @@
 import os
-import platform
+import logging
+
+import time
+
+import setting
 from operation import Operation
 from analysis import Analysis
 import codecs
+
+
 
 class Test(object):
     frame_driver = None
     frame_flag = 0
 
-    def __init__(self, driver):
+    def __init__(self, driver,testcase_path):
         self.driver = driver
+        tc = testcase_path.split(setting.TESTCASE_FOLDER)[1]
+        log_file = os.path.join(setting.LOG_FOLDER, tc + '.log')
+        log_folder = os.path.pardir(log_file)
+        if not os.path.exists(log_folder):
+            os.makedirs(log_folder)
+        logging.basicConfig(filename=log_file, level=logging.INFO)
 
 
     def execute_tc(self, path):
@@ -17,6 +29,7 @@ class Test(object):
         with codecs.open(path,'r','utf-8') as testcase:
             for line in testcase.readlines():
                 csv_datas.append(line.strip('\n').split(','))
+        logging.info("==========start testcase {}===========".format(csv_datas[0][0]))
         for i, data in enumerate(csv_datas):
             if i > 0:
                 tc_data = dict(zip(csv_datas[0], data))
@@ -24,6 +37,7 @@ class Test(object):
                     self.execute_action(tc_data)
                 if tc_data['Expect']:
                     self.verify_expect(tc_data)
+        logging.info("==========finish testcase {}===========".format(csv_datas[0][0]))
 
 
     def execute_action(self, datas):
@@ -37,11 +51,7 @@ class Test(object):
             if datas['ActionLocation'] == '':
                 operation.open_page(datas['ActionValue'])
             else:
-                if platform.platform().startswith("Darwin"):
-                    folder = r"/"
-                else:
-                    folder = '\\'
-                path = os.getcwd()+folder+datas['ActionLocation']+folder+datas['ActionValue']
+                path = os.path.join(os.getcwd(),datas['ActionLocation'],datas['ActionValue'])
                 operation.open_page(path)
         elif datas['Action'].upper() == "CLICK":
             operation.click(loc)
