@@ -74,7 +74,7 @@ class Operation(object):
         try:
             WebDriverWait(self.driver, 10).until(lambda driver: driver.find_element(**loc).is_displayed())
             return self.driver.find_element(**loc)
-        except NoSuchElementException:
+        except NoSuchElementException("Fail to find element: {0} {1}".format(loc['by'], loc['value'])):
             assert False, "Fail to find element: {0} {1}".format(loc['by'], loc['value'])
 
 

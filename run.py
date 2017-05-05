@@ -1,52 +1,56 @@
+#!/usr/bin/env Python
+# coding=utf-8
 import os
-import platform
-import unittest
 
 import setting
-from selenium.webdriver.chrome.webdriver import WebDriver
-
-
 from test import Test
 
-class TestRun(unittest.TestCase):
 
+class Run():
+    """
     @classmethod
     def setUpClass(cls):
-        super(TestRun, cls).setUpClass()
-        path = os.getcwd()
-        if platform.platform().startswith("Darwin"):
-            chromedriver = path + "/browser_driver/chromedriver"
-        else:
-            chromedriver = path + "\\browser_driver\\chromedriver.exe"
-        os.environ["webdriver.chrome.driver"] = chromedriver
-        cls.chrome_driver = WebDriver(chromedriver)
-        cls.chrome_driver.implicitly_wait(10)
+       super(TestRun, cls).setUpClass()
+       path = os.getcwd()
+       if platform.platform().startswith("Darwin"):
+           chromedriver = path + "/browser_driver/chromedriver"
+       else:
+           chromedriver = path + "\\browser_driver\\chromedriver.exe"
+       os.environ["webdriver.chrome.driver"] = chromedriver
+       cls.chrome_driver = WebDriver(chromedriver)
+       cls.chrome_driver.implicitly_wait(10)
 
-
+    
     @classmethod
     def tearDownClass(cls):
         cls.chrome_driver.quit()
         super(TestRun, cls).tearDownClass()
 
+    """
 
-    def test(self):
+    def run(self):
+
         file_list = self.GetFileList(setting.TESTCASE_FOLDER, [])
+        file_list.sort()
         for f in file_list:
-            test = Test(self.chrome_driver,f)
-            test.execute_tc(os.path.join(os.getcwd(), f))
+            test = Test(f)
+            test.execute_tc()
 
     def GetFileList(self, dir, fileList):
         if os.path.isfile(dir):
-            fileList.append(dir.decode('gbk'))
+            fileList.append(dir)
         elif os.path.isdir(dir):
             for s in os.listdir(dir):
-                # Èç¹ûĞèÒªºöÂÔÄ³Ğ©ÎÄ¼ş¼Ğ£¬Ê¹ÓÃÒÔÏÂ´úÂë
+                # å¦‚æœéœ€è¦å¿½ç•¥æŸäº›æ–‡ä»¶å¤¹ï¼Œä½¿ç”¨ä»¥ä¸‹ä»£ç 
                 # if s == "xxx":
                 # continue
                 newDir = os.path.join(dir, s)
                 self.GetFileList(newDir, fileList)
-        return fileList.sort()
+        return fileList
+
+
 
 
 if __name__ == '__main__':
-    testresult = TestRun('test')
+    run = Run()
+    run.run()
