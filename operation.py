@@ -52,7 +52,7 @@ class Operation(object):
         if actual_result == value:
             logging.info("Get string: {0}".format(value))
         else:
-            assert False, logging.error("Get wrong value:{0}. Expected:{1}".format(actual_result, value))
+            assert False, "Get wrong value:{0}. Expected:{1}".format(actual_result, value)
 
     def compare(self, bys, locations, properties):
         analysis = Analysis()
@@ -66,7 +66,7 @@ class Operation(object):
             if values[0].lower() == values[i].lower():
                 pass
             else:
-                assert False, logging.error("Compreation {0} are not equal".format(values))
+                assert False, "Compreation {0} are not equal".format(values)
 
 
     ####################### For Public Function################
