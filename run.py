@@ -24,17 +24,17 @@ class Run():
         for f in file_list:
             test = Test(f[0])
             results = dict()
-            results[f[0]] = {'module': f[1], 'test_case': f[2]}
-            results[f[0]]['result'] = test.execute_tc()
+            results = {'module': f[1], 'test_case': f[2]}
+            results['result'] = test.execute_tc()
             self.result['results'].append(results)
 
-        env = Environment(loader=PackageLoader(os.getcwd(), 'templates'))
+        env = Environment(loader=PackageLoader("template_package", 'templates'))
         template = env.get_template('template.html')
 
         if not os.path.exists(setting.TEST_RESULTS_FOLDER):
             os.makedirs(setting.TEST_RESULTS_FOLDER)
-        with open(setting.TEST_RESULTS_FOLDER + os.sep + self.result['time'] + '.html') as res:
-            res.write(template.render(results=self.result))
+        with open(setting.TEST_RESULTS_FOLDER + os.sep + self.result['time'] + '.html','w') as res:
+            res.write(template.render(result=self.result))
 
     def GetFileList(self, dir, fileList):
         if os.path.isfile(dir):

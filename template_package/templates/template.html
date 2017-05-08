@@ -12,10 +12,8 @@
     <div style="float: left">{{ result.machine }}</div>
 </div>
 <div>
-    {% for r in result.results %}
-        <div style="float: left">{{ m.module_name }}</div>
-        <div style="float: left">{{ m.pass_rate }}</div>
-    {% endfor %}
+    <div style="float: left">module_name</div>
+    <div style="float: left">pass_rate</div>
 </div>
 
 <table>
@@ -27,11 +25,11 @@
     </tr>
     </thead>
     <tbody>
-    {% for t in test_results %}
+    {% for r in result.results %}
     <tr>
-        <td><span>test_5_5</span></td>
-        <th><span>Test Case</span></th>
-        <td><span>普通订阅号</span></td>
+        <td><span>{{r.module}}</span></td>
+        <th><span>{{r.test_case}}</span></th>
+        <td><span>{{r.result}}</span></td>
     </tr>
     {% endfor %}
     </tbody>
