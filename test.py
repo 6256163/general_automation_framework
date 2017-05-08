@@ -5,6 +5,9 @@ import logging
 import platform
 import codecs
 
+import time
+
+import shutil
 from selenium import webdriver
 
 import setting
@@ -22,6 +25,8 @@ class Test(object):
 
 
     def execute_tc(self):
+        result = True
+        #初始化logger
         logger = self.setup_logging(self.tc)
         csv_datas = list()
         # 读取当前csv
@@ -46,12 +51,14 @@ class Test(object):
                     if tc_data['Expect']:
                         self.verify_expect(tc_data)
 
-                    logging.info(csv_datas[i])
+                    logger.info(csv_datas[i])
             except Exception as e:
-                logger.error(e)
+                result = False
+                logger.exception(e)
                 break
         self.driver.quit()
         logger.info("==========finish testcase {}===========".format(csv_datas[1][0]))
+        return result
 
 
     def execute_action(self, datas):
@@ -143,6 +150,9 @@ class Test(object):
         else:
             logger.handlers[0] = handler
         return logger
+
+
+
 
 
 
