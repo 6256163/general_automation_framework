@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TestResult-{{ time }}</title>
+</head>
+<body>
+<div>
+    <div style="float: left">Test Date</div>
+    <div style="float: left">{{ time }}</div>
+    <div style="float: left">Test Machine</div>
+    <div style="float: left">{{ machine_name }}</div>
+</div>
+<div>
+    {% for m in modules %}
+        <div style="float: left">{{ m.module_name }}</div>
+        <div style="float: left">{{ m.pass_rate }}</div>
+    {% endfor %}
+</div>
+
+<table>
+    <thead>
+    <tr>
+        <th><span>Test Module</span></th>
+        <th><span>Test Case</span></th>
+        <th><span>Test Log</span></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for t in test_results %}
+    <tr>
+        <td><span>test_5_5</span></td>
+        <th><span>Test Case</span></th>
+        <td><span>普通订阅号</span></td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</body>
+</html>
