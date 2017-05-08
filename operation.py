@@ -49,10 +49,8 @@ class Operation(object):
     def verify(self, value, property, loc):
         actual_result = self.get_property_value(property, loc)
 
-        if actual_result == value:
-            logging.info("Get string: {0}".format(value))
-        else:
-            assert False, "Get wrong value:{0}. Expected:{1}".format(actual_result, value)
+        if actual_result != value:
+            assert False, u"Get wrong value:{0}. Expected:{1}".format(actual_result, value)
 
     def compare(self, bys, locations, properties):
         analysis = Analysis()
@@ -66,7 +64,7 @@ class Operation(object):
             if values[0].lower() == values[i].lower():
                 pass
             else:
-                assert False, "Compreation {0} are not equal".format(values)
+                assert False, u"Compreation {0} are not equal".format(values)
 
 
     ####################### For Public Function################
@@ -74,8 +72,8 @@ class Operation(object):
         try:
             WebDriverWait(self.driver, 10).until(lambda driver: driver.find_element(**loc).is_displayed())
             return self.driver.find_element(**loc)
-        except NoSuchElementException("Fail to find element: {0} {1}".format(loc['by'], loc['value'])):
-            assert False, "Fail to find element: {0} {1}".format(loc['by'], loc['value'])
+        except NoSuchElementException(u"Fail to find element: {0} {1}".format(loc['by'], loc['value'])):
+            assert False, u"Fail to find element: {0} {1}".format(loc['by'], loc['value'])
 
 
     def get_property_value(self,property, loc):
