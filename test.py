@@ -73,7 +73,7 @@ class Test(object):
                 operation.open_page(datas['ActionValue'])
             else:
                 path = os.path.join(os.getcwd(), datas['ActionLocation'], datas['ActionValue'])
-                operation.open_page(path)
+                operation.open_page(r'file://'+path)
         elif datas['Action'].upper() == "CLICK":
             operation.click(loc)
         elif datas['Action'].upper() == "SWITCH_FRAME":
