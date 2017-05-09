@@ -19,18 +19,19 @@ class Test(object):
     frame_driver = None
     frame_flag = 0
 
-    def __init__(self, testcase_path):
+    def __init__(self, tc, test_time):
         self.driver = None
-        self.tc = testcase_path
-
+        self.test_case = tc[0]
+        self.test_module = tc[1]
+        self.test_time = test_time
 
     def execute_tc(self):
         result = True
-        #初始化logger
-        logger = self.setup_logging(self.tc)
+        # 初始化logger
+        logger = self.setup_logging()
         csv_datas = list()
         # 读取当前csv
-        with codecs.open(self.tc, 'r', 'utf-8') as testcase:
+        with codecs.open(self.test_case, 'r', 'utf-8') as testcase:
             for line in testcase.readlines():
                 csv_datas.append(line.strip('\n').strip('\r').split(','))
         logger.info("==========start testcase {}===========".format(csv_datas[1][0]))
@@ -59,7 +60,6 @@ class Test(object):
         self.driver.quit()
         logger.info("==========finish testcase {}===========".format(csv_datas[1][0]))
         return result
-
 
     def execute_action(self, datas):
         operation = Operation(self.driver)
@@ -94,7 +94,6 @@ class Test(object):
         else:
             pass
 
-
     def verify_expect(self, datas):
         operation = Operation(self.driver)
         analysis = Analysis()
@@ -107,7 +106,6 @@ class Test(object):
                               datas['ExpectProperty'].split(';'))
         else:
             pass
-
 
     def setup_driver(self, driver_name):
         if platform.platform().startswith("Win"):
@@ -125,13 +123,14 @@ class Test(object):
 
         self.driver.implicitly_wait(10)
 
+    def setup_logging(self):
 
-
-    def setup_logging(self, testcase_path):
-        tc_file = os.path.basename(testcase_path)
-        log_file = os.path.join(setting.LOG_FOLDER, tc_file + '.log')
-        if not os.path.exists(setting.LOG_FOLDER):
-            os.makedirs(setting.LOG_FOLDER)
+        # 创建log路径 /test_log/日期/模块名称/模块名称/用例名称.log
+        log_path = os.path.join(setting.LOG_FOLDER, self.test_time, *self.test_module)
+        if not os.path.exists(log_path):
+            os.makedirs(log_path)
+        tc_file = os.path.basename(self.test_case)
+        log_file = os.path.join(log_path, tc_file + '.log')
 
         logger = logging.getLogger("test_log")
         logger.setLevel(logging.INFO)
@@ -150,9 +149,3 @@ class Test(object):
         else:
             logger.handlers[0] = handler
         return logger
-
-
-
-
-
-

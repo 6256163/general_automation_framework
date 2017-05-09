@@ -1,8 +1,9 @@
 #!/usr/bin/env Python
 # coding=utf-8
+import codecs
 import os
+import socket
 import time
-import shutil
 
 from jinja2 import Environment, PackageLoader
 import setting
@@ -11,29 +12,35 @@ from test import Test
 
 class Run():
     def __init__(self):
-        self.result = dict()
+        self.result = {
+            'time': time.strftime('%Y-%m-%d %H-%M-%S', time.localtime(time.time())),
+            'machine': socket.gethostname(),
+            'modules': {}
+        }
 
     def run(self):
-        self.achieve_log()
         file_list = self.GetFileList(setting.TESTCASE_FOLDER, [])
         file_list.sort()
-        self.result['time'] = time.strftime('%Y-%m-%d %H-%M-%S', time.localtime(time.time()))
-        import socket
-        self.result['machine'] = socket.gethostname()
-        self.result['results'] = list()
         for f in file_list:
-            test = Test(f[0])
-            results = dict()
-            results = {'module': f[1], 'test_case': f[2]}
-            results['result'] = test.execute_tc()
-            self.result['results'].append(results)
+            test = Test(f, self.result['time'])
+            r = test.execute_tc()
+
+            if not '.'.join(f[1]) in self.result['modules'].keys():
+                self.result['modules']['.'.join(f[1])] = {'pass': 0, 'fail': 0}
+                self.result['modules']['.'.join(f[1])]['results'] = list()
+            if r:
+                self.result['modules']['.'.join(f[1])]['pass'] += 1
+            else:
+                self.result['modules']['.'.join(f[1])]['fail'] += 1
+            self.result['modules']['.'.join(f[1])]['results'].append({'result': r, 'test_case': f[2]})
+            # self.result['results'].append(results)
 
         env = Environment(loader=PackageLoader("template_package", 'templates'))
         template = env.get_template('template.html')
 
         if not os.path.exists(setting.TEST_RESULTS_FOLDER):
             os.makedirs(setting.TEST_RESULTS_FOLDER)
-        with open(setting.TEST_RESULTS_FOLDER + os.sep + self.result['time'] + '.html','w') as res:
+        with codecs.open(setting.TEST_RESULTS_FOLDER + os.sep + self.result['time'] + '.html', 'w', 'utf-8') as res:
             res.write(template.render(result=self.result))
 
     def GetFileList(self, dir, fileList):
@@ -55,17 +62,44 @@ class Run():
                 self.GetFileList(newDir, fileList)
         return sorted(fileList)
 
-    def achieve_log(self):
-        # 归档历史log
-        if os.path.exists(setting.LOG_FOLDER):
-            achieve_folder = time.strftime('%Y-%m-%d %H-%M-%S', time.localtime(time.time()))
-            achieve_path = os.path.join(setting.LOG_FOLDER, achieve_folder)
-            os.makedirs(achieve_path)
-            for s in os.listdir(setting.LOG_FOLDER):
-                if s.split('.')[-1].upper() == "LOG":
-                    shutil.move(os.path.join(setting.LOG_FOLDER, s), achieve_path)
-
 
 if __name__ == '__main__':
+    result = {
+        'time': '2017-05-09 17-19-41',
+        'machine': 'SH-EB3406462',
+        'modules': {
+            '': {
+                    'pass': 2,
+                    'fail': 1,
+                    'results': [
+                        {'result': True, 'test_case': 'testcase - 副本 (2)'},
+                        {'result': False, 'test_case': 'testcase - 副本'},
+                        {'result': True, 'test_case': 'testcase'}
+                    ]
+                 },
+            '模块1': {
+                'pass': 2,
+                'fail': 1,
+                'results': [
+                    {'result': True, 'test_case': 'testcase - 副本 (2)'},
+                    {'result': False, 'test_case': 'testcase - 副本'},
+                    {'result': True, 'test_case': 'testcase'}
+                ]
+            },
+            '模块1.模块2': {
+                'pass': 2,
+                'fail': 1,
+                'results': [
+                    {'result': True, 'test_case': 'testcase - 副本 (2)'},
+                    {'result': False, 'test_case': 'testcase - 副本'},
+                    {'result': True, 'test_case': 'testcase'}
+                ]
+            }
+        }
+    }
+
+    for m in result['modules']:
+        for m1 in result['modules'][m]:
+            print (m1)
     run = Run()
     run.run()

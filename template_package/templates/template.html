@@ -1,38 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>TestResult-{{ result.time }}</title>
+    <style>
+        .resultFalse {
+            color: red;
+        }
+
+        .resultTrue {
+            color: green;
+        }
+    </style>
 </head>
 <body>
-<div>
-    <div style="float: left">Test Date</div>
+<div style="overflow: hidden">
+    <div style="float: left">Test Date:</div>
     <div style="float: left">{{ result.time }}</div>
-    <div style="float: left">Test Machine</div>
+    <div style="float: left">Test Machine:</div>
     <div style="float: left">{{ result.machine }}</div>
 </div>
-<div>
-    <div style="float: left">module_name</div>
+<div style="overflow: hidden">
+    <div style="float: left; width: 20%">module_name</div>
     <div style="float: left">pass_rate</div>
 </div>
+{% for m in result.modules %}
+    <div style="overflow: hidden">
+        <div style="float: left; width: 20%">{{ m }}</div>
+        <div style="float: left; width: 39%">{{ result.modules.m.pass }}</div>
+        <div style="float: left; width: 39%">{{ result.modules.m.fail }}</div>
+    </div>
+{% endfor %}
 
-<table>
-    <thead>
-    <tr>
-        <th><span>Test Module</span></th>
-        <th><span>Test Case</span></th>
-        <th><span>Test Log</span></th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for r in result.results %}
-    <tr>
-        <td><span>{{r.module}}</span></td>
-        <th><span>{{r.test_case}}</span></th>
-        <td><span>{{r.result}}</span></td>
-    </tr>
+<div style="border-top: 2px solid #6f5fff;border-right: 2px solid #6f5fff  ">
+    <div style="overflow: hidden;  border-bottom: 2px solid #6f5fff ">
+        <div style="float: left;width: 20%;border-left: 2px solid #6f5fff ">Test Module</div>
+        <div style="float: left;width: 20%;border-left: 2px solid #6f5fff ">Test Case</div>
+        <div style="float: left;border-left: 2px solid #6f5fff ">Test Log</div>
+    </div>
+
+    {% for rm in result.modules %}
+        {% for r in result.modules.rm.results %}
+            <div style="overflow: hidden; border-bottom: 2px solid #6f5fff" class="result{{ r.result }}">
+                <div class="module" style="float: left;width: 20%;border-left: 2px solid #6f5fff ">{{ rm }}</div>
+                <div class="testcase"
+                     style="float: left;width: 20%;border-left: 2px solid #6f5fff ">{{ r.test_case }}</div>
+                <div style="float: left;border-left: 2px solid #6f5fff ">{{ r.result }}</div>
+            </div>
+        {% endfor %}
     {% endfor %}
-    </tbody>
-</table>
+
+</div>
 </body>
 </html>
