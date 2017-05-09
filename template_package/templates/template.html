@@ -25,11 +25,11 @@
     <div style="float: left; width: 20%">module_name</div>
     <div style="float: left">pass_rate</div>
 </div>
-{% for m in result.modules %}
+{% for key, value in result.modules.items() %}
     <div style="overflow: hidden">
-        <div style="float: left; width: 20%">{{ m }}</div>
-        <div style="float: left; width: 39%">{{ result.modules.m.pass }}</div>
-        <div style="float: left; width: 39%">{{ result.modules.m.fail }}</div>
+        <div style="float: left; width: 20%">{{ key }}</div>
+        <div style="float: left; width: 39%">{{ value.pass }}</div>
+        <div style="float: left; width: 39%">{{ value.fail }}</div>
     </div>
 {% endfor %}
 
@@ -40,13 +40,13 @@
         <div style="float: left;border-left: 2px solid #6f5fff ">Test Log</div>
     </div>
 
-    {% for rm in result.modules %}
-        {% for r in result.modules.rm.results %}
-            <div style="overflow: hidden; border-bottom: 2px solid #6f5fff" class="result{{ r.result }}">
-                <div class="module" style="float: left;width: 20%;border-left: 2px solid #6f5fff ">{{ rm }}</div>
+    {% for key, value in result.modules.items() %}
+        {% for value_key,value_value in value.items() %}
+            <div style="overflow: hidden; border-bottom: 2px solid #6f5fff" class="result{{ value_value.result }}">
+                <div class="module" style="float: left;width: 20%;border-left: 2px solid #6f5fff ">{{ value_key }}</div>
                 <div class="testcase"
-                     style="float: left;width: 20%;border-left: 2px solid #6f5fff ">{{ r.test_case }}</div>
-                <div style="float: left;border-left: 2px solid #6f5fff ">{{ r.result }}</div>
+                     style="float: left;width: 20%;border-left: 2px solid #6f5fff ">{{ value_value.test_case }}</div>
+                <div style="float: left;border-left: 2px solid #6f5fff ">{{ value_value.result }}</div>
             </div>
         {% endfor %}
     {% endfor %}
