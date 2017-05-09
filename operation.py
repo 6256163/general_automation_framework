@@ -20,16 +20,16 @@ class Operation(object):
     def open_page(self, url_):
         self.driver.get(url_)
         # self.driver.maximize_window()
-        logging.info("Open page:{0}".format(url_))
+        #logging.info("Open page:{0}".format(url_))
 
     def input_value(self, value, loc):
         self.get_element(loc).clear()
         self.get_element(loc).send_keys(value)
-        logging.info("Input value: {0}".format(value))
+        #logging.info("Input value: {0}".format(value))
 
     def click(self, loc):
         self.get_element(loc).click()
-        logging.info("Click element: {0} {1}".format(loc['by'], loc['value']))
+        #logging.info("Click element: {0} {1}".format(loc['by'], loc['value']))
 
     def switch_window(self, title):
         handles = self.driver.window_handles
