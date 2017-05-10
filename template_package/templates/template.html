@@ -12,42 +12,89 @@
         .resultTrue {
             color: green;
         }
+
+        .cell {
+            float: left;
+            border-left: 2px solid #6f5fff
+        }
+
+        .row {
+            overflow: hidden;
+            border-bottom: 2px solid #6f5fff
+        }
+
+        .box {
+            border-top: 2px solid #6f5fff;
+            border-right: 2px solid #6f5fff
+        }
+
+        span {
+            width: 100%;
+        }
+        div{
+            padding: 5px;
+        }
     </style>
+    <script type="text/javascript">
+        function show_log(id) {
+            log_dom = document.getElementById(id);
+            if (log_dom.style.display == 'none') {
+                log_dom.style.display = 'block'
+            }
+            else {
+                log_dom.style.display = 'none'
+            }
+        }
+
+    </script>
 </head>
 <body>
-<div style="overflow: hidden">
-    <div style="float: left">Test Date:</div>
-    <div style="float: left">{{ result.time }}</div>
-    <div style="float: left">Test Machine:</div>
-    <div style="float: left">{{ result.machine }}</div>
+<div class="box">
+    <div class="row">
+        <div class="cell">Test Date:</div>
+        <div class="cell">{{ result.time }}</div>
+        <div class="cell">Test Machine:</div>
+        <div class="cell">{{ result.machine }}</div>
+    </div>
 </div>
-<div style="overflow: hidden">
-    <div style="float: left; width: 20%">module_name</div>
-    <div style="float: left">pass_rate</div>
-</div>
+<div class="box">
+    <div class="row">
+        <div class="cell" style="width: 20%">module_name</div>
+        <div class="cell">pass_rate</div>
+    </div>
+
 {% for key, value in result.modules.items() %}
-    <div style="overflow: hidden">
-        <div style="float: left; width: 20%">{{ key }}</div>
-        <div style="float: left; width: 39%">{{ value.pass }}</div>
-        <div style="float: left; width: 39%">{{ value.fail }}</div>
+    <div class="row">
+        <div class="cell" style="width: 20%"><span>{{ key }}  </span></div>
+        <div class="cell" >
+            <div style="float: left">{{ value.fail }}</div>
+            <div style="float: left;background: #15ff00; width: 500px; height: 20px">
+                <div style="background: #ff0013; width: {{ value.fail/(value.fail+value.pass)*500 }}px;height: 20px"></div>
+            </div>
+            <div style="float: left">{{ value.pass }}</div>
+        </div>
     </div>
 {% endfor %}
 
-<div style="border-top: 2px solid #6f5fff;border-right: 2px solid #6f5fff  ">
-    <div style="overflow: hidden;  border-bottom: 2px solid #6f5fff ">
-        <div style="float: left;width: 20%;border-left: 2px solid #6f5fff ">Test Module</div>
-        <div style="float: left;width: 20%;border-left: 2px solid #6f5fff ">Test Case</div>
-        <div style="float: left;border-left: 2px solid #6f5fff ">Test Log</div>
+</div>
+<div class="box">
+    <div class="row">
+        <div class="cell" style="width: 20%;">Test Module</div>
+        <div class="cell" style="width: 20%;">Test Case</div>
     </div>
 
     {% for key, value in result.modules.items() %}
-        {% for value_key,value_value in value.items() %}
-            <div style="overflow: hidden; border-bottom: 2px solid #6f5fff" class="result{{ value_value.result }}">
-                <div class="module" style="float: left;width: 20%;border-left: 2px solid #6f5fff ">{{ value_key }}</div>
-                <div class="testcase"
-                     style="float: left;width: 20%;border-left: 2px solid #6f5fff ">{{ value_value.test_case }}</div>
-                <div style="float: left;border-left: 2px solid #6f5fff ">{{ value_value.result }}</div>
+        {% for result in value.results %}
+            <div class="result{{ result.result }} row"
+                 onclick="show_log('{{ key+result.test_case }}')">
+                <div class="cell" style="width: 20%;">
+                    <span>{{ key }}  </span></div>
+                <div class="cell" style="width: 20%"><span>{{ result.test_case }}</span>
+                </div>
+
             </div>
+            <div id="{{ key+result.test_case }}" style="border: 2px solid #6f5fff;display: none"><span
+                    style="overflow-x: auto;">{{ result.log }}</span></div>
         {% endfor %}
     {% endfor %}
 

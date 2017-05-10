@@ -31,8 +31,10 @@ class Run():
             if r:
                 self.result['modules']['.'.join(f[1])]['pass'] += 1
             else:
+
                 self.result['modules']['.'.join(f[1])]['fail'] += 1
-            self.result['modules']['.'.join(f[1])]['results'].append({'result': r, 'test_case': f[2]})
+            with open(test.log_file,'r') as log:
+                self.result['modules']['.'.join(f[1])]['results'].append({'result': r, 'test_case': f[2], 'log':'<br/>'.join(log.readlines())})
             # self.result['results'].append(results)
 
         env = Environment(loader=PackageLoader("template_package", 'templates'))
@@ -40,7 +42,10 @@ class Run():
 
         if not os.path.exists(setting.TEST_RESULTS_FOLDER):
             os.makedirs(setting.TEST_RESULTS_FOLDER)
-        with codecs.open(setting.TEST_RESULTS_FOLDER + os.sep + self.result['time'] + '.html', 'w', 'utf-8') as res:
+
+        #创建result文件
+        result_html= setting.TEST_RESULTS_FOLDER + os.sep + self.result['time'] + '.html'
+        with codecs.open(result_html, 'w', 'utf-8') as res:
             res.write(template.render(result=self.result))
 
     def GetFileList(self, dir, fileList):
@@ -51,7 +56,10 @@ class Run():
             module = pattern.search(dir).groups()
             module_level = module[0].split(os.sep)
             del module_level[0]
+
             testcase = module_level.pop()
+            if module_level ==[]:
+                module_level = ['null']
             fileList.append((dir, module_level, testcase))
         elif os.path.isdir(dir):
             for s in os.listdir(dir):
@@ -64,42 +72,5 @@ class Run():
 
 
 if __name__ == '__main__':
-    result = {
-        'time': '2017-05-09 17-19-41',
-        'machine': 'SH-EB3406462',
-        'modules': {
-            '': {
-                    'pass': 2,
-                    'fail': 1,
-                    'results': [
-                        {'result': True, 'test_case': 'testcase - 副本 (2)'},
-                        {'result': False, 'test_case': 'testcase - 副本'},
-                        {'result': True, 'test_case': 'testcase'}
-                    ]
-                 },
-            '模块1': {
-                'pass': 2,
-                'fail': 1,
-                'results': [
-                    {'result': True, 'test_case': 'testcase - 副本 (2)'},
-                    {'result': False, 'test_case': 'testcase - 副本'},
-                    {'result': True, 'test_case': 'testcase'}
-                ]
-            },
-            '模块1.模块2': {
-                'pass': 2,
-                'fail': 1,
-                'results': [
-                    {'result': True, 'test_case': 'testcase - 副本 (2)'},
-                    {'result': False, 'test_case': 'testcase - 副本'},
-                    {'result': True, 'test_case': 'testcase'}
-                ]
-            }
-        }
-    }
-
-    for m in result['modules']:
-        for m1 in result['modules'][m]:
-            print (m1)
     run = Run()
     run.run()

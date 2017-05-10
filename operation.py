@@ -72,7 +72,7 @@ class Operation(object):
         try:
             WebDriverWait(self.driver, 10).until(lambda driver: driver.find_element(**loc).is_displayed())
             return self.driver.find_element(**loc)
-        except NoSuchElementException(u"Fail to find element: {0} {1}".format(loc['by'], loc['value'])):
+        except NoSuchElementException(msg=u"Fail to find element: {0} {1}".format(loc['by'], loc['value'])):
             assert False, u"Fail to find element: {0} {1}".format(loc['by'], loc['value'])
 
 
@@ -81,3 +81,4 @@ class Operation(object):
             return self.get_element(loc).text
         else:
             return self.get_element(loc).get_attribute(property)
+

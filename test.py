@@ -130,13 +130,13 @@ class Test(object):
         if not os.path.exists(log_path):
             os.makedirs(log_path)
         tc_file = os.path.basename(self.test_case)
-        log_file = os.path.join(log_path, tc_file + '.log')
+        self.log_file = os.path.join(log_path, tc_file + '.log')
 
         logger = logging.getLogger("test_log")
         logger.setLevel(logging.INFO)
 
         # create a file handler
-        handler = logging.FileHandler(log_file)
+        handler = logging.FileHandler(self.log_file)
         handler.setLevel(logging.INFO)
 
         # create a logging format
