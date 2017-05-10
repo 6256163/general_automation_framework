@@ -1,10 +1,16 @@
-from executer.operation import Operation
+from operation import Operation
 
 
 class Action(Operation):
 
-    def open_page(self):
-        self.driver.get(self.csv['ActionValue'])
+    def __init__(self, driver, csv):
+        super(Action,self).__init__(driver, csv)
+
+    def open_page(self, href=None):
+        if href == None:
+            self.driver.get(self.csv['ActionValue'])
+        else:
+            self.driver.get(href)
 
     def input_value(self):
         target = self.get_element(self.csv['ActionBy'], self.csv['ActionLocation'])

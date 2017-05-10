@@ -1,7 +1,10 @@
-from executer.operation import Operation
+from operation import Operation
 
 
 class Expect(Operation):
+
+    def __init__(self, driver, csv):
+        super(Expect,self).__init__(driver, csv)
 
     def verify(self):
         actual_result = self.get_property_value(self.csv['ExpectBy'], self.csv['ExpectLocation'],
