@@ -1,4 +1,5 @@
-from operation import Operation
+# coding=utf-8
+from .operation import Operation
 
 
 class Expect(Operation):
