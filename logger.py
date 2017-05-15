@@ -1,9 +1,11 @@
 # coding=utf-8
-import os
 import logging
+import os
 
 import setting
-from loader.testcase import Testcase
+
+from testcase import Testcase
+
 
 class Logger(object):
 

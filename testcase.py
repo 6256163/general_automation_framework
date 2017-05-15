@@ -3,10 +3,7 @@ import codecs
 import os
 import re
 
-from jinja2 import Environment, PackageLoader
-
 import setting
-from executer.execution import Execution
 
 
 class Testcase(object):

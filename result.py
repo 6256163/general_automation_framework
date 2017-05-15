@@ -1,8 +1,8 @@
 # coding=utf-8
 import socket
 
-from loader.testcase import Testcase
-from logger.logger import Logger
+from logger import Logger
+from testcase import Testcase
 
 
 class Result(object):

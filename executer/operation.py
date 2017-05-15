@@ -5,11 +5,16 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 
 class Operation(object):
-    def __init__(self, driver, csv):
+    def __init__(self, csv, driver = None):
         self.driver = driver
         self.csv = csv
 
     def get_element(self, by, value):
+        """
+        :param by: By.ID,By.name,By.link_text ...
+        :param value: value for By.ID,By.name,By.link_text ...
+        :return: WebElement object
+        """
         loc = self.get_loc(by, value)
         try:
             WebDriverWait(self.driver, 10).until(lambda driver: driver.find_element(**loc).is_displayed())
@@ -18,12 +23,23 @@ class Operation(object):
             assert False, u"Fail to find element: {0} {1}".format(loc['by'], loc['value'])
 
     def get_property_value(self, by, value, property):
+        """
+        :param by: By.ID,By.name,By.link_text ...
+        :param value: value for By.ID,By.name,By.link_text ...
+        :param property: dom property
+        :return: dom property value
+        """
         if property.upper() == "TEXT":
             return self.get_element(by, value).text
         else:
             return self.get_element(by, value).get_attribute(property)
 
     def get_loc(self, by, value):
+        """
+        :param by: By.ID,By.name,By.link_text ...
+        :param value: value for By.ID,By.name,By.link_text ...
+        :return: dict {by=, value=,}
+        """
         if by.upper() == "XPATH":
             return {'by': By.XPATH, 'value': value}
         elif by.upper() == "ID":
@@ -44,6 +60,11 @@ class Operation(object):
             pass
 
     def get_compare(self, expectBy, expectLocation):
+        """
+        :param list of by, splited by ';'
+        :param value list of by, splited by ';'
+        :return: list of dict {by=, value=,}
+        """
         bys = expectBy.split(';')
         locs = expectLocation.split(';')
         return [self.get_loc(bys[0], locs[0]), self.get_loc(bys[1], locs[1])]

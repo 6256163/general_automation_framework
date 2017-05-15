@@ -4,8 +4,8 @@ from .operation import Operation
 
 class Expect(Operation):
 
-    def __init__(self, driver, csv):
-        super(Expect,self).__init__(driver, csv)
+    def __init__(self, csv):
+        super(Expect,self).__init__(csv)
 
     def verify(self):
         actual_result = self.get_property_value(self.csv['ExpectBy'], self.csv['ExpectLocation'],

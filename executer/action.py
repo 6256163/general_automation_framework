@@ -6,8 +6,8 @@ from .operation import Operation
 
 class Action(Operation):
 
-    def __init__(self, driver, csv):
-        super(Action,self).__init__(driver, csv)
+    def __init__(self, csv):
+        super(Action,self).__init__(csv)
 
     def open_page(self):
         # 直接用href地址打开网页

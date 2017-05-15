@@ -3,13 +3,13 @@ import codecs
 import os
 import time
 
-from jinja2 import Environment, PackageLoader
-
 import setting
+from jinja2 import Environment, PackageLoader
+from result import Result
+
 from executer.execution import Execution
-from loader.result import Result
-from loader.testcase import Testcase
-from logger.logger import Logger
+from logger import Logger
+from testcase import Testcase
 
 
 class Runner(object):
