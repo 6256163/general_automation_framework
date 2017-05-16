@@ -14,26 +14,14 @@ class Execution(Action, Expect):
         super(Execution, self).__init__(csv)
         self.setup_driver()
 
-    def execute(self):
+    def update_step(self, step):
+        self.csv = step
 
-        execut = getattr(Execution, self.csv['Action'].lower())
-        execut()
-        # if self.csv['Action'].upper() in [
-        #     'INPUT_VALUE',
-        #     'OPEN_PAGE',
-        #     'CLICK',
-        #     'SWITCH_WINDOW',
-        #     'OPEN_NEW_PAGE',
-        # ]:
-        #     execut = getattr(Execution, self.csv['Action'].lower())
-        #     execut()
-        #
-        # if self.csv['Expect'].upper() in [
-        #     "VERIFY",
-        #     "COMPARE"
-        # ]:
-        #     execut = getattr(Execution, self.csv['Expect'].lower())
-        #     execut()
+    def execute(self):
+        if self.csv['Action']:
+            getattr(Execution, self.csv['Action'].lower())(self)
+        if self.csv['Expect']:
+            getattr(Execution, self.csv['Expect'].lower())(self)
 
     def setup_driver(self):
         if self.driver is None:
@@ -51,3 +39,6 @@ class Execution(Action, Expect):
                 pass
 
             self.driver.implicitly_wait(10)
+
+    def quit(self):
+        self.driver.quit()
