@@ -16,7 +16,8 @@ class Logger(object):
 
     def get_log_file(self):
         # 创建log路径 /test_log/日期/模块名称/模块名称/用例名称.log
-        log_path = os.path.join(setting.LOG_FOLDER, self.test_time, *Testcase().get_tc_module(self.tc_path))
+        tc = Testcase()
+        log_path = os.path.join(setting.LOG_FOLDER, self.test_time, *tc.get_tc_module(self.tc_path))
         if not os.path.exists(log_path):
             os.makedirs(log_path)
         tc_file = os.path.basename(self.tc_path)
@@ -28,7 +29,8 @@ class Logger(object):
         logger.setLevel(logging.INFO)
 
         # create a file handler
-        handler = logging.FileHandler(self.get_log_file())
+        log_file = self.get_log_file()
+        handler = logging.FileHandler(log_file)
         handler.setLevel(logging.INFO)
 
         # create a logging format
