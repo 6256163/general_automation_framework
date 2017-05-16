@@ -1,5 +1,6 @@
 # coding=utf-8
 import os
+from time import sleep
 
 from .operation import Operation
 
@@ -11,7 +12,7 @@ class Action(Operation):
 
     def open_page(self):
         # 直接用href地址打开网页
-        if self.csv['ActionValue']:
+        if not self.csv['ActionLocation']:
             self.driver.get(self.csv['ActionValue'])
         # ActionLocation 表示HTML存放路径， ActionValue 表示HTML文件名
         else:
@@ -24,6 +25,7 @@ class Action(Operation):
         target.send_keys(self.csv['ActionValue'])
 
     def click(self):
+        sleep(3)
         self.get_element(self.csv['ActionBy'], self.csv['ActionLocation']).click()
 
     def switch_window(self):
@@ -41,3 +43,15 @@ class Action(Operation):
         js = 'window.open("{0}");'.format(href)
         self.driver.execute_script(js)
 
+
+    def switch_frame(self):
+        if self.csv['ActionBy'] == '':
+            self.driver.switch_to.frame(self.csv['ActionLocation'])
+        else:
+            self.driver.switch_to.frame(self.get_element(self.csv['ActionBy'],self.csv['ActionLocation']))
+
+    def switch_default_content(self):
+        self.driver.switch_to.default_content()
+
+    def switch_parent_frame(self):
+        self.driver.switch_to.parent_frame()
