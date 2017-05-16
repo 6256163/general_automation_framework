@@ -55,9 +55,10 @@ class Testcase(object):
     pattern = re.compile(setting.TESTCASE_FOLDER + "(.*?)" + ".csv")
 
     def get_tc_module(self, path):
-        module = self.pattern.search(path).groups()[0].split(os.sep)[1:-1]
-        if module == []:
-            module.append('Null')
+        tc_module = self.pattern.search(path).groups()[0].split(os.sep)[1:-1]
+        if not tc_module:
+            tc_module.append('Null')
+        return tc_module
 
     def get_tc_name(self, path):
         return os.path.basename(path)
