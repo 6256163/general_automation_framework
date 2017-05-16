@@ -30,8 +30,6 @@
 
         span {
             width: 100%;
-        }
-        div{
             padding: 5px;
         }
     </style>
@@ -51,27 +49,28 @@
 <body>
 <div class="box">
     <div class="row">
-        <div class="cell">Test Date:</div>
-        <div class="cell">{{ result.time }}</div>
-        <div class="cell">Test Machine:</div>
-        <div class="cell">{{ result.machine }}</div>
+        <div class="cell"><span>Test Date:</span></div>
+        <div class="cell"><span>{{ result.time }}</span></div>
+        <div class="cell"><span>Test Machine:</span></div>
+        <div class="cell"><span>{{ result.machine }}</span></div>
     </div>
 </div>
 <div class="box">
     <div class="row">
-        <div class="cell" style="width: 20%">module_name</div>
-        <div class="cell">pass_rate</div>
+        <div class="cell" style="width: 20%"><span>module_name</span></div>
+        <div class="cell"><span>pass_rate</span></div>
     </div>
 
 {% for key, value in result.modules.items() %}
     <div class="row">
         <div class="cell" style="width: 20%"><span>{{ key }}  </span></div>
-        <div class="cell" >
-            <div style="float: left">{{ value.fail }}</div>
+        <div class="cell" ><span>
+            <div style="float: left"><span>{{ value.fail }}</span></div>
             <div style="float: left;background: #15ff00; width: 500px; height: 20px">
                 <div style="background: #ff0013; width: {{ value.fail/(value.fail+value.pass)*500 }}px;height: 20px"></div>
             </div>
-            <div style="float: left">{{ value.pass }}</div>
+            <div style="float: left"><span>{{ value.pass }}</span></div>
+            </span>
         </div>
     </div>
 {% endfor %}
@@ -79,8 +78,8 @@
 </div>
 <div class="box">
     <div class="row">
-        <div class="cell" style="width: 20%;">Test Module</div>
-        <div class="cell" style="width: 20%;">Test Case</div>
+        <div class="cell" style="width: 20%;"><span>Test Module</span></div>
+        <div class="cell" style="width: 20%;"><span>Test Case</span></div>
     </div>
 
     {% for key, value in result.modules.items() %}
