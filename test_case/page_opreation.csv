@@ -1,0 +1,9 @@
+TestCase,Step,Browser,PageObject,PageAction,PageValue,Action,ActionBy,ActionLocation,ActionValue,Expect,ExpectBy,ExpectLocation,ExpectProperty,ExpectValue
+tc_001,0,chrome,Login,login_form,username=admin|password=admin,,,,,,,,,
+tc_001,0,chrome,Navigation,click_menu,menu=console,,,,,,,,,
+tc_001,0,chrome,Console,user_form,username=66544376|level=苏宁控股集团（控股品牌中心）.文创集团总部（文创品牌中心）|roleType=1|name=将大大减少卡路里|phone=12347564333|wxaccount=weuqiwoeq|email=222@222.com|remark=jfksdjfksldjflksjdflksjdflksjdlfkjsdlfkj房价快速登录福建省电力科技分类考试的,,,,,,,,,
+tc_001,0,chrome,Console,user_form,username=66544372|level=苏宁控股集团（控股品牌中心）.文创集团总部（文创品牌中心）|roleType=1|name=将大大减少卡路里|phone=12347564333|wxaccount=weuqiwoeq|email=222@222.com|remark=jfksdjfksldjflksjdflksjdflksjdlfkjsdlfkj房价快速登录福建省电力科技分类考试的,,,,,,,,,
+tc_001,0,chrome,Console,user_form,username=66544373|level=苏宁控股集团（控股品牌中心）.文创集团总部（文创品牌中心）|roleType=1|name=将大大减少卡路里|phone=12347564333|wxaccount=weuqiwoeq|email=222@222.com|remark=jfksdjfksldjflksjdflksjdflksjdlfkjsdlfkj房价快速登录福建省电力科技分类考试的,,,,,,,,,
+tc_001,0,chrome,Console,user_form,username=66544374|level=苏宁控股集团（控股品牌中心）.文创集团总部（文创品牌中心）|roleType=1|name=将大大减少卡路里|phone=12347564333|wxaccount=weuqiwoeq|email=222@222.com|remark=jfksdjfksldjflksjdflksjdflksjdlfkjsdlfkj房价快速登录福建省电力科技分类考试的,,,,,,,,,
+tc_001,0,chrome,Console,user_form,username=66544375|level=苏宁控股集团（控股品牌中心）.文创集团总部（文创品牌中心）|roleType=1|name=将大大减少卡路里|phone=12347564333|wxaccount=weuqiwoeq|email=222@222.com|remark=jfksdjfksldjflksjdflksjdflksjdlfkjsdlfkj房价快速登录福建省电力科技分类考试的,,,,,,,,,
+tc_001,0,chrome,Console,user_form,username=66544376|level=苏宁控股集团（控股品牌中心）.文创集团总部（文创品牌中心）|roleType=1|name=将大大减少卡路里|phone=12347564333|wxaccount=weuqiwoeq|email=222@222.com|remark=jfksdjfksldjflksjdflksjdflksjdlfkjsdlfkj房价快速登录福建省电力科技分类考试的,,,,,,,,,

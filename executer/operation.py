@@ -5,7 +5,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 
 class Operation(object):
-    def __init__(self, csv, driver = None):
+    def __init__(self, csv = None, driver = None):
         self.driver = driver
         self.csv = csv
 
@@ -19,6 +19,19 @@ class Operation(object):
         try:
             WebDriverWait(self.driver, 10).until(lambda driver: driver.find_element(**loc).is_displayed())
             return self.driver.find_element(**loc)
+        except NoSuchElementException(msg=u"Fail to find element: {0} {1}".format(loc['by'], loc['value'])):
+            assert False, u"Fail to find element: {0} {1}".format(loc['by'], loc['value'])
+
+    def get_elements(self, by, value):
+        """
+        :param by: By.ID,By.name,By.link_text ...
+        :param value: value for By.ID,By.name,By.link_text ...
+        :return: WebElement object
+        """
+        loc = self.get_loc(by, value)
+        try:
+            WebDriverWait(self.driver, 10).until(lambda driver: driver.find_element(**loc).is_displayed())
+            return self.driver.find_elements(**loc)
         except NoSuchElementException(msg=u"Fail to find element: {0} {1}".format(loc['by'], loc['value'])):
             assert False, u"Fail to find element: {0} {1}".format(loc['by'], loc['value'])
 
@@ -44,17 +57,17 @@ class Operation(object):
             return {'by': By.XPATH, 'value': value}
         elif by.upper() == "ID":
             return {'by': By.ID, 'value': value}
-        elif by.upper() == "CSS_SELECTOR":
+        elif by.upper() in ["CSS_SELECTOR", "CSS SELECTOR"]:
             return {'by': By.CSS_SELECTOR, 'value': value}
-        elif by.upper() == "TAG_NAME":
+        elif by.upper() in ["TAG_NAME", "TAG NAME"]:
             return {'by': By.TAG_NAME, 'value': value}
-        elif by.upper() == "LINK_TEXT":
+        elif by.upper() in ["LINK_TEXT", "LINK TEXT"] :
             return {'by': By.LINK_TEXT, 'value': value}
         elif by.upper() == "NAME":
             return {'by': By.NAME, 'value': value}
-        elif by.upper() == "CLASS_NAME":
+        elif by.upper() in ["CLASS_NAME", "CLASS NAME"]:
             return {'by': By.CLASS_NAME, 'value': value}
-        elif by.upper() == "PARTIAL_LINK_TEXT":
+        elif by.upper() in ["PARTIAL_LINK_TEXT","PARTIAL LINK TEXT"]:
             return {'by': By.PARTIAL_LINK_TEXT, 'value': value}
         else:
             pass

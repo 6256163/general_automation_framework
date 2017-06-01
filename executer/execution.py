@@ -3,7 +3,7 @@ import os
 import platform
 
 from selenium import webdriver
-
+from page_object.page_object import PageObject
 import setting
 from .action import Action
 from .expect import Expect
@@ -18,6 +18,11 @@ class Execution(Action, Expect):
         self.csv = step
 
     def execute(self):
+        if self.csv['PageObject']:
+            kwarg = dict()
+            for item in self.csv['PageValue'].split('|'):
+                kwarg[item.split('=')[0]] = item.split('=')[1]
+            po = PageObject().get_instence(self.csv['PageObject'])(self.driver).perform(self.csv['PageAction'], **kwarg)
         if self.csv['Action']:
             getattr(Execution, self.csv['Action'].lower())(self)
         if self.csv['Expect']:
