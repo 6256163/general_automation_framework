@@ -2,7 +2,7 @@
 import codecs
 import os
 import time
-
+import sys, getopt
 import setting
 from jinja2 import Environment, PackageLoader
 from result import Result
@@ -16,7 +16,20 @@ class Runner(object):
     def __init__(self):
         self.time = time.strftime('%Y-%m-%d %H-%M-%S', time.localtime(time.time()))
 
-    def run(self):
+    def run(self, argv):
+        # 命令行参数处理
+        try:
+            opts, args = getopt.getopt(argv, "t:r:l:", ["testcase=", "result=", "log="])
+        except getopt.GetoptError:
+            print ('runner.py -t <testcase path> -r <result path> -l <log path>')
+            sys.exit(2)
+        for opt, arg in opts:
+            if opt in ("-t", "--testcase"):
+                TC = arg
+            elif opt in ("-r", "--result"):
+                RESULT = arg
+            elif opt in ("-l", "--log"):
+                LOG = arg
         tc = Testcase()
         file_list = tc.get_csv_list()
         r = True
@@ -25,7 +38,7 @@ class Runner(object):
             logger = Logger(f, self.time).setup_logging()
             steps = tc.get_steps(f)
             csv_lines = tc.get_line(f)
-            #result init
+            # result init
             r = True
             exe = Execution(steps[0])
             for step, line in (zip(steps, csv_lines)):
@@ -53,4 +66,4 @@ class Runner(object):
 
 if __name__ == "__main__":
     run = Runner()
-    run.run()
+    run.run(sys.argv[1:])
