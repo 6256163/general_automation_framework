@@ -10,9 +10,9 @@ class Console(BasePage):
     def __init__(self, driver):
         super(Console, self).__init__(driver)
 
-    add_new_user = (By.LINK_TEXT, u'+添加新用户')
+    add_new_user = (By.LINK_TEXT, '+添加新用户')
+    add_new_group = (By.LINK_TEXT, '添加组织架构')
     submit = (By.NAME, 'submit')
-
 
     def user_form(self, **kwargs):
 
@@ -75,6 +75,27 @@ class Console(BasePage):
 
         if kwargs.get('checkreason', ''):
             self.input(kwargs['checkreason'], *(By.NAME, 'checkreason'))
+
+        self.click(*self.submit)
+        sleep(5)
+
+
+    def group_form(self, **kwargs):
+        self.click(*self.add_new_group)
+
+        if kwargs.get('name', ''):
+            self.input(kwargs['name'], *(By.NAME, 'name'))
+        else:
+            assert False, "name don't set"
+
+        # select group
+        if kwargs.get('level', ''):
+            levels = kwargs['level'].split('.')
+            for l in range(len(levels)):
+                select = Select(self.get_element(By.XPATH, "//select[@level = {0}]".format(l + 1)))
+                select.select_by_visible_text(levels[l])
+        else:
+            assert False, "Level don't set"
 
         self.click(*self.submit)
         sleep(5)
