@@ -1,6 +1,6 @@
 # 使用手册
 ## 框架简介
-- 通用型自动化测试框架，基于WebDriver，关键字驱动模式CSV。PageObject为订制，非通用。
+- 通用型自动化测试框架，基于WebDriver，关键字驱动模式CSV。
 
 ## Testcase说明
 #### 文件类型：CSV
@@ -8,8 +8,8 @@
 - TestCase：测试用例编号，不区分大小写。
 - Step：测试用例步骤，数字1、2、3……
 - Browser：确定当前测试使用的浏览器类型，目前支持CHROME，FIREFOX。不区分大小写
-- Action：行为操作名称，即调用对应的方法名。不区分大小写[详细说明]
-- ActionBy：Action参数。元素定位属性。不区分大小写[详细说明]
+- Action：行为操作名称，即调用对应的方法名。不区分大小写
+- ActionBy：Action参数。元素定位属性。不区分大小写
     * **ID**
     * **NAME**
     * **XPATH**
@@ -33,7 +33,7 @@
 - ExpectLocation：Expect参数。元素定位参数
 - ExpectProperty：Expect参数。元素属性
 - ExpectValue：Expect参数。期望值
-- PageObject：调用的模块，即Page类
+- PageObject：根据Web定制，非通用调用的模块，即Page类
 - PageAction：Page类对应方法名
 - PageValue：传入给方法的参数
   
