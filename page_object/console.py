@@ -14,7 +14,7 @@ class Console(BasePage):
     add_new_group = (By.LINK_TEXT, '添加组织架构')
     submit = (By.NAME, 'submit')
 
-    def user_form(self, **kwargs):
+    def add_user(self, **kwargs):
 
         self.click(*self.add_new_user)
 
@@ -80,7 +80,7 @@ class Console(BasePage):
         sleep(5)
 
 
-    def group_form(self, **kwargs):
+    def add_group(self, **kwargs):
         self.click(*self.add_new_group)
 
         if kwargs.get('name', ''):
