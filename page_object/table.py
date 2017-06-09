@@ -1,3 +1,5 @@
+from time import sleep
+
 from selenium.webdriver.common.by import By
 
 from page_object.base_page import BasePage
@@ -8,19 +10,10 @@ class Table(BasePage):
         super(Table, self).__init__(driver)
 
     pagination = (By.CSS_SELECTOR, 'ul.pagination')
-    next_page = (By.LINK_TEXT, u'下一页')
-    first_page = (By.LINK_TEXT, u'首页')
-    colum={
-        u'用户帐号':0,
-        u'姓名':1,
-        u'角色': 1,
-        u'所属组织': 1,
-        u'使用状态': 1,
-        u'审核状态': 1,
-        u'姓名': 1,
-    }
+    next_page = (By.LINK_TEXT, '下一页»')
+    first_page = (By.LINK_TEXT, '首页')
 
-    def get_line(self,name):
+    def get_line(self, index, value):
         """
         :param name: 使用每一行的唯一标识符定位。如，username，id，
         :return: tr or None
@@ -30,12 +23,19 @@ class Table(BasePage):
         if len(first_page):
             first_page[0].click()
         while True:
-            tds = self.get_elements(By.TAG_NAME, 'td')
-            for td in tds:
-                if td.get_attribute('text') == name:
-                    return td.parent()
-            if self.page_to(self.next_page[1]):
-                break
+            trs = self.get_elements(By.TAG_NAME, 'tr')
+            for tr in trs[1:]:
+                tds = tr.find_elements(By.TAG_NAME, 'td')
+                if len(tds) and tds[index].text == value:
+                    return tds[index]
+                else:
+                    continue
+            next_page = self.get_elements(*self.next_page)
+            if len(next_page):
+                next_page[0].click()
+                sleep(3)
+            else:
+                return None
 
     def page_to(self, num):
         """
@@ -43,17 +43,46 @@ class Table(BasePage):
         :return: True：表示没有找到元素
         """
         pagination = self.driver.find_elements(*self.pagination)
-        next_page = pagination.find_elements(by=By.LINK_TEXT,value=num)
+        next_page = pagination.find_elements(by=By.LINK_TEXT, value=num)
         if len(next_page):
             next_page.click()
         else:
             return True
 
-    def operate(self, name, operation):
-        line = self.get_line(name)
-        line.find_element(by=By.LINK_TEXT,value = operation).click()
+
+    def verify_column(self, **kwargs):
+        td = self.get_line(int(kwargs['column']), kwargs['value'])
+        if td:
+            if td.text != kwargs['value']:
+                assert False, "Wrong column value: {0}. Expect: {1}".format(td.text, kwargs['value'])
+        else:
+            assert False, "Cannot find column:{0}".format(kwargs['value'])
+
+    def edit_column(self, **kwargs):
+        # key is for csv, value is for web element
+        action = {
+            '编辑': '编辑',
+            '禁止': '禁止',
+            '启用': '启用',
+            '删除': '删除',
+            '审核': '审核'
+        }
+        confirm = {
+            'TRUE': 0,
+            'FALSE': 1
+        }
+        td = self.get_line(int(kwargs['column']), kwargs['value'])
+        if td:
+            operation = td.find_elements(By.XPATH, '../td')[-1]
+            action_index = kwargs['action']
+            operation.find_element(By.LINK_TEXT, action[action_index]).click()
+
+            if kwargs['action'] in ['2', '3', '4']:
+                confirm_index = kwargs['confirm'].upper()
+                pop_dialog = self.driver.find_element(By.CSS_SELECTOR, 'div.popover_bar')
+                btns = pop_dialog.find_elements(By.XPATH, './*')
+                btns[confirm[confirm_index]].click()
+        else:
+            assert False, "Cannot find column:{0}".format(kwargs['value'])
 
 
-    def verify_colum(self,name, index):
-        tr = self.get_line(name)
-        return tr
