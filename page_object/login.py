@@ -9,7 +9,7 @@ from page_object.base_page import BasePage
 class Login(BasePage):
     def __init__(self, driver):
         super(Login, self).__init__(driver)
-        self.open_page('http://wx-pre-t.quantone.com/web/index.php?c=user&a=login&p=quantoneadminlogin')
+        self.open_page('http://weimaxpre.cnsuning.com/web/index.php?c=user&a=login&p=quantoneadminlogin')
 
     USERNAME = (By.ID, 'username')
     PASSWORD = (By.ID, 'password')
