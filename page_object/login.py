@@ -15,20 +15,20 @@ class Login(BasePage):
     PASSWORD = (By.ID, 'password')
     SUBMIT = (By.NAME, 'submit')
 
-
-    def login_form(self, **kwargs):
+    # 用户登录
+    def login(self, **kwargs):
         # input username
         if kwargs.get('username', ''):
             self.input(kwargs['username'], *self.USERNAME)
         else:
             assert False, "Username don't set"
 
-        # input
+        # input password
         if kwargs.get('password', ''):
             self.input(kwargs['password'], *self.PASSWORD)
         else:
             assert False, "Password don't set"
-
+        # 提交
         self.click(*self.SUBMIT)
         sleep(5)
 

@@ -1,5 +1,6 @@
 class PageObject(object):
 
+    # 动态获取page对象
     def get_instence(self, name):
         path = name.split('.')
         # 导入package.module

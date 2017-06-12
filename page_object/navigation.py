@@ -6,6 +6,7 @@ class Navigation(BasePage):
     def __init__(self, driver):
         super(Navigation, self).__init__(driver)
 
+    # 通用菜单选项
     office_account_management = (By.LINK_TEXT, u'公众号管理')
     index = (By.LINK_TEXT, u'首页')
     office_account_list = (By.LINK_TEXT, u'公众号列表')
@@ -24,10 +25,10 @@ class Navigation(BasePage):
     group_management = (By.LINK_TEXT, u'组织架构管理')
 
     def click_menu(self, **kwargs):
-        # input username
+        # click menus
         if kwargs.get('menu', ''):
             menus= kwargs['menu'].split('.')
             for m in menus:
                 self.click(By.LINK_TEXT,m)
         else:
-            assert False, "Username don't set"
+            assert False, "menu don't set"
