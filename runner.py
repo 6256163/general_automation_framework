@@ -15,9 +15,10 @@ from testcase import Testcase
 class Runner(object):
     def __init__(self):
         self.time = time.strftime('%Y-%m-%d %H-%M-%S', time.localtime(time.time()))
-        self.TC = ''
-        self.RESULT = ''
-        self.LOG = ''
+        self.TC = setting.TESTCASE_FOLDER
+        self.RESULT = setting.TEST_RESULTS_FOLDER
+        self.LOG = setting.LOG_FOLDER
+
     def run(self, argv):
         # 命令行参数处理
         try:
@@ -41,7 +42,8 @@ class Runner(object):
         # 循环执行 CSV 文件
         for f in file_list:
             # 初始化 logger
-            logger = Logger(f, self.time, self.LOG).setup_logging()
+            my_log = Logger(f, self.time, self.LOG)
+            logger = my_log.setup_logging()
             # 获取csv步骤，数据与关键字拼装
             steps = tc.get_steps(f)
             # 逐行读取csv
@@ -59,7 +61,7 @@ class Runner(object):
                     logger.exception(e)
                     break
             exe.quit()
-            tc_result.set_result(r, tc.get_tc_name(f), tc.get_tc_module(f), logger.get_log_file())
+            tc_result.set_result(r, tc.get_tc_name(f), tc.get_tc_module(f), my_log.get_log_file())
         env = Environment(loader=PackageLoader("template_package", 'templates'))
         template = env.get_template('template.html')
 
