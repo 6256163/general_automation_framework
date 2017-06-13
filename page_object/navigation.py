@@ -1,3 +1,4 @@
+# coding=utf-8
 from page_object.base_page import BasePage
 from selenium.webdriver.common.by import By
 

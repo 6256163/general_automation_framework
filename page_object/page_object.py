@@ -1,3 +1,4 @@
+# coding=utf-8
 class PageObject(object):
 
     # 动态获取page对象

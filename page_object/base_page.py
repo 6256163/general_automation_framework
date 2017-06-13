@@ -1,3 +1,4 @@
+# coding=utf-8
 from selenium.webdriver.chrome.webdriver import WebDriver
 
 from executer.operation import Operation

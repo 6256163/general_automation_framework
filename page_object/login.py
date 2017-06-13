@@ -1,9 +1,8 @@
+# coding=utf-8
 from time import sleep
 
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import Select
-
-from page_object.base_page import BasePage
+from base_page import BasePage
 
 
 class Login(BasePage):
