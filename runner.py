@@ -15,7 +15,9 @@ from testcase import Testcase
 class Runner(object):
     def __init__(self):
         self.time = time.strftime('%Y-%m-%d %H-%M-%S', time.localtime(time.time()))
-
+        self.TC = ''
+        self.RESULT = ''
+        self.LOG = ''
     def run(self, argv):
         # 命令行参数处理
         try:
@@ -24,19 +26,25 @@ class Runner(object):
             print ('runner.py -t <testcase path> -r <result path> -l <log path>')
             sys.exit(2)
         for opt, arg in opts:
+            if not os.path.exists(arg):
+                os.makedirs(arg)
             if opt in ("-t", "--testcase"):
-                TC = arg
+                self.TC = arg
             elif opt in ("-r", "--result"):
-                RESULT = arg
+                self.RESULT = arg
             elif opt in ("-l", "--log"):
-                LOG = arg
-        tc = Testcase()
+                self.LOG = arg
+        tc = Testcase(self.TC)
         file_list = tc.get_csv_list()
         r = True
-        tc_result = Result(self.time)
+        tc_result = Result(self.time, self.RESULT)
+        # 循环执行 CSV 文件
         for f in file_list:
-            logger = Logger(f, self.time).setup_logging()
+            # 初始化 logger
+            logger = Logger(f, self.time, self.LOG).setup_logging()
+            # 获取csv步骤，数据与关键字拼装
             steps = tc.get_steps(f)
+            # 逐行读取csv
             csv_lines = tc.get_line(f)
             # result init
             r = True
@@ -51,15 +59,12 @@ class Runner(object):
                     logger.exception(e)
                     break
             exe.quit()
-            tc_result.set_result(f, r)
+            tc_result.set_result(r, tc.get_tc_name(f), tc.get_tc_module(f), logger.get_log_file())
         env = Environment(loader=PackageLoader("template_package", 'templates'))
         template = env.get_template('template.html')
 
-        if not os.path.exists(setting.TEST_RESULTS_FOLDER):
-            os.makedirs(setting.TEST_RESULTS_FOLDER)
-
         # 创建result文件
-        result_html = setting.TEST_RESULTS_FOLDER + os.sep + tc_result.get_result()['time'] + '.html'
+        result_html = self.RESULT + os.sep + tc_result.get_result()['time'] + '.html'
         with codecs.open(result_html, 'w', 'utf-8') as res:
             res.write(template.render(result=tc_result.get_result()))
 
