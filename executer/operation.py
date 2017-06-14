@@ -1,4 +1,6 @@
 # coding=utf-8
+from __future__ import absolute_import
+
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait

@@ -1,4 +1,7 @@
 # coding=utf-8
+from __future__ import absolute_import
+
+
 class PageObject(object):
 
     # 动态获取page对象

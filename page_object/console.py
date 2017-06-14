@@ -1,11 +1,11 @@
 # coding=utf-8
+from __future__ import absolute_import
 from time import sleep
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 
-from page_object.base_page import BasePage
-
+from .base_page import BasePage
 
 class Console(BasePage):
     def __init__(self, driver):

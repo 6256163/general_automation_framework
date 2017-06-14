@@ -1,7 +1,9 @@
 # coding=utf-8
-from page_object.base_page import BasePage
+from __future__ import absolute_import
+
 from selenium.webdriver.common.by import By
 
+from .base_page import BasePage
 
 class Navigation(BasePage):
     def __init__(self, driver):

@@ -1,5 +1,5 @@
 # coding=utf-8
-from selenium.webdriver.chrome.webdriver import WebDriver
+from __future__ import absolute_import
 
 from executer.operation import Operation
 
