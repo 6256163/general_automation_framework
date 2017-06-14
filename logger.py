@@ -2,8 +2,6 @@
 import logging
 import os
 
-import setting
-
 from testcase import Testcase
 
 

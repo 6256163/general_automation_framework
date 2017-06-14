@@ -19,7 +19,7 @@ class Testcase(object):
         if dir == None:
             dir = self.folder
         if os.path.isfile(dir):
-            file_list.append((dir))
+            file_list.append(dir)
         elif os.path.isdir(dir):
             for s in os.listdir(dir):
                 # 如果需要忽略某些文件夹，使用以下代码
@@ -28,6 +28,7 @@ class Testcase(object):
                 newDir = os.path.join(dir, s)
                 self.get_csv_list(newDir, file_list)
         return sorted(file_list)
+
 
     # 逐行读取csv
     def get_line(self, path):
