@@ -13,28 +13,16 @@ from testcase import Testcase
 
 
 class Runner(object):
-    def __init__(self):
+    def __init__(self, command_line):
+        self.command_line = command_line
         self.time = time.strftime('%Y-%m-%d %H-%M-%S', time.localtime(time.time()))
-        self.TC = setting.TESTCASE_FOLDER
-        self.RESULT = setting.TEST_RESULTS_FOLDER
-        self.LOG = setting.LOG_FOLDER
+        self.TC = None
+        self.RESULT = None
+        self.LOG = None
+        self.process_command_line()
 
-    def run(self, argv):
-        # 命令行参数处理
-        try:
-            opts, args = getopt.getopt(argv, "t:r:l:", ["testcase=", "result=", "log="])
-        except getopt.GetoptError:
-            print ('runner.py -t <testcase path> -r <result path> -l <log path>')
-            sys.exit(2)
-        for opt, arg in opts:
-            if not os.path.exists(arg):
-                os.makedirs(arg)
-            if opt in ("-t", "--testcase"):
-                self.TC = arg
-            elif opt in ("-r", "--result"):
-                self.RESULT = arg
-            elif opt in ("-l", "--log"):
-                self.LOG = arg
+    def run(self):
+
         tc = Testcase(self.TC)
         file_list = tc.get_csv_list()
         r = True
@@ -70,7 +58,26 @@ class Runner(object):
         with codecs.open(result_html, 'w', 'utf-8') as res:
             res.write(template.render(result=tc_result.get_result()))
 
+    def process_command_line(self):
+        # 命令行参数处理
+        try:
+            if not self.command_line:
+                raise getopt.GetoptError('')
+            opts, args = getopt.getopt(self.command_line, "t:r:l:", ["testcase=", "result=", "log="])
+        except getopt.GetoptError:
+            print('runner.py -t <testcase path> -r <result path> -l <log path>')
+            sys.exit()
+        for opt, arg in opts:
+            if opt in ("-t", "--testcase"):
+                self.TC = arg
+            elif opt in ("-r", "--result"):
+                self.RESULT = arg
+            elif opt in ("-l", "--log"):
+                self.LOG = arg
+        if self.RESULT == None or self.LOG == None or self.TC == None:
+            sys.exit()
+
 
 if __name__ == "__main__":
-    run = Runner()
-    run.run(sys.argv[1:])
+    run = Runner(sys.argv[1:])
+    run.run()
