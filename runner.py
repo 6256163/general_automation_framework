@@ -16,10 +16,10 @@ class Runner(object):
     def __init__(self, command_line):
         self.command_line = command_line
         self.time = time.strftime('%Y-%m-%d %H-%M-%S', time.localtime(time.time()))
-        self.TC = None
-        self.RESULT = None
-        self.LOG = None
-        self.process_command_line()
+        self.TC = setting.TESTCASE_FOLDER
+        self.RESULT = setting.TEST_RESULTS_FOLDER
+        self.LOG = setting.LOG_FOLDER
+        # self.process_command_line()
 
     def run(self):
 

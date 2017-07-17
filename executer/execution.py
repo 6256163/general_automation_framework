@@ -22,8 +22,9 @@ class Execution(Action, Expect):
     def execute(self):
         if self.csv['PageObject']:
             kwarg = dict()
-            for item in self.csv['PageValue'].split('|'):
-                kwarg[item.split('=')[0]] = item.split('=')[1]
+            if self.csv['PageValue']:
+                for item in self.csv['PageValue'].split('|'):
+                    kwarg[item.split('=')[0]] = item.split('=')[1]
             po = PageObject().get_instence(self.csv['PageObject'])(self.driver).perform(self.csv['PageAction'], **kwarg)
         if self.csv['Action']:
             getattr(Execution, self.csv['Action'].lower())(self)
