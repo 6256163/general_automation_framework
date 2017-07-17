@@ -1,6 +1,11 @@
 # coding=utf-8
 from __future__ import absolute_import
 
+from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
 from executer.operation import Operation
 
 
@@ -41,9 +46,25 @@ class BasePage(object):
     # 点击元素
     def click(self, *args):
         self.get_element(*args).click()
+        #WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(args)).click()
 
     # 内容输入
     def input(self, input, *args):
         target = self.get_element(*args)
         target.clear()
         target.send_keys(input)
+
+    def wait_ajax_loading(self):
+        try:
+            while self.driver.find_element(By.CSS_SELECTOR, 'div.ajax_loading').is_displayed():
+                pass
+        except NoSuchElementException:
+            pass
+
+
+    def wait_create_table(self):
+        try:
+            while self.driver.find_element(By.CSS_SELECTOR, 'div.autoInfoIndicator').is_displayed():
+                pass
+        except NoSuchElementException:
+            pass
