@@ -56,7 +56,8 @@ class BasePage(object):
 
     def wait_ajax_loading(self):
         try:
-            while self.driver.find_element(By.CSS_SELECTOR, 'div.ajax_loading').is_displayed():
+            while self.driver.find_element(By.CSS_SELECTOR, 'div.ajax_loading').is_displayed() \
+                    or self.driver.find_element(By.CSS_SELECTOR, 'div.ajaxloading_mask').is_displayed():
                 pass
         except NoSuchElementException:
             pass
@@ -65,6 +66,14 @@ class BasePage(object):
     def wait_create_table(self):
         try:
             while self.driver.find_element(By.CSS_SELECTOR, 'div.autoInfoIndicator').is_displayed():
+                pass
+        except NoSuchElementException:
+            pass
+
+    def wait_mask(self):
+        try:
+            while self.driver.find_element(By.CSS_SELECTOR, 'div.datalist_loading_mask').is_displayed() \
+                    or self.driver.find_element(By.CSS_SELECTOR, 'div.ajaxloading_mask').is_displayed():
                 pass
         except NoSuchElementException:
             pass
