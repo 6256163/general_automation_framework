@@ -15,6 +15,7 @@ class Execution(Action, Expect):
     def __init__(self, csv):
         super(Execution, self).__init__(csv)
         self.setup_driver()
+        self.driver.maximize_window()
 
     def update_step(self, step):
         self.csv = step
