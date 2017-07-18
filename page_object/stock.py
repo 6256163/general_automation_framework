@@ -42,10 +42,13 @@ class Stock(BasePage):
         self.wait_create_table()
 
     def switch_mode(self, **kwargs):
+
         mode = {
             '下单': 'mode_select',
             '查询': 'mode_view'
         }
+
+        self.wait_mask()
         self.click(*(By.XPATH,'//label[@for="{0}"]'.format(mode[kwargs['mode']])))
 
     def choose_date(self,**kwargs):

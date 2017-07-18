@@ -3,6 +3,7 @@ from __future__ import absolute_import
 from time import sleep
 
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 
 from .base_page import BasePage
 
@@ -10,7 +11,13 @@ from .base_page import BasePage
 class Selector(BasePage):
     def __init__(self,driver):
         super(Selector, self).__init__(driver)
-        self.driver.switch_to.frame(self.get_element(By.CSS_SELECTOR, 'iframe.dialogBodyIfr'))
+        self.driver.switch_to.default_content()
+        ifrs = self.driver.find_elements(By.TAG_NAME, 'iframe')
+        for ifr in ifrs:
+            if ifr.size['width'] != 0:
+                self.driver.switch_to.frame(ifr)
+                break
+
 
 
     def select(self, items):
@@ -32,15 +39,11 @@ class Selector(BasePage):
         sleep(3)
 
     def search(self,adv):
-        search_div=  self.driver.findelement(By.CSS_SELECTOR,'div.search')
+        search_div=  self.driver.find_element(By.CSS_SELECTOR,'div.search')
         search_input = search_div.find_element(By.TAG_NAME,'input')
         search_input.clear()
         search_input.send_keys(adv)
-        search_input.send_keys("Enter")
-
-        tbody = self.driver.find_element(By.TAG_NAME,'tbody')
-        input = tbody.find_element(By.TAG_NAME,'input')
-        input.click()
+        search_input.send_keys(Keys.ENTER)
 
         self.confirm()
 
