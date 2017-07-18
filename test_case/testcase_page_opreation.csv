@@ -9,4 +9,6 @@ tc_001,Check the user is added,chrome,page_object.stock.Stock,select_item,items=
 tc_001,filter user,chrome,page_object.stock.Stock,query,,,,,,,,,,
 tc_001,filter user,chrome,page_object.stock.Stock,switch_mode,mode=下单,,,,,,,,,
 tc_001,filter user,chrome,page_object.stock.Stock,choose_date,index=1;2;3,,,,,,,,,
-tc_001,,chrome,page_object.order.Order,per_order,order_advId=六间房|operation=提交,,,,,,,,,
+tc_001,,chrome,page_object.order.Order,fill_order,adv=六间房|operation=提交,,,,,,,,,
+tc_001,,chrome,page_object.order.Order,execute_order,operation=审批,,,,,,,,,
+tc_001,,chrome,page_object.order.Order,fill_order,operation=审批,,,,,,,,,
