@@ -21,16 +21,20 @@ class Execution(Action, Expect):
         self.csv = step
 
     def execute(self):
+        result_log = None
         if self.csv['PageObject']:
             kwarg = dict()
             if self.csv['PageValue']:
                 for item in self.csv['PageValue'].split('|'):
                     kwarg[item.split('=')[0]] = item.split('=')[1]
-            po = PageObject().get_instence(self.csv['PageObject'])(self.driver).perform(self.csv['PageAction'], **kwarg)
+            func = self.csv['PageAction'] if self.csv['PageAction'] else self.csv['PageExpect']
+            result_log = PageObject().get_instence(self.csv['PageObject'])(self.driver).perform(func, **kwarg)
         if self.csv['Action']:
             getattr(Execution, self.csv['Action'].lower())(self)
         if self.csv['Expect']:
-            getattr(Execution, self.csv['Expect'].lower())(self)
+            result_log = getattr(Execution, self.csv['Expect'].lower())(self)
+        return result_log
+
 
     def setup_driver(self):
         if self.driver is None:

@@ -14,7 +14,7 @@ class Expect(Operation):
                                                 self.csv['ExpectProperty'])
 
         if actual_result != self.csv['ExpectValue']:
-            assert False, u"Get wrong value:{0}. Expected:{1}".format(actual_result, self.csv['ExpectValue'])
+            return u"Get wrong value:{0}. Expected:{1}".format(actual_result, self.csv['ExpectValue'])
 
     def compare(self):
         values = list()
@@ -26,4 +26,4 @@ class Expect(Operation):
             if values[0].lower() == values[i].lower():
                 pass
             else:
-                assert False, u"Compreation {0} are not equal".format(values)
+                return u"Compreation {0} are not equal".format(values)
