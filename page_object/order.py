@@ -16,15 +16,15 @@ class Order(BasePage):
         self.wait_mask()
 
     # 通用元素定位信息
-    new = (By.LINK_TEXT, '我要下单')
+    new_button = (By.LINK_TEXT, '我要下单')
 
     # 新建订单
-    def new_order(self, **kwargs):
-        self.click(*self.new)
+    def new(self, **kwargs):
+        self.click(*self.new_button)
         self.wait_ajax_loading()
 
 
-    def fill_order(self, **kwargs):
+    def fill(self, **kwargs):
         if kwargs.get('type',None):
             sel = self.get_element(By.ID,'order_orderType')
             Select(sel).select_by_value(kwargs['orderType'])
@@ -48,7 +48,11 @@ class Order(BasePage):
 
 
 
-    def execute_order(self, **kwargs):
+    def execute(self, **kwargs):
         table = Table(self.driver)
         table.execute(kwargs['operation'])
 
+
+    def verify_list(self, **kwargs):
+        table = Table(self.driver)
+        return table.verify(**kwargs)

@@ -18,10 +18,18 @@ class Table(BasePage):
         self.columns = dict([(v.text,i) for i, v in enumerate(ths)])
         sleep(3)
 
+    def get_line(self):
+        tbody = self.get_element(By.TAG_NAME, 'tbody')
+        tr = tbody.find_element(By.TAG_NAME, 'tr')
+        return tr.find_elements(By.TAG_NAME, 'td')
 
     def execute(self, operation):
-        tbody = self.get_element(By.TAG_NAME,'tbody')
-        tr = tbody.find_element(By.TAG_NAME,'tr')
-        tds = tr.find_elements(By.TAG_NAME,'td')
-        tds[-1].find_element(By.XPATH,'//a[@title="{0}"]'.format(operation)).click()
+        tds = self.get_line()
+        tds[self.columns['操作']].find_element(By.XPATH,'//a[@title="{0}"]'.format(operation)).click()
 
+    def verify(self, **kwargs):
+        tds = self.get_line()
+        for (k,v) in kwargs.items():
+            actual = tds[self.columns[k]].text
+            if actual != v:
+                return "Expect: {0}. Actual: {1}".format(v,actual)
