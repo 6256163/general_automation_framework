@@ -1,0 +1,2 @@
+selenium==3.4.0
+Jinja2==2.9.6
