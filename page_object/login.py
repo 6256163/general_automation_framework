@@ -10,9 +10,9 @@ from .base_page import BasePage
 
 
 class Login(BasePage):
-    def __init__(self, driver):
+    def __init__(self, driver, url = 'http://10.28.8.102/site/superentrance'):
         super(Login, self).__init__(driver)
-        self.open_page('http://10.28.8.102/site/superentrance')
+        self.open_page(url)
 
     USERNAME = (By.ID, 'LoginForm_username')
     PASSWORD = (By.ID, 'LoginForm_password')
@@ -41,7 +41,6 @@ class Login(BasePage):
         # 提交
         self.click(*self.SUBMIT)
         self.wait_ajax_loading()
-
 
 
 

@@ -44,7 +44,7 @@ class Runner(object):
                     logger.info(str(line))
                     exe.update_step(step)
                     log=exe.execute()
-                    if not log:
+                    if log:
                         r = False
                         logger.info(log)
                 except Exception as e:

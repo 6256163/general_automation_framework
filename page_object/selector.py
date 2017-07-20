@@ -43,6 +43,7 @@ class Selector(BasePage):
         search_input = search_div.find_element(By.TAG_NAME,'input')
         search_input.clear()
         search_input.send_keys(adv)
+        sleep(3)
         search_input.send_keys(Keys.ENTER)
 
         self.confirm()

@@ -13,6 +13,7 @@ class Navigation(BasePage):
     def __init__(self, driver):
         super(Navigation, self).__init__(driver)
 
+
     # 一级 - 首页菜单
     index = [(By.PARTIAL_LINK_TEXT,'首页')]
     # 一级 - 订单管理菜单
@@ -55,6 +56,7 @@ class Navigation(BasePage):
     price_policy = [suning, (By.PARTIAL_LINK_TEXT,'价格政策管理')]
 
     def click_menu(self, **kwargs):
+        self.wait_mask()
         # click menus
         if kwargs.get('menu', False):
             menus= getattr(Navigation,kwargs['menu'])
