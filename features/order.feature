@@ -63,3 +63,8 @@ Feature: Order
              |类型|询量|
              |状态|编辑中|
           """
+        When audit the order <times> times
+        Then check the order info from order list
+             |key|value|
+             |类型|新设|
+             |状态|待提交|

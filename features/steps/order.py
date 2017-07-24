@@ -76,6 +76,10 @@ def step_impl(context):
     context.execute_steps(context.text)
 
 
+@when('audit the order <times> times')
+def step_impl(context):
+    pass
+
 def sub_dict(dic, sub):
     return dict([(key, dic.get(key,None)) for key in sub])
 
