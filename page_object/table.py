@@ -3,7 +3,7 @@ from __future__ import absolute_import
 from time import sleep
 
 from selenium.webdriver.common.by import By
-
+from selenium.webdriver.common.keys import Keys
 from .base_page import BasePage
 
 class Table(BasePage):
@@ -26,6 +26,17 @@ class Table(BasePage):
     def execute(self, operation):
         tds = self.get_line()
         tds[self.columns['操作']].find_element(By.XPATH,'//a[@title="{0}"]'.format(operation)).click()
+
+    def get_field(self, field):
+        return self.get_line()[self.columns[field]].text
+
+    def search(self,order):
+        input = self.get_element(By.CSS_SELECTOR,'input.searchTxt')
+        input.clear()
+        input.send_keys(order)
+        input.send_keys(Keys.ENTER)
+        sleep(3)
+
 
     def verify(self, **kwargs):
         tds = self.get_line()
