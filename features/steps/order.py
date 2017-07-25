@@ -6,7 +6,7 @@ from page_object.login import Login
 from page_object.navigation import Navigation
 from page_object.order import Order
 from page_object.stock import Stock
-
+from features.store import test_store
 login_url = 'http://10.28.8.102/site/superentrance'
 
 
@@ -30,7 +30,7 @@ def step_impl(context):
     assert context.driver.current_url.endswith('/index'), "Wrong page after login: {0}".format(context.driver.url)
 
 
-@given('navigate to order_list page')
+@given('navigate to page')
 def step_impl(context):
     context.navigation = Navigation(context.driver)
     context.navigation.click_menu(**table_to_dict(context.table))
@@ -70,15 +70,23 @@ def step_impl(context):
 def step_impl(context):
     assert not context.order.verify_list(**table_to_dict(context.table))
 
-
-@given('a new order is saved')
+@then('storage order number')
 def step_impl(context):
-    context.execute_steps(context.text)
+    key = context.table.rows[0].cells[0]
+    test_store.store[key] = context.order.get_field(field='订单编号')
+    test_store
 
 
-@when('audit the order <times> times')
+@given('an order')
 def step_impl(context):
-    pass
+    key = context.table.rows[0].cells[0]
+    context.order.search_order(order= test_store.store[key])
+
+@when('audit the order')
+def step_impl(context):
+    for i in range(context.table.rows[0].cells[0]):
+        context.order.execute(operation='审批')
+        context.order.fill(operation='审批')
 
 def sub_dict(dic, sub):
     return dict([(key, dic.get(key,None)) for key in sub])

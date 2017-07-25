@@ -16,7 +16,7 @@ Feature: Order
 
 
     Scenario: new CPT order
-        Given navigate to order_list page
+        Given navigate to page
              |key|value|
              |menu|order_list|
         When click new order
@@ -37,34 +37,30 @@ Feature: Order
              |key|value|
              |类型|询量|
              |状态|审批中|
+         And storage order number
+             |order_in_storage|
+             |order1          |
 
-    Scenario: audit a new order to complete
-        Given a new order is saved
-          """
-          Given navigate to order_list page
+    Scenario Outline: audit a pre-order to complete
+        Given navigate to page
              |key|value|
              |menu|order_list|
-          When click new order
-           And stock query
+        And an order
+             |order_in_storage|
+             |order1          |
+        When audit the order
              |key|value|
-             |type|CPT|
-             |date|2017-10-13;2017-10-16|
-             |0|网站页面广告.首页.网站首页通栏4|
-           And select slot and create new order
-             |key|value|
-             |mode|下单|
-             |index|1;2;3|
-           And fill and submit info
-             |key|value|
-             |adv|六间房|
-             |operation|保存|
-          Then check the order info from order list
-             |key|value|
-             |类型|询量|
-             |状态|编辑中|
-          """
-        When audit the order <times> times
+             |amount|<amount>|
+             |cost|<cost>|
+             |pay_date|<pay_date>|
         Then check the order info from order list
              |key|value|
-             |类型|新设|
-             |状态|待提交|
+             |类型|<type>|
+             |状态|<state>|
+        Examples: Per-order
+             |type|state|amount|cost|pay_date|
+             |询量|审批中||||
+             |新设|待提交|100|200|2|
+             |新设|审批中||||
+             |新设|审批中||||
+             |新设|已生成||||
