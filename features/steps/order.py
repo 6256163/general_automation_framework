@@ -2,13 +2,13 @@
 from behave import *
 
 from executer.execution import Execution
+from features import store
 from page_object.login import Login
 from page_object.navigation import Navigation
 from page_object.order import Order
 from page_object.stock import Stock
-from features.store import test_store
-login_url = 'http://10.28.8.102/site/superentrance'
 
+login_url = 'http://10.28.8.102/site/superentrance'
 
 @given('browser should be launched')
 def step_impl(context):
@@ -72,15 +72,19 @@ def step_impl(context):
 
 @then('storage order number')
 def step_impl(context):
+    context.order = Order(context.driver)
     key = context.table.rows[0].cells[0]
-    test_store.store[key] = context.order.get_field(field='订单编号')
-    test_store
+    field = '订单编号'
+    value = context.order.get_field(field=field)
+    store.set_value(key, value)
+    order_num = store.get_value(key)
 
 
 @given('an order')
 def step_impl(context):
     key = context.table.rows[0].cells[0]
-    context.order.search_order(order= test_store.store[key])
+    order_num = store.get_value(key)
+    context.order.search_order(order=order_num)
 
 @when('audit the order')
 def step_impl(context):
