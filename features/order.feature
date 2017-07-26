@@ -53,14 +53,16 @@ Feature: Order
              |amount|<amount>|
              |cost|<cost>|
              |pay_date|<pay_date>|
+             |operation|<operation>|
         Then check the order info from order list
              |key|value|
              |类型|<type>|
              |状态|<state>|
         Examples: Per-order
-             |type|state|amount|cost|pay_date|
-             |询量|审批中||||
-             |新设|待提交|100|200|2|
-             |新设|审批中||||
-             |新设|审批中||||
-             |新设|已生成||||
+             |amount|cost|pay_date|operation|type|state|
+             ||||审批|询量|审批中|
+             ||||审批|新设|待下单|
+             |100|200|2|编辑|新设|审批中|
+             ||||审批|新设|审批中|
+             ||||审批|新设|审批中|
+             ||||审批|新设|已生成|

@@ -1,8 +1,9 @@
 # coding=utf-8
+import sys
 from behave import *
 
 from executer.execution import Execution
-from features import store
+from page_object import store
 from page_object.login import Login
 from page_object.navigation import Navigation
 from page_object.order import Order
@@ -74,7 +75,8 @@ def step_impl(context):
 def step_impl(context):
     context.order = Order(context.driver)
     key = context.table.rows[0].cells[0]
-    field = '订单编号'
+    field = '订单编号'.encode('gbk').decode()
+    cod = sys.getdefaultencoding()
     value = context.order.get_field(field=field)
     store.set_value(key, value)
     order_num = store.get_value(key)
@@ -82,15 +84,21 @@ def step_impl(context):
 
 @given('an order')
 def step_impl(context):
+    context.order = Order(context.driver)
     key = context.table.rows[0].cells[0]
     order_num = store.get_value(key)
     context.order.search_order(order=order_num)
 
 @when('audit the order')
 def step_impl(context):
-    for i in range(context.table.rows[0].cells[0]):
-        context.order.execute(operation='审批')
-        context.order.fill(operation='审批')
+    dic = table_to_dict(context.table)
+    context.order.execute(**dic)
+    context.order.fill(**dic)
+
+@then('close browser')
+def step_impl(context):
+    context.driver.quit()
+
 
 def sub_dict(dic, sub):
     return dict([(key, dic.get(key,None)) for key in sub])

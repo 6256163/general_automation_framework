@@ -56,6 +56,8 @@ class Order(BasePage):
 
         # final operation
         if kwargs['operation']:
+            if kwargs['operation'] == "编辑":
+                kwargs['operation'] = '提交'
             self.click(By.XPATH, '//input[@value="{0}"]'.format(kwargs['operation']))
             dialog = self.get_element(By.XPATH, '//div[@role="dialog"]')
             buttons = dialog.find_elements(By.TAG_NAME, 'button')

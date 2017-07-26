@@ -60,7 +60,11 @@ class Navigation(BasePage):
         # click menus
         if kwargs.get('menu', False):
             menus= getattr(Navigation,kwargs['menu'])
-            for m in menus:
-                self.click(*m)
+            try:
+                for m in menus:
+                    self.click(*m)
+            except:
+                for m in menus:
+                    self.click(*m)
         else:
             assert False, "menu don't set"

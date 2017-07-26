@@ -1,7 +1,7 @@
 # coding=utf-8
 from __future__ import absolute_import
 
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, WebDriverException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -45,7 +45,10 @@ class BasePage(object):
 
     # 点击元素
     def click(self, *args):
-        self.get_element(*args).click()
+        try:
+            self.get_element(*args).click()
+        except WebDriverException:
+            self.get_element(*args).click()
         #WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(args)).click()
 
     # 内容输入
