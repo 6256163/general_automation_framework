@@ -45,11 +45,7 @@ class BasePage(object):
 
     # 点击元素
     def click(self, *args):
-        try:
-            self.get_element(*args).click()
-        except WebDriverException:
-            self.get_element(*args).click()
-        #WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(args)).click()
+        WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(args)).click()
 
     # 内容输入
     def input(self, input, *args):
@@ -58,25 +54,18 @@ class BasePage(object):
         target.send_keys(input)
 
     def wait_ajax_loading(self):
-        try:
-            while self.driver.find_element(By.CSS_SELECTOR, 'div.ajax_loading').is_displayed() \
-                    or self.driver.find_element(By.CSS_SELECTOR, 'div.ajaxloading_mask').is_displayed():
-                pass
-        except NoSuchElementException:
-            pass
-
+        self.wait_('div.ajaxloading', 'div.ajaxloading_mask')
 
     def wait_create_table(self):
-        try:
-            while self.driver.find_element(By.CSS_SELECTOR, 'div.autoInfoIndicator').is_displayed():
-                pass
-        except NoSuchElementException:
-            pass
+        self.wait_('div.autoInfoIndicator')
 
-    def wait_mask(self):
-        try:
-            while self.driver.find_element(By.CSS_SELECTOR, 'div.datalist_loading_mask').is_displayed() \
-                    or self.driver.find_element(By.CSS_SELECTOR, 'div.ajaxloading_mask').is_displayed():
-                pass
-        except NoSuchElementException:
-            pass
+    def wait_datalist_loading(self):
+        self.wait_('div.datalist_loading_mask', 'div.datalist_loading')
+
+    def wait_(self, *css_selectors):
+        for css in css_selectors:
+            while self.driver.find_element(By.CSS_SELECTOR, css):
+                while len(self.driver.find_elements(By.CSS_SELECTOR, css)):
+                    if not self.driver.find_elements(By.CSS_SELECTOR, css)[0].is_displayed():
+                        break
+                break
