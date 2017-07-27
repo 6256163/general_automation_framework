@@ -15,13 +15,13 @@ from .base_page import BasePage
 class Order(BasePage):
     def __init__(self, driver):
         super(Order, self).__init__(driver)
+        self.wait_datalist_loading()
 
     # 通用元素定位信息
     new_button = (By.LINK_TEXT, '我要下单')
 
     # 新建订单
     def new(self, **kwargs):
-        self.wait_mask()
         self.click(*self.new_button)
         self.wait_ajax_loading()
 
@@ -55,10 +55,8 @@ class Order(BasePage):
             self.driver.execute_script('document.getElementById("order_payDate").value="{0}"'.format(date))
 
         # final operation
-        if kwargs['operation']:
-            if kwargs['operation'] == "编辑":
-                kwargs['operation'] = '提交'
-            self.click(By.XPATH, '//input[@value="{0}"]'.format(kwargs['operation']))
+        if kwargs['submit']:
+            self.click(By.XPATH, '//input[@value="{0}"]'.format(kwargs['submit']))
             dialog = self.get_element(By.XPATH, '//div[@role="dialog"]')
             buttons = dialog.find_elements(By.TAG_NAME, 'button')
             for b in buttons:
@@ -68,7 +66,6 @@ class Order(BasePage):
                     break
 
     def execute(self, **kwargs):
-        self.wait_mask()
         table = Table(self.driver)
         table.execute(kwargs['operation'])
 

@@ -43,4 +43,3 @@ class Login(BasePage):
         self.wait_ajax_loading()
 
 
-

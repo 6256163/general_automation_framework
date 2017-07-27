@@ -52,7 +52,7 @@ class Stock(BasePage):
 
     def query(self):
         self.click(*(By.CSS_SELECTOR, 'button.seld'))
-        self.wait_create_table()
+        self.wait_ajax_loading()
 
     def switch_mode(self, **kwargs):
 
@@ -60,8 +60,7 @@ class Stock(BasePage):
             '下单': 'mode_select',
             '查询': 'mode_view'
         }
-
-        self.wait_mask()
+        sleep(5)
         self.click(*(By.XPATH, '//label[@for="{0}"]'.format(mode[kwargs['mode']])))
 
     def select_slot(self, **kwargs):

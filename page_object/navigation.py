@@ -56,7 +56,6 @@ class Navigation(BasePage):
     price_policy = [suning, (By.PARTIAL_LINK_TEXT,'价格政策管理')]
 
     def click_menu(self, **kwargs):
-        self.wait_mask()
         # click menus
         if kwargs.get('menu', False):
             menus= getattr(Navigation,kwargs['menu'])
