@@ -1,19 +1,6 @@
-@tags @tag
+@chrome
 Feature: Order
     User can new order and audit order to make it switch to correct type and state.
-
-    Background: Launch browser
-        Given browser should be launched
-            |browser|
-            |chrome |
-        And login page is opened
-        When input user login info and submit
-             |key|value|
-             |username|2|
-             |password|123456|
-             |verifycode|imqa|
-        Then show the index page
-
 
     Scenario: new CPT order
         Given navigate to page
@@ -24,7 +11,7 @@ Feature: Order
              |key|value|
              |type|CPT|
              |date|2017-10-13;2017-10-16|
-             |0|网站页面广告.首页.网站首页通栏4|
+             |0|视频广告.通用位置.通用前贴|
          And select slot and create new order
              |key|value|
              |mode|下单|
@@ -32,14 +19,17 @@ Feature: Order
          And fill and submit info
              |key|value|
              |adv|六间房|
-             |operation|提交|
+             |submit|提交|
         Then check the order info from order list
              |key|value|
              |类型|询量|
              |状态|审批中|
-         And storage order number
+        And storage order number
              |order_in_storage|
-             |order1          |
+             |<order_num>          |
+        Examples: Prepare order
+             |order_num|
+             |order1|
 
     Scenario Outline: audit a pre-order to complete
         Given navigate to page
@@ -54,15 +44,17 @@ Feature: Order
              |cost|<cost>|
              |pay_date|<pay_date>|
              |operation|<operation>|
+             |submit|<submit>|
         Then check the order info from order list
              |key|value|
              |类型|<type>|
              |状态|<state>|
         Examples: Per-order
-             |amount|cost|pay_date|operation|type|state|
-             ||||审批|询量|审批中|
-             ||||审批|新设|待下单|
-             |100|200|2|编辑|新设|审批中|
-             ||||审批|新设|审批中|
-             ||||审批|新设|审批中|
-             ||||审批|新设|已生成|
+             |operation|submit|type|state|amount|cost|pay_date|
+             |审批|审批|询量|审批中||||
+             |审批|审批|新设|待下单||||
+             |编辑|提交|新设|审批中|100|200|2|
+             |审批|审批|新设|审批中||||
+             |审批|审批|新设|审批中||||
+             |审批|审批|新设|已生成||||
+
