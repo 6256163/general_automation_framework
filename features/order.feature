@@ -2,7 +2,7 @@
 Feature: Order
     User can new order and audit order to make it switch to correct type and state.
 
-    Scenario: new CPT order
+    Scenario Outline: new CPT order
         Given navigate to page
              |key|value|
              |menu|order_list|
@@ -30,12 +30,14 @@ Feature: Order
         Examples: Prepare order
              |order_num|
              |order1|
+             |order2|
+             |order3|
 
     Scenario Outline: audit a pre-order to complete
         Given navigate to page
              |key|value|
              |menu|order_list|
-        And an order
+        And search an order
              |order_in_storage|
              |order1          |
         When audit the order
@@ -47,6 +49,7 @@ Feature: Order
              |submit|<submit>|
         Then check the order info from order list
              |key|value|
+             |order|order1|
              |类型|<type>|
              |状态|<state>|
         Examples: Per-order
@@ -58,3 +61,170 @@ Feature: Order
              |审批|审批|新设|审批中||||
              |审批|审批|新设|已生成||||
 
+
+
+    Scenario Outline: adjust an order to complete
+        Given navigate to page
+             |key|value|
+             |menu|order_list|
+        And search an order
+             |order_in_storage|
+             |order2          |
+        When audit the order
+             |key|value|
+             |amount|<amount>|
+             |cost|<cost>|
+             |pay_date|<pay_date>|
+             |operation|<operation>|
+             |submit|<submit>|
+        Then check the order info from order list
+             |key|value|
+             |order|order2|
+             |类型|<type>|
+             |状态|<state>|
+        Examples: Per-order
+             |operation|submit|type|state|amount|cost|pay_date|
+             |审批|审批|询量|审批中||||
+             |审批|审批|新设|待下单||||
+             |编辑|提交|新设|审批中|100|200|2|
+             |审批|审批|新设|审批中||||
+             |审批|审批|新设|审批中||||
+             |审批|审批|新设|已生成||||
+             |调整|保存|调整|待下单|300|300|5|
+             |编辑|提交|调整|审批中||||
+             |审批|审批|调整|审批中||||
+             |审批|审批|调整|审批中||||
+             |审批|审批|调整|已生成||||
+
+    Scenario Outline: cancel an order
+        Given navigate to page
+             |key|value|
+             |menu|order_list|
+        And search an order
+             |order_in_storage|
+             |order3          |
+        When audit the order
+             |key|value|
+             |amount|<amount>|
+             |cost|<cost>|
+             |pay_date|<pay_date>|
+             |operation|<operation>|
+             |submit|<submit>|
+        Then check the order info from order list
+             |key|value|
+             |order|order3|
+             |类型|<type>|
+             |状态|<state>|
+        Examples: Per-order
+             |operation|submit|type|state|amount|cost|pay_date|
+             |审批|审批|询量|审批中||||
+             |审批|审批|新设|待下单||||
+             |编辑|提交|新设|审批中|100|200|2|
+             |审批|审批|新设|审批中||||
+             |审批|审批|新设|审批中||||
+             |审批|审批|新设|已生成||||
+             |撤销||撤销|编辑中||||
+             |编辑|提交|撤销|审批中||||
+             |审批|审批|撤销|审批中||||
+             |审批|审批|撤销|审批中||||
+             |审批|审批|撤销|审批中||||
+             |审批|审批|撤销|审批中||||
+             |审批|审批|撤销|审批中||||
+             |审批|审批|撤销|审批中||||
+             |审批|审批|撤销|已生成||||
+
+
+    Scenario Outline: adjust an adjusted order
+        Given navigate to page
+             |key|value|
+             |menu|order_list|
+        And search an order
+             |order_in_storage|
+             |order2          |
+        When audit the order
+             |key|value|
+             |amount|<amount>|
+             |cost|<cost>|
+             |pay_date|<pay_date>|
+             |adjust  |<adjust>  |
+             |operation|<operation>|
+             |submit|<submit>|
+        Then check the order info from order list
+             |key|value|
+             |order|order2|
+             |类型|<type>|
+             |状态|<state>|
+        Examples: Per-order
+             |operation|submit|type|state|amount|cost|pay_date|adjust|
+             |审批|提交|调整|审批中||||调整排期和单价|
+             |审批|审批|调整|审批中|||||
+             |审批|审批|调整|待下单|||||
+             |编辑|提交|调整|审批中|100|200|2||
+             |审批|审批|调整|审批中|||||
+             |审批|审批|调整|审批中|||||
+             |审批|审批|调整|已生成|||||
+
+    Scenario Outline: adjust order's schedule
+        Given navigate to page
+             |key|value|
+             |menu|order_list|
+        And search an order
+             |order_in_storage|
+             |order1         |
+        When audit the order
+             |key|value|
+             |amount|<amount>|
+             |cost|<cost>|
+             |pay_date|<pay_date>|
+             |adjust  |<adjust>  |
+             |operation|<operation>|
+             |submit|<submit>|
+        Then check the order info from order list
+             |key|value|
+             |order|order1|
+             |类型|<type>|
+             |状态|<state>|
+        Examples: Per-order
+             |operation|submit|type|state|amount|cost|pay_date|adjust|
+             |审批|审批|询量|审批中|||||
+             |审批|审批|新设|待下单|||||
+             |编辑|提交|新设|审批中|100|200|2||
+             |审批|审批|新设|审批中|||||
+             |审批|审批|新设|审批中|||||
+             |审批|审批|新设|已生成|||||
+             |调整|保存|调整|编辑中|300|300|5|调整排期和单价|
+             |编辑|提交|调整|审批中|||||
+             |审批|审批|调整|待下单|||||
+             |编辑|提交|调整|审批中|100|200|2||
+             |审批|审批|调整|审批中|||||
+             |审批|审批|调整|审批中|||||
+             |审批|审批|调整|已生成|||||
+
+
+    Scenario Outline: cancel an adjusted order
+        Given navigate to page
+             |key|value|
+             |menu|order_list|
+        And search an order
+             |order_in_storage|
+             |order1         |
+        When audit the order
+             |key|value|
+             |operation|<operation>|
+             |submit|<submit>|
+        Then check the order info from order list
+             |key|value|
+             |order|order1|
+             |类型|<type>|
+             |状态|<state>|
+        Examples: Per-order
+             |operation|submit|type|state|
+             |撤销||撤销|编辑中|
+             |编辑|提交|撤销|审批中|
+             |审批|审批|撤销|审批中|
+             |审批|审批|撤销|审批中|
+             |审批|审批|撤销|审批中|
+             |审批|审批|撤销|审批中|
+             |审批|审批|撤销|审批中|
+             |审批|审批|撤销|审批中|
+             |审批|审批|撤销|已生成|
