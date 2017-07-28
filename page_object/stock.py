@@ -12,6 +12,7 @@ from .selector import Selector
 class Stock(BasePage):
     def __init__(self, driver):
         super(Stock, self).__init__(driver)
+        self.wait_ajax_loading()
 
     def switch_stock_type(self, **kwargs):
         if kwargs['type'].upper() == 'CPT':

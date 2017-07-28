@@ -22,10 +22,20 @@ class Order(BasePage):
 
     # 新建订单
     def new(self, **kwargs):
+        self.wait_datalist_loading()
         self.click(*self.new_button)
-        self.wait_ajax_loading()
+
 
     def fill(self, **kwargs):
+        if kwargs.get('adjust',None):
+            div = self.get_element(By.ID,'mainBtnContainer')
+            buttons = div.find_elements(By.TAG_NAME,'button')
+            for b in buttons:
+                if b.text == kwargs['adjust']:
+                    b.click()
+                    break
+            self.confirm_dialog()
+
         # fill per_order info
         if kwargs.get('type', None):
             sel = self.get_element(By.ID, 'order_orderType')
@@ -57,17 +67,12 @@ class Order(BasePage):
         # final operation
         if kwargs['submit']:
             self.click(By.XPATH, '//input[@value="{0}"]'.format(kwargs['submit']))
-            dialog = self.get_element(By.XPATH, '//div[@role="dialog"]')
-            buttons = dialog.find_elements(By.TAG_NAME, 'button')
-            for b in buttons:
-                if b.text == "关闭":
-                    sleep(5)
-                    b.click()
-                    break
+            self.confirm_dialog()
 
     def execute(self, **kwargs):
         table = Table(self.driver)
         table.execute(kwargs['operation'])
+        self.confirm_dialog()
 
     def get_field(self, **kwargs):
         table = Table(self.driver)
@@ -80,3 +85,14 @@ class Order(BasePage):
     def verify_list(self, **kwargs):
         table = Table(self.driver)
         return table.verify(**kwargs)
+
+
+    def confirm_dialog(self):
+        dialog = self.get_elements(By.XPATH, '//div[@role="dialog"]')
+        if len(dialog):
+            buttons = dialog[0].find_elements(By.TAG_NAME, 'button')
+            for b in buttons:
+                if b.text in ["关闭","确定"]:
+                    sleep(5)
+                    b.click()
+                    break

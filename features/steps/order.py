@@ -9,6 +9,7 @@ from page_object.navigation import Navigation
 from page_object.order import Order
 from page_object.stock import Stock
 
+
 @given('navigate to page')
 def step_impl(context):
     context.navigation = Navigation(context.driver)
@@ -47,8 +48,12 @@ def step_impl(context):
 
 @then('check the order info from order list')
 def step_impl(context):
-    result = context.order.verify_list(**table_to_dict(context.table))
+    dic = table_to_dict(context.table)
+    if dic.get('order',None):
+        dic['order'] = store.get_value(dic['order'])
+    result = context.order.verify_list(**dic)
     assert not result, result
+
 
 @then('storage order number')
 def step_impl(context):
@@ -61,12 +66,13 @@ def step_impl(context):
     order_num = store.get_value(key)
 
 
-@given('an order')
+@given('search an order')
 def step_impl(context):
     context.order = Order(context.driver)
     key = context.table.rows[0].cells[0]
     order_num = store.get_value(key)
     context.order.search_order(order=order_num)
+
 
 @when('audit the order')
 def step_impl(context):
@@ -74,13 +80,15 @@ def step_impl(context):
     context.order.execute(**dic)
     context.order.fill(**dic)
 
+
 @then('close browser')
 def step_impl(context):
     context.driver.quit()
 
 
+
 def sub_dict(dic, sub):
-    return dict([(key, dic.get(key,None)) for key in sub])
+    return dict([(key, dic.get(key, None)) for key in sub])
 
 
 def table_to_dict(table):

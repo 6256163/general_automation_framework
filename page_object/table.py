@@ -36,9 +36,13 @@ class Table(BasePage):
         input.send_keys(order)
         input.send_keys(Keys.ENTER)
         sleep(3)
-
+        self.wait_datalist_loading()
 
     def verify(self, **kwargs):
+        key = 'order'
+        if kwargs.get(key,None):
+            self.search(kwargs[key])
+            kwargs.pop(key)
         tds = self.get_line()
         for (k,v) in kwargs.items():
             actual = tds[self.columns[k]].text
