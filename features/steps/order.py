@@ -16,7 +16,7 @@ def step_impl(context):
     context.navigation.click_menu(**table_to_dict(context.table))
 
 
-@when('click new order')
+@when('new an order')
 def step_impl(context):
     context.order = Order(context.driver)
     context.order.new()
@@ -41,7 +41,7 @@ def step_impl(context):
     context.stock.select_slot(**sub_dict(params, ['index']))
 
 
-@when('fill and submit info')
+@when('fill and submit order form')
 def step_impl(context):
     context.order.fill(**table_to_dict(context.table))
 

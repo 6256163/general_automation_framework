@@ -2,6 +2,7 @@
 from __future__ import absolute_import
 from time import sleep
 
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
@@ -25,10 +26,10 @@ class Selector(BasePage):
         for item in items:
             item_a = self.driver.find_element(By.LINK_TEXT, item)
             item_i = item_a.find_element(By.XPATH, '../i')
-            item_img = item_a.find_element(By.XPATH, '../img')
             if not first:
                 first = item_i
             if item == items[-1]:
+                item_img = item_a.find_element(By.XPATH, '../img')
                 item_img.click()
             else:
                 item_i.click()

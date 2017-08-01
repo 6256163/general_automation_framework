@@ -2,6 +2,7 @@
 from __future__ import absolute_import
 from time import sleep
 
+from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from .base_page import BasePage
@@ -15,13 +16,20 @@ class Table(BasePage):
 
     def init_table(self):
         ths = self.table.find_elements(By.TAG_NAME,'th')
-        self.columns = dict([(v.text,i) for i, v in enumerate(ths)])
+        try:
+            self.columns = dict([(v.text,i) for i, v in enumerate(ths)])
+        except StaleElementReferenceException:
+            pass
         sleep(3)
 
     def get_line(self):
         tbody = self.get_element(By.TAG_NAME, 'tbody')
         tr = tbody.find_element(By.TAG_NAME, 'tr')
         return tr.find_elements(By.TAG_NAME, 'td')
+
+    def get_lines(self):
+        tbody = self.get_element(By.TAG_NAME, 'tbody')
+        return tbody.find_elements(By.TAG_NAME, 'tr')
 
     def execute(self, operation):
         tds = self.get_line()
@@ -45,6 +53,9 @@ class Table(BasePage):
             kwargs.pop(key)
         tds = self.get_line()
         for (k,v) in kwargs.items():
-            actual = tds[self.columns[k]].text
-            if actual != v:
-                return "Expect: {0}. Actual: {1}".format(v,actual)
+            try:
+                actual = tds[self.columns[k]].text
+                if actual != v:
+                    return "Expect: {0}. Actual: {1}".format(v,actual)
+            except KeyError:
+                pass
