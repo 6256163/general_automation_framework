@@ -25,12 +25,12 @@ class Price(BasePage):
     def fill(self, **kwargs):
         buttons = self.get_elements(By.TAG_NAME, 'button')
 
-        def sql_query(self, sql):
+        def sql_query(sql_):
             db = pymysql.connect("10.28.8.102", "snow_cheng", "eaps0543", "simpQA")
             db.set_charset('utf8')
-            cursor = db.cursor()
-            cursor.execute(sql)
-            result = str(cursor.fetchall()[-1][0])
+            with db.cursor() as cursor:
+                cursor.execute(sql_)
+                result = str(cursor.fetchall()[-1][0])
             return result
 
         db_store = {
@@ -80,11 +80,12 @@ class Price(BasePage):
                 db_store['adr'].append(ad_id)
         else:
             # restore adr ID
-            adrs = self.get_element(By.ID, 'choose_ad_content').text.replace(',',';').replace('->','.')
-            for adr in adrs:
-                sql = "select id from ad_position where PositionName='{0}'".format(adr.split('.')[-1])
-                ad_id = sql_query(sql)
-                db_store['adr'].append(ad_id)
+            if kwargs.get('submit', None) != '审批':
+                adrs = self.get_element(By.ID, 'choose_ad_content').text.replace(',',';').replace('->','.')
+                for adr in adrs:
+                    sql = "select id from ad_position where PositionName='{0}'".format(adr.split('.')[-1])
+                    ad_id = sql_query(sql)
+                    db_store['adr'].append(ad_id)
 
         if kwargs.get('area', None):
             for area in kwargs['area'].split(';'):
@@ -98,9 +99,10 @@ class Price(BasePage):
                     id_ += area_id + '_'
                 db_store['area'].append(id_[:-1])
         else:
-            areas = self.get_element(By.ID, 'addresid').text
-            for area_id in areas.split(','):
-                db_store['adr'].append(area_id)
+            if kwargs.get('submit', None) != '审批':
+                areas = self.get_element(By.ID, 'addresid').text
+                for area_id in areas.split(','):
+                    db_store['adr'].append(area_id)
 
 
         if kwargs.get('port', None):

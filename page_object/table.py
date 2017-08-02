@@ -16,10 +16,7 @@ class Table(BasePage):
 
     def init_table(self):
         ths = self.table.find_elements(By.TAG_NAME,'th')
-        try:
-            self.columns = dict([(v.text,i) for i, v in enumerate(ths)])
-        except StaleElementReferenceException:
-            pass
+        self.columns = dict([(v.text,i) for i, v in enumerate(ths)])
         sleep(3)
 
     def get_line(self):

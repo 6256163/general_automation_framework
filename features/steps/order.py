@@ -1,7 +1,7 @@
 # coding=utf-8
+from behave import *
 from page_object import store
 from features.steps.common import *
-from page_object.order import Order
 
 
 @when('new')

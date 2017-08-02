@@ -23,7 +23,6 @@ class Selector(BasePage):
 
     def select(self, items):
         first = None
-        self.driver.find_element(By.XPATH, '//button[@title="清空"]').click()
         for item in items:
             item_a = self.driver.find_element(By.LINK_TEXT, item)
             item_i = item_a.find_element(By.XPATH, '../i')
