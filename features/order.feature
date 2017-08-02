@@ -2,7 +2,7 @@
 Feature: Order
     User can new order and audit order to make it switch to correct type and state.
     Scenario Outline: Create a new order
-        When new an order
+        When new
         And stock query
              |key|value|
              |type|CPT|
@@ -12,17 +12,17 @@ Feature: Order
              |key|value|
              |mode|下单|
              |index|1;2;3|
-        And fill and submit order form
+        And fill
              |key|value|
              |adv|六间房|
              |submit|提交|
-        Then check the order info from order list
+        Then check list
              |key|value|
              |类型|询量|
              |状态|审批中|
-        And storage order number
-             |order_in_storage|
-             |<order_num>          |
+        And store
+             |order_in_storage|field|
+             |<order_num>|订单编号|
         Examples: order number
              |order_num|
              |order1   |
@@ -31,17 +31,17 @@ Feature: Order
 
 
     Scenario Outline: audit a pre-order to complete
-        Given search an order
+        Given search
              |order_in_storage|
              |order1          |
-        When audit the order
+        When operate
              |key|value|
              |amount|<amount>|
              |cost|<cost>|
              |pay_date|<pay_date>|
              |operation|<operation>|
              |submit|<submit>|
-        Then check the order info from order list
+        Then check list
              |key|value|
              |order|order1|
              |类型|<type>|
@@ -58,17 +58,17 @@ Feature: Order
 
 
     Scenario Outline: adjust an order to complete
-        Given search an order
+        Given search
              |order_in_storage|
              |order2       |
-        When audit the order
+        When operate
              |key|value|
              |amount|<amount>|
              |cost|<cost>|
              |pay_date|<pay_date>|
              |operation|<operation>|
              |submit|<submit>|
-        Then check the order info from order list
+        Then check list
              |key|value|
              |order|order2|
              |类型|<type>|
@@ -88,17 +88,17 @@ Feature: Order
              |审批|审批|调整|已生成||||
 
     Scenario Outline: cancel an order
-        Given search an order
+        Given search
              |order_in_storage|
              |order3          |
-        When audit the order
+        When operate
              |key|value|
              |amount|<amount>|
              |cost|<cost>|
              |pay_date|<pay_date>|
              |operation|<operation>|
              |submit|<submit>|
-        Then check the order info from order list
+        Then check list
              |key|value|
              |order|order3|
              |类型|<type>|
@@ -123,10 +123,10 @@ Feature: Order
 
 
     Scenario Outline: adjust an adjusted order
-        Given search an order
+        Given search
              |order_in_storage|
              |order2        |
-        When audit the order
+        When operate
              |key|value|
              |amount|<amount>|
              |cost|<cost>|
@@ -134,7 +134,7 @@ Feature: Order
              |adjust  |<adjust>  |
              |operation|<operation>|
              |submit|<submit>|
-        Then check the order info from order list
+        Then check list
              |key|value|
              |order|order2|
              |类型|<type>|
@@ -150,10 +150,10 @@ Feature: Order
              |审批|审批|调整|已生成|||||
 
     Scenario Outline: adjust order's schedule
-        Given search an order
+        Given search
              |order_in_storage|
              |order1         |
-        When audit the order
+        When operate
              |key|value|
              |amount|<amount>|
              |cost|<cost>|
@@ -161,7 +161,7 @@ Feature: Order
              |adjust  |<adjust>  |
              |operation|<operation>|
              |submit|<submit>|
-        Then check the order info from order list
+        Then check list
              |key|value|
              |order|order1|
              |类型|<type>|
@@ -179,14 +179,14 @@ Feature: Order
 
 
     Scenario Outline: cancel an adjusted order
-        Given search an order
+        Given search
              |order_in_storage|
              |order1         |
-        When audit the order
+        When operate
              |key|value|
              |operation|<operation>|
              |submit|<submit>|
-        Then check the order info from order list
+        Then check list
              |key|value|
              |order|order1|
              |类型|<type>|
