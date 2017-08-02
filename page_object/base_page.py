@@ -1,6 +1,8 @@
 # coding=utf-8
 from __future__ import absolute_import
 
+from time import sleep
+
 from selenium.common.exceptions import NoSuchElementException, WebDriverException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
@@ -52,6 +54,17 @@ class BasePage(object):
         target = self.get_element(*args)
         target.clear()
         target.send_keys(input)
+
+    # close confirm dialog
+    def confirm_dialog(self):
+        dialog = self.get_elements(By.XPATH, '//div[@role="dialog"]')
+        if len(dialog):
+            buttons = dialog[0].find_elements(By.TAG_NAME, 'button')
+            for b in buttons:
+                if b.text in ["关闭","确定"]:
+                    sleep(5)
+                    b.click()
+                    break
 
     def wait_ajax_loading(self):
         self.wait_('div.ajaxloading', 'div.ajaxloading_mask')

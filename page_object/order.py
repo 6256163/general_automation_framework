@@ -21,7 +21,7 @@ class Order(BasePage):
     new_button = (By.LINK_TEXT, '我要下单')
 
     # 新建订单
-    def new(self, **kwargs):
+    def new(self):
         self.wait_datalist_loading()
         self.click(*self.new_button)
 
@@ -76,25 +76,6 @@ class Order(BasePage):
         if  kwargs['operation'] == '撤销':
             self.wait_ajax_loading()
 
-    def get_field(self, **kwargs):
-        table = Table(self.driver)
-        return table.get_field(kwargs['field'])
-
-    def search_order(self, **kwargs):
-        table = Table(self.driver)
-        table.search(kwargs['order'])
-
-    def verify_list(self, **kwargs):
-        table = Table(self.driver)
-        return table.verify(**kwargs)
 
 
-    def confirm_dialog(self):
-        dialog = self.get_elements(By.XPATH, '//div[@role="dialog"]')
-        if len(dialog):
-            buttons = dialog[0].find_elements(By.TAG_NAME, 'button')
-            for b in buttons:
-                if b.text in ["关闭","确定"]:
-                    sleep(5)
-                    b.click()
-                    break
+

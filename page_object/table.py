@@ -47,15 +47,12 @@ class Table(BasePage):
         self.wait_datalist_loading()
 
     def verify(self, **kwargs):
-        key = 'order'
-        if kwargs.get(key,None):
-            self.search(kwargs[key])
-            kwargs.pop(key)
+        for key in ['order','price']:
+            if kwargs.get(key,None):
+                self.search(kwargs[key])
+                kwargs.pop(key)
         tds = self.get_line()
         for (k,v) in kwargs.items():
-            try:
-                actual = tds[self.columns[k]].text
-                if actual != v:
-                    return "Expect: {0}. Actual: {1}".format(v,actual)
-            except KeyError:
-                pass
+            actual = tds[self.columns[k]].text
+            if actual != v:
+                return "Expect: {0}. Actual: {1}".format(v,actual)
