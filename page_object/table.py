@@ -2,21 +2,24 @@
 from __future__ import absolute_import
 from time import sleep
 
-from selenium.common.exceptions import StaleElementReferenceException
+from selenium.common.exceptions import StaleElementReferenceException, NoAlertPresentException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.wait import WebDriverWait
+
 from .base_page import BasePage
+
 
 class Table(BasePage):
     def __init__(self, driver):
         super(Table, self).__init__(driver)
-        self.table = self.get_element(By.TAG_NAME,'table')
+        self.table = self.get_element(By.TAG_NAME, 'table')
         self.columns = dict()
         self.init_table()
 
     def init_table(self):
-        ths = self.table.find_elements(By.TAG_NAME,'th')
-        self.columns = dict([(v.text,i) for i, v in enumerate(ths)])
+        ths = self.table.find_elements(By.TAG_NAME, 'th')
+        self.columns = dict([(v.text, i) for i, v in enumerate(ths)])
         sleep(3)
 
     def get_line(self):
@@ -30,26 +33,45 @@ class Table(BasePage):
 
     def execute(self, operation):
         tds = self.get_line()
-        tds[self.columns['操作']].find_element(By.XPATH,'//a[@title="{0}"]'.format(operation)).click()
+        tds[self.columns['操作']].find_element(By.XPATH, '//a[@title="{0}"]'.format(operation)).click()
+        try:
+            self.driver.switch_to.alert.text
+            self.driver.switch_to.alert.accept()
+            self.driver.switch_to.default_content()
+            self.wait_grid_table_loading()
+        except NoAlertPresentException:
+            self.confirm_dialog()
+            if operation in ['撤销', '提交']:
+                self.wait_ajax_loading()
 
     def get_field(self, field):
         return self.get_line()[self.columns[field]].text
 
-    def search(self,order):
-        input = self.get_element(By.CSS_SELECTOR,'input.searchTxt')
-        input.clear()
-        input.send_keys(order)
-        input.send_keys(Keys.ENTER)
-        sleep(3)
-        self.wait_datalist_loading()
+    def search(self, order):
+        if self.get_line()[1].text != order:
+            input = self.get_element(By.CSS_SELECTOR, 'input.searchTxt')
+            input.clear()
+            input.send_keys(order)
+            input.send_keys(Keys.ENTER)
+            self.search_wait(order)
 
     def verify(self, **kwargs):
-        for key in ['order','price']:
-            if kwargs.get(key,None):
+        for key in ['order', 'price']:
+            if kwargs.get(key, None):
                 self.search(kwargs[key])
                 kwargs.pop(key)
         tds = self.get_line()
-        for (k,v) in kwargs.items():
+        for (k, v) in kwargs.items():
             actual = tds[self.columns[k]].text
             if actual != v:
-                return "Expect: {0}. Actual: {1}".format(v,actual)
+                return "Expect: {0}. Actual: {1}".format(v, actual)
+
+
+    def search_wait(self, id_):
+        tbody =self.driver.find_element(By.TAG_NAME, 'tbody')
+        WebDriverWait(tbody, 60).until\
+            (
+                lambda t:
+                len(t.find_elements(By.TAG_NAME,'tr')) == 1
+                and t.find_element(By.TAG_NAME, 'tr').find_elements(By.TAG_NAME, 'td')[1].text == id_
+            )

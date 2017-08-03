@@ -25,23 +25,11 @@ class Price(BasePage):
     def fill(self, **kwargs):
         buttons = self.get_elements(By.TAG_NAME, 'button')
 
-        def sql_query(sql_):
-            db = pymysql.connect("10.28.8.102", "snow_cheng", "eaps0543", "simpQA")
-            db.set_charset('utf8')
-            with db.cursor() as cursor:
-                cursor.execute(sql_)
-                result = str(cursor.fetchall()[-1][0])
-            return result
-
-        db_store = {
-            'adr': [],
-            'area': []
-        }
-
         def get_button(btn_text):
             for b in buttons:
                 if b.text == btn_text:
                     return b
+
 
         if kwargs.get('adv', None):
             get_button('选择广告主').click()
@@ -75,57 +63,29 @@ class Price(BasePage):
                 get_button('选择广告位').click()
                 select = Selector(self.driver)
                 select.select(adr.split('.'))
-                sql = "select id from ad_position where PositionName='{0}'".format(adr.split('.')[-1])
-                ad_id = sql_query(sql)
-                db_store['adr'].append(ad_id)
-        else:
-            # restore adr ID
-            if kwargs.get('submit', None) != '审批':
-                adrs = self.get_element(By.ID, 'choose_ad_content').text.replace(',',';').replace('->','.')
-                for adr in adrs:
-                    sql = "select id from ad_position where PositionName='{0}'".format(adr.split('.')[-1])
-                    ad_id = sql_query(sql)
-                    db_store['adr'].append(ad_id)
 
         if kwargs.get('area', None):
             for area in kwargs['area'].split(';'):
                 get_button('选择地域').click()
                 selector = Selector(self.driver)
                 selector.select(area.split('.'))
-                id_ = ''
-                for a in area.split('.'):
-                    sql = "select id from area where Title='{0}'".format(a)
-                    area_id = sql_query(sql)
-                    id_ += area_id + '_'
-                db_store['area'].append(id_[:-1])
-        else:
-            if kwargs.get('submit', None) != '审批':
-                areas = self.get_element(By.ID, 'addresid').text
-                for area_id in areas.split(','):
-                    db_store['adr'].append(area_id)
 
 
         if kwargs.get('port', None):
             table = Table(self.driver)
-            for port, ad_id in zip(kwargs['port'].split(';'), db_store['adr']):
-                sel = table.table.find_element(By.ID, 'plat' + ad_id)
+            selects = table.table.find_elements(By.TAG_NAME,'select')
+            for port, sel in zip(kwargs['port'].split(';'),selects):
                 select = Select(sel)
                 [select.select_by_visible_text(p) for p in port.split('.')]
 
         if kwargs.get('price', None):
-            # adr 分广告位
-            for ad_id, prices in zip(db_store['adr'], kwargs['price'].split(';')):
-                # area 分地域
-                if len(db_store['area']):
-                    for area_id, price in zip(db_store['area'], prices.split('/')):
-                        # step 分阶梯
-                        [self.input(p, By.NAME, "appl{0}-{1}[{2}]".format(ad_id, area_id, str(i + 1))) for i,p in
-                         enumerate(price.split('.'))]
-                else:
-                    for price in prices.split('/'):
-                        # step 分阶梯
-                        [self.input(p, By.NAME, "appl{0}-0{1}".format(ad_id, str(i + 1))) for p, i in
-                         enumerate(price.split('.'))]
+            table = Table(self.driver)
+            tds = table.table.find_elements(By.CSS_SELECTOR,'td.put_price_set')
+            # adr
+            for price, td in zip(kwargs['price'].split(';'),tds):
+                for p, input in zip(price.split('.'),td.find_elements(By.TAG_NAME,'input')):
+                    input.clear()
+                    input.send_keys(p)
 
         if kwargs.get('type', None):
             table = Table(self.driver)

@@ -19,10 +19,14 @@ class Selector(BasePage):
                 self.driver.switch_to.frame(ifr)
                 break
 
-
+    def clear(self):
+        self.driver.find_element(By.XPATH, '//button[@title="清除"]').click()
 
     def select(self, items):
         first = None
+        if items == ['']:
+            self.driver.find_element(By.XPATH, '//button[@title="清空"]').click()
+            items.pop()
         for item in items:
             item_a = self.driver.find_element(By.LINK_TEXT, item)
             item_i = item_a.find_element(By.XPATH, '../i')
@@ -35,7 +39,6 @@ class Selector(BasePage):
                 item_i.click()
 
         self.driver.find_element(By.XPATH, '//button[@title="选择"]').click()
-        first.click()
         self.confirm()
         sleep(3)
 
@@ -44,9 +47,8 @@ class Selector(BasePage):
         search_input = search_div.find_element(By.TAG_NAME,'input')
         search_input.clear()
         search_input.send_keys(adv)
-        sleep(3)
         search_input.send_keys(Keys.ENTER)
-
+        sleep(5)
         self.confirm()
 
 

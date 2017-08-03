@@ -75,6 +75,9 @@ class BasePage(object):
     def wait_datalist_loading(self):
         self.wait_('div.datalist_loading_mask', 'div.datalist_loading')
 
+    def wait_grid_table_loading(self):
+        self.wait_('div#grid_table_loading')
+
     def wait_(self, *css_selectors):
         for css in css_selectors:
             while self.driver.find_element(By.CSS_SELECTOR, css):

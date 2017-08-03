@@ -72,9 +72,7 @@ class Order(BasePage):
     def execute(self, **kwargs):
         table = Table(self.driver)
         table.execute(kwargs['operation'])
-        self.confirm_dialog()
-        if  kwargs['operation'] == '撤销':
-            self.wait_ajax_loading()
+
 
 
 
