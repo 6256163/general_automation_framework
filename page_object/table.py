@@ -68,10 +68,9 @@ class Table(BasePage):
 
 
     def search_wait(self, id_):
+        sleep(3)
         tbody =self.driver.find_element(By.TAG_NAME, 'tbody')
-        WebDriverWait(tbody, 60).until\
-            (
-                lambda t:
-                len(t.find_elements(By.TAG_NAME,'tr')) == 1
-                and t.find_element(By.TAG_NAME, 'tr').find_elements(By.TAG_NAME, 'td')[1].text == id_
-            )
+        while len(tbody.find_elements(By.TAG_NAME,'tr')) != 1 or tbody.find_element(By.TAG_NAME, 'tr').find_elements(By.TAG_NAME, 'td')[1].text != id_:
+            sleep(1)
+
+
