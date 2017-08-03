@@ -64,4 +64,5 @@ Feature: Price
         Examples: Per-order
              |operation|submit|state|adr|price|
              |编辑|保存|编辑中|;视频广告.通用位置.通用前贴|40.200|
+             |提交||审核中|||
 
