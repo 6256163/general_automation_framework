@@ -7,11 +7,11 @@ Feature: Order
              |key|value|
              |type|CPT|
              |date|2017-10-13;2017-10-16|
-             |0|视频广告.通用位置.通用前贴|
-        And select slot and create new order
+             |adr|视频广告.通用位置.通用前贴|
+        And add new
              |key|value|
              |mode|下单|
-             |index|1;2;3|
+             |slot|1;2;3|
         And fill
              |key|value|
              |adv|六间房|

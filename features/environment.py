@@ -5,7 +5,9 @@ import sys
 from executer.execution import Execution
 from page_object.login import Login
 from page_object.navigation import Navigation
+from page_object.order import Order
 from page_object.page_object import PageObject
+from page_object.price import Price
 from page_object.stock import Stock
 from page_object.table import Table
 
@@ -42,6 +44,8 @@ def before_feature(context, feature):
     # Load page module
     page = '.'.join(['page_object', context.feature.name.lower(), context.feature.name])
     context.operate = PageObject().get_instence(page)(context.driver)
+    context.order = Order(context.driver)
+    context.price = Price(context.driver)
     context.table_ = Table(context.driver)
     context.stock = Stock(context.driver)
 

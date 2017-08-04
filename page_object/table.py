@@ -45,8 +45,10 @@ class Table(BasePage):
                 self.wait_ajax_loading()
 
     def get_field(self, field):
-        return self.get_line()[self.columns[field]].text
-
+        try:
+            return self.get_line()[self.columns[field]].text
+        except KeyError:
+            pass
     def search(self, order):
         if self.get_line()[1].text != order:
             input = self.get_element(By.CSS_SELECTOR, 'input.searchTxt')
