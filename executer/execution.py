@@ -15,7 +15,10 @@ class Execution(Action, Expect):
     def __init__(self, csv):
         super(Execution, self).__init__(csv)
         self.setup_driver()
-        self.driver.maximize_window()
+        try:
+            self.driver.maximize_window()
+        except:
+            pass
 
     def update_step(self, step):
         self.csv = step
@@ -34,7 +37,6 @@ class Execution(Action, Expect):
         if self.csv['Expect']:
             result_log = getattr(Execution, self.csv['Expect'].lower())(self)
         return result_log
-
 
     def setup_driver(self):
         if self.driver is None:

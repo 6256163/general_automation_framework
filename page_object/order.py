@@ -25,55 +25,55 @@ class Order(BasePage):
         self.wait_datalist_loading()
         self.click(*self.new_button)
 
+    def select_adjust(self, adjust):
+        div = self.get_element(By.ID, 'mainBtnContainer')
+        buttons = div.find_elements(By.TAG_NAME, 'button')
+        for b in buttons:
+            if b.text == adjust:
+                b.click()
+                break
+        self.confirm_dialog()
+
+    def select_type(self, type):
+        sel = self.get_element(By.ID, 'order_orderType')
+        Select(sel).select_by_value(type)
+
+    def select_adv(self, adv):
+        self.get_element(By.XPATH, '//button[@title="选择"]').click()
+        select = Selector(self.driver)
+        select.search(adv)
+        sleep(1)
+
+    def input_amount(self, amount):
+        self.input(amount, *(By.ID, 'order_orderAmount'))
+
+    def input_cost(self, cost):
+        self.input(cost, *(By.ID, 'order_orderCost'))
+
+    def input_pay_date(self, date):
+        try:
+            d = int(date)
+            date_ = datetime.datetime.now() + datetime.timedelta(days=d)
+            date = date_.strftime('%Y-%m-%d')
+        except ValueError:
+            pass
+        self.driver.execute_script('document.getElementById("order_payDate").value="{0}"'.format(date))
+
+    def submit(self, submit):
+        self.click(By.XPATH, '//input[@value="{0}"]'.format(submit))
+        self.confirm_dialog()
 
     def fill(self, **kwargs):
-        if kwargs.get('adjust',None):
-            div = self.get_element(By.ID,'mainBtnContainer')
-            buttons = div.find_elements(By.TAG_NAME,'button')
-            for b in buttons:
-                if b.text == kwargs['adjust']:
-                    b.click()
-                    break
-            self.confirm_dialog()
 
-        # fill per_order info
-        if kwargs.get('type', None):
-            sel = self.get_element(By.ID, 'order_orderType')
-            Select(sel).select_by_value(kwargs['orderType'])
+        dic = {
+            'adjust': self.select_adjust,
+            'type': self.select_type,
+            'adv': self.select_adv,
+            'amount': self.input_amount,
+            'cost': self.input_cost,
+            'pay_date': self.input_pay_date,
+            'submit': self.submit
+        }
 
-        if kwargs.get('adv', None):
-            self.get_element(By.XPATH, '//button[@title="选择"]').click()
-            select = Selector(self.driver)
-            select.search(kwargs['adv'])
-            sleep(3)
-
-        # fill order info
-        if kwargs.get('amount', None):
-            self.input(kwargs['amount'], *(By.ID, 'order_orderAmount'))
-
-        if kwargs.get('cost', None):
-            self.input(kwargs['cost'], *(By.ID, 'order_orderCost'))
-
-        if kwargs.get('pay_date', None):
-            date = kwargs['pay_date']
-            try:
-                d = int(kwargs['pay_date'])
-                date_ = datetime.datetime.now() + datetime.timedelta(days=d)
-                date = date_.strftime('%Y-%m-%d')
-            except ValueError:
-                pass
-            self.driver.execute_script('document.getElementById("order_payDate").value="{0}"'.format(date))
-
-        # final operation
-        if kwargs['submit']:
-            self.click(By.XPATH, '//input[@value="{0}"]'.format(kwargs['submit']))
-            self.confirm_dialog()
-
-    def execute(self, **kwargs):
-        table = Table(self.driver)
-        table.execute(kwargs['operation'])
-
-
-
-
-
+        for key, value in kwargs.items():
+            dic[key](value)

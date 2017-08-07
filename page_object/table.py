@@ -13,11 +13,11 @@ from .base_page import BasePage
 class Table(BasePage):
     def __init__(self, driver):
         super(Table, self).__init__(driver)
-        self.table = self.get_element(By.TAG_NAME, 'table')
         self.columns = dict()
         self.init_table()
 
     def init_table(self):
+        self.table = self.get_element(By.TAG_NAME, 'table')
         ths = self.table.find_elements(By.TAG_NAME, 'th')
         self.columns = dict([(v.text, i) for i, v in enumerate(ths)])
         sleep(3)
@@ -46,6 +46,7 @@ class Table(BasePage):
 
     def get_field(self, field):
         try:
+            self.init_table()
             return self.get_line()[self.columns[field]].text
         except KeyError:
             pass
@@ -73,6 +74,7 @@ class Table(BasePage):
         sleep(3)
         tbody =self.driver.find_element(By.TAG_NAME, 'tbody')
         while len(tbody.find_elements(By.TAG_NAME,'tr')) != 1 or tbody.find_element(By.TAG_NAME, 'tr').find_elements(By.TAG_NAME, 'td')[1].text != id_:
+            tbody = self.driver.find_element(By.TAG_NAME, 'tbody')
             sleep(1)
 
 

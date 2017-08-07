@@ -7,8 +7,7 @@ Feature: Price
         And fill
             |key|value|
             |adv|六间房  |
-            |from|3   |
-            |to  |5|
+            |date|3;5   |
             |adr |视频广告.通用位置.通用前贴;视频广告.通用位置.通用暂停|
             |area|中国.江苏.南京;中国.浙江|
             |port|客户端.Ipad;客户端.Ipad|

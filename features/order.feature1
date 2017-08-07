@@ -6,12 +6,12 @@ Feature: Order
         And stock query
              |key|value|
              |type|CPT|
-             |date|3;5|
-             |adr|0/视频广告.通用位置.通用前贴|
-        And add new
+             |date|2017-10-13;2017-10-16|
+             |0|视频广告.通用位置.通用前贴|
+        And select slot and create new order
              |key|value|
              |mode|下单|
-             |slot|1;2;3|
+             |index|1;2;3|
         And fill
              |key|value|
              |adv|六间房|
