@@ -17,5 +17,7 @@ def sub_dict(dic, sub):
 def table_to_dict(table):
     dic = collections.OrderedDict()
     for row in table:
-        dic[row.cells[0]] = row.cells[1]
+        # store not empty string
+        if row.cells[1]:
+            dic[row.cells[0]] = row.cells[1]
     return dic

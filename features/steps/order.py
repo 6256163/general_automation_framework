@@ -61,7 +61,7 @@ def search_given(context):
 @when('operate')
 def operate_when(context):
     dic = table_to_dict(context.table)
-    context.table_.execute(dic['operation'])
+    context.table_.execute(dic.pop('operation'))
     context.operate.fill(**dic)
 
 

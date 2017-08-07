@@ -43,6 +43,9 @@ class Order(BasePage):
         select = Selector(self.driver)
         select.search(adv)
         sleep(1)
+        order_productLine = self.get_element(By.ID,'order_productLine')
+        while not order_productLine.text:
+            sleep(1)
 
     def input_amount(self, amount):
         self.input(amount, *(By.ID, 'order_orderAmount'))

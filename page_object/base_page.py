@@ -3,7 +3,7 @@ from __future__ import absolute_import
 
 from time import sleep
 
-from selenium.common.exceptions import NoSuchElementException, WebDriverException
+from selenium.common.exceptions import NoSuchElementException, WebDriverException, StaleElementReferenceException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -82,6 +82,9 @@ class BasePage(object):
         for css in css_selectors:
             while self.driver.find_element(By.CSS_SELECTOR, css):
                 while len(self.driver.find_elements(By.CSS_SELECTOR, css)):
-                    if not self.driver.find_elements(By.CSS_SELECTOR, css)[0].is_displayed():
-                        break
+                    try:
+                        if not self.driver.find_element(By.CSS_SELECTOR, css).is_displayed():
+                            break
+                    except Exception as e:
+                        pass
                 break
