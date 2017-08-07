@@ -6,7 +6,7 @@ Feature: Order
         And stock query
              |key|value|
              |type|CPT|
-             |date|3;5|
+             |date|3;6|
              |adr|0/视频广告.通用位置.通用前贴|
         And add new
              |key|value|
