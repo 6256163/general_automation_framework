@@ -38,7 +38,6 @@ class Table(BasePage):
             self.driver.switch_to.alert.text
             self.driver.switch_to.alert.accept()
             self.driver.switch_to.default_content()
-            self.wait_grid_table_loading()
         except NoAlertPresentException:
             self.confirm_dialog()
             if operation in ['撤销', '提交']:

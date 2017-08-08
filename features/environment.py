@@ -37,9 +37,9 @@ def before_feature(context, feature):
     # Navigate to feature page
     context.navigation = Navigation(context.driver)
     if feature.name == "Order":
-        context.navigation.click_menu(**{'menu': 'order_list'})
+        context.navigation.click_menu('order_list')
     elif feature.name == 'Price':
-        context.navigation.click_menu(**{'menu': 'price_list'})
+        context.navigation.click_menu('price_list')
 
     # Load page module
     if feature.name.lower() in ['order','price']:

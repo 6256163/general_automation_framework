@@ -6,28 +6,9 @@ from page_object import store
 from features.steps.common import *
 from features.steps.stock import *
 from page_object.order import Order
+from page_object.page_object import PageObject
 from page_object.price import Price
 
-
-@given('order')
-def order_given(context):
-    context.operate = Order(context.driver)
-    navigate_given(context)
-    sleep(1)
-    new_when(context)
-    sleep(1)
-    stock_query_when(context)
-    add_new_when(context)
-    fill_when(context)
-
-@given('price')
-def price_given(context):
-    context.operate = Price(context.driver)
-    navigate_given(context)
-    sleep(1)
-    new_when(context)
-    sleep(1)
-    fill_when(context)
 
 @when('new')
 def new_when(context):

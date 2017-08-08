@@ -5,28 +5,31 @@ Feature: Order
         When new
         And stock query
              |key|value|
-             |type|CPT|
-             |date|3;6|
-             |adr|0/视频广告.通用位置.通用前贴|
+             |type|<type>|
+             |date|<date>|
+             |adr|<adr>|
+             |area|<area>|
+             |port|<port>|
         And add new
              |key|value|
-             |slot|1;2;3|
+             |slot|<slot>|
         And fill
              |key|value|
-             |adv|六间房|
-             |submit|提交|
+             |adv|<adv>|
+             |submit|<submit>|
         Then check list
              |key|value|
-             |类型|询量|
-             |状态|审批中|
+             |类型|<类型>|
+             |状态|<状态>|
         And store
              |order_in_storage|field|
              |<order_num>|订单编号|
         Examples: order number
-             |order_num|
-             |order1   |
-             |order2   |
-             |order3   |
+             |order_num|submit|type|date|adr|area|port|slot|adv|类型|状态|
+             |order1|提交|CPT|3;6|0/视频广告.通用位置.通用前贴|1/中国.江苏.南京|客户端|1;2;3|六间房|询量|审批中|
+             |order2|提交|CPT|3;6|0/视频广告.通用位置.通用暂停|1/中国.江苏.南京|客户端|1;2;3|六间房|询量|审批中|
+             |order3|提交|CPT|3;6|0/视频广告.通用位置.通用前贴||客户端|1;2;3|六间房|询量|审批中|
+             |order4|保存|CPT|3;6|0/视频广告.通用位置.通用前贴|1/中国.江苏.南京;中国.浙江|客户端.Ipad|1;2;3|六间房|询量|编辑中|
 
 
     Scenario Outline: audit a pre-order to complete

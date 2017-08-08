@@ -103,5 +103,6 @@ class Price(BasePage):
         }
 
         for key, value in kwargs.items():
-            dic[key](value)
+            if key in dic.keys():
+                dic[key](value)
 

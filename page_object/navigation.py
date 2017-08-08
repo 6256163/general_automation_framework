@@ -55,15 +55,13 @@ class Navigation(BasePage):
     # 二级 - 价格政策管理
     price_policy = [suning, (By.PARTIAL_LINK_TEXT,'价格政策管理')]
 
-    def click_menu(self, **kwargs):
+    def click_menu(self, menu):
         # click menus
-        if kwargs.get('menu', False):
-            menus= getattr(Navigation,kwargs['menu'])
+        if menu:
+            menus= getattr(Navigation,menu)
             try:
                 for m in menus:
                     self.click(*m)
             except:
                 for m in menus:
                     self.click(*m)
-        else:
-            assert False, "menu don't set"

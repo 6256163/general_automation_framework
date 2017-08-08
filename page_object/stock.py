@@ -63,7 +63,7 @@ class Stock(BasePage):
 
     def select_port(self, port):
         div = self.get_elements(By.CSS_SELECTOR, 'div.ko_multipleSelectEnhanced')
-        sel = div.find_element(By.TAG_NAME, 'select')
+        sel = div[0].find_element(By.TAG_NAME, 'select')
         select = Select(sel)
         [select.select_by_visible_text(p) for p in port.split('.')]
 
@@ -76,7 +76,14 @@ class Stock(BasePage):
         sleep(5)
         self.click(*(By.XPATH, '//label[@for="{0}"]'.format(mode[key])))
 
+    mode = {
+        '下单': 'mode_select',
+        '查询': 'mode_view'
+    }
+
     def select_slot(self, slot):
+        sleep(5)
+        self.click(*(By.XPATH, '//label[@for="{0}"]'.format('mode_select')))
         body = self.get_element(By.CSS_SELECTOR, 'tbody.ui-selectable')
         tr = body.find_elements(By.TAG_NAME, 'tr')[0]
         indexs = slot.split(';')
@@ -99,7 +106,8 @@ class Stock(BasePage):
             'port':self.select_port
         }
         for key, value in kwargs.items():
-            dic[key](value)
+            if key in dic.keys():
+                dic[key](value)
 
         self.click(*(By.CSS_SELECTOR, 'button.seld'))
         self.wait_ajax_loading()
@@ -109,12 +117,12 @@ class Stock(BasePage):
     def add_new(self,**kwargs):
         self.click(*(By.XPATH, '//label[@for="{0}"]'.format('mode_select')))
         dic = {
-            'mode':self.switch_mode,
             'slot':self.select_slot,
             'id':self.select_order
         }
         for key, value in kwargs.items():
-            dic[key](value)
+            if key in dic.keys():
+                dic[key](value)
         createNewBtn = self.get_element(By.ID, 'createNewBtn')
         createNewBtn.click()
 
