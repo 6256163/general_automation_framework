@@ -10,7 +10,6 @@ Feature: Order
              |adr|0/视频广告.通用位置.通用前贴|
         And add new
              |key|value|
-             |mode|下单|
              |slot|1;2;3|
         And fill
              |key|value|
