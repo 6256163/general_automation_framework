@@ -118,7 +118,7 @@ class Stock(BasePage):
         self.click(*(By.XPATH, '//label[@for="{0}"]'.format('mode_select')))
         dic = {
             'slot':self.select_slot,
-            'id':self.select_order
+            'order':self.select_order
         }
         for key, value in kwargs.items():
             if key in dic.keys():

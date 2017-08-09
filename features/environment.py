@@ -42,9 +42,9 @@ def before_feature(context, feature):
         context.navigation.click_menu('price_list')
 
     # Load page module
-    if feature.name.lower() in ['order','price']:
-        page = '.'.join(['page_object', context.feature.name.lower(), context.feature.name])
-        context.operate = PageObject().get_instence(page)(context.driver)
+    obj = filter(lambda name: feature.name.startswith(name), ['Order','Price'])[0]
+    page = '.'.join(['page_object', context.feature.name.lower(), obj])
+    context.operate = PageObject().get_instence(page)(context.driver)
     context.order = Order(context.driver)
     context.price = Price(context.driver)
     context.table_ = Table(context.driver)
