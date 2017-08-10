@@ -11,24 +11,28 @@ from .base_page import BasePage
 
 
 class Table(BasePage):
-    def __init__(self, driver):
+    def __init__(self, driver, loc=(By.TAG_NAME, 'table')):
         super(Table, self).__init__(driver)
+        self.loc = loc
         self.columns = dict()
         self.init_table()
 
     def init_table(self):
-        self.table = self.get_element(By.TAG_NAME, 'table')
+        self.table = self.get_element(*self.loc)
         ths = self.table.find_elements(By.TAG_NAME, 'th')
         self.columns = dict([(v.text, i) for i, v in enumerate(ths)])
         sleep(3)
 
-    def get_line(self):
-        tbody = self.get_element(By.TAG_NAME, 'tbody')
-        tr = tbody.find_element(By.TAG_NAME, 'tr')
+    def get_line(self, tr = None):
+        if not tr:
+            table = self.get_element(*self.loc)
+            tbody = table.find_element(By.TAG_NAME, 'tbody')
+            tr = tbody.find_element(By.TAG_NAME, 'tr')
         return tr.find_elements(By.TAG_NAME, 'td')
 
     def get_lines(self):
-        tbody = self.get_element(By.TAG_NAME, 'tbody')
+        table = self.get_element(*self.loc)
+        tbody = table.find_element(By.TAG_NAME, 'tbody')
         return tbody.find_elements(By.TAG_NAME, 'tr')
 
     def execute(self, operation):
@@ -68,12 +72,18 @@ class Table(BasePage):
             if actual != v:
                 return "Expect: {0}. Actual: {1}".format(v, actual)
 
+    def verify_tg(self):
+        for tr in self.get_lines():
+            tds = self.get_line(tr=tr)
+
 
     def search_wait(self, id_):
         sleep(3)
-        tbody =self.driver.find_element(By.TAG_NAME, 'tbody')
+        table = self.get_element(*self.loc)
+        tbody = table.find_element(By.TAG_NAME, 'tbody')
         while len(tbody.find_elements(By.TAG_NAME,'tr')) != 1 or tbody.find_element(By.TAG_NAME, 'tr').find_elements(By.TAG_NAME, 'td')[1].text != id_:
-            tbody = self.driver.find_element(By.TAG_NAME, 'tbody')
+            table = self.get_element(*self.loc)
+            tbody = table.find_element(By.TAG_NAME, 'tbody')
             sleep(1)
 
 

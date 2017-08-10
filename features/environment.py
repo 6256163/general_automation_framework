@@ -16,7 +16,7 @@ if parent_path not in sys.path:
     sys.path.append(parent_path)
 from page_object import store
 
-login_url = 'http://10.28.8.102/site/superentrance'
+login_url = 'http://10.200.44.43/site/superentrance'  # 'http://10.28.8.102/site/superentrance'
 
 
 def before_all(context):
@@ -42,7 +42,7 @@ def before_feature(context, feature):
         context.navigation.click_menu('price_list')
 
     # Load page module
-    obj = filter(lambda name: feature.name.startswith(name), ['Order','Price'])[0]
+    obj = feature.name[0:6]
     page = '.'.join(['page_object', context.feature.name.lower(), obj])
     context.operate = PageObject().get_instence(page)(context.driver)
     context.order = Order(context.driver)

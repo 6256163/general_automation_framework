@@ -14,6 +14,7 @@ Feature: Order-Schedule
         And add new
              |key|value|
              |slot|1;2;3|
+             |submit|加入|
         And fill
              |key|value|
              |adv|六间房|
@@ -32,11 +33,16 @@ Feature: Order-Schedule
              |key|value|
              |type|CPM|
              |date|3;6|
-             |adr|0/视频广告.通用位置.通用前贴|
+             |adr|0/视频广告.通用位置.通用暂停|
              |area|1/中国.江苏.南京|
              |port|客户端|
         And add new
              |key|value|
              |order|order4|
              |slot|1;2;3|
+             |submit|编辑|
+        Then check schedule
+             |submit|保存|
+             |
+
         Examples: Per-order

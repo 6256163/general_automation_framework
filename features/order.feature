@@ -13,6 +13,7 @@ Feature: Order
         And add new
              |key|value|
              |slot|<slot>|
+             |submit|加入|
         And fill
              |key|value|
              |adv|<adv>|

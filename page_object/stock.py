@@ -90,20 +90,28 @@ class Stock(BasePage):
         for i in indexs:
             tr.find_element(By.XPATH, 'td[@data-index="{0}"]'.format(i)).click()
 
-    def select_order(self,order):
-        sel = self.get_elements(By.CSS_SELECTOR,'select.campaign_list')
+    def select_order(self, order):
+        sel = self.get_elements(By.CSS_SELECTOR, 'select.campaign_list')
         select = Select(sel)
         select.select_by_visible_text(order)
 
+    def submit(self, submit):
+
+        map = {
+            '加入': 'createNewBtn',
+            '编辑': 'editOneBtn'
+        }
+        btn = self.get_element(By.ID, map[submit])
+        btn.click()
 
     def query(self, **kwargs):
         dic = {
-            'type':self.switch_type,
-            'date':self.select_date,
-            'adr':self.select_item,
-            'area':self.select_item,
-            'content':self.select_item,
-            'port':self.select_port
+            'type': self.switch_type,
+            'date': self.select_date,
+            'adr': self.select_item,
+            'area': self.select_item,
+            'content': self.select_item,
+            'port': self.select_port
         }
         for key, value in kwargs.items():
             if key in dic.keys():
@@ -113,17 +121,13 @@ class Stock(BasePage):
         self.wait_ajax_loading()
         sleep(3)
 
-
-    def add_new(self,**kwargs):
+    def add_new(self, **kwargs):
         self.click(*(By.XPATH, '//label[@for="{0}"]'.format('mode_select')))
         dic = {
-            'slot':self.select_slot,
-            'order':self.select_order
+            'slot': self.select_slot,
+            'order': self.select_order,
+            'submit': self.submit
         }
         for key, value in kwargs.items():
             if key in dic.keys():
                 dic[key](value)
-        createNewBtn = self.get_element(By.ID, 'createNewBtn')
-        createNewBtn.click()
-
-
