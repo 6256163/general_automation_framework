@@ -62,19 +62,14 @@ class Table(BasePage):
             self.search_wait(order)
 
     def verify(self, **kwargs):
-        for key in ['order', 'price']:
-            if kwargs.get(key, None):
-                self.search(kwargs[key])
-                kwargs.pop(key)
-        tds = self.get_line()
+        tds = self.get_line() if filter(lambda page: page in kwargs.keys(), ['order', 'price']) \
+            else self.get_line(self.get_lines[-1])
         for (k, v) in kwargs.items():
+            if k in ['order', 'price']:
+                continue
             actual = tds[self.columns[k]].text
             if actual != v:
                 return "Expect: {0}. Actual: {1}".format(v, actual)
-
-    def verify_tg(self):
-        for tr in self.get_lines():
-            tds = self.get_line(tr=tr)
 
 
     def search_wait(self, id_):

@@ -18,13 +18,15 @@ Feature: Order
              |key|value|
              |adv|<adv>|
              |submit|<submit>|
-        Then check list
-             |key|value|
-             |类型|<类型>|
-             |状态|<状态>|
-        And store
+        Then store
              |order_in_storage|field|
              |<order_num>|订单编号|
+        And check list
+             |key|value|
+             |order|<order_num>|
+             |类型|<类型>|
+             |状态|<状态>|
+
         Examples: order number
              |order_num|submit|type|date|adr|area|port|slot|adv|类型|状态|
              |order1|提交|CPT|3;6|0/视频广告.通用位置.通用前贴|1/中国.江苏.南京|客户端|1;2;3|六间房|询量|审批中|

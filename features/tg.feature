@@ -3,6 +3,9 @@ Feature: Order-Schedule
     User can new price and audit price to make it switch to correct type and state.
 
     Background: save an order
+        Given navigate
+             |key|value|
+             |menu|order_list|
         When new
         And stock query
              |key|value|
@@ -42,7 +45,12 @@ Feature: Order-Schedule
              |slot|1;2;3|
              |submit|编辑|
         Then check schedule
+             |key|value|
              |submit|保存|
-             |
+             |广告位|通用暂停|
+             |平台|客户端|
+             |地域|中国.江苏.南京|
+             |下单量|1CPT|
+
 
         Examples: Per-order

@@ -34,16 +34,20 @@ def before_feature(context, feature):
     context.login = Login(context.driver, url=login_url)
     context.login.login(**{'username': '2', 'password': '123456', 'verifycode': 'imqa'})
 
+
+
     # Navigate to feature page
     context.navigation = Navigation(context.driver)
+    # init a page
+    context.navigation.click_menu('order_list')
     if feature.name == "Order":
         context.navigation.click_menu('order_list')
     elif feature.name == 'Price':
         context.navigation.click_menu('price_list')
 
     # Load page module
-    obj = feature.name[0:6]
-    page = '.'.join(['page_object', context.feature.name.lower(), obj])
+    obj = feature.name[0:5]
+    page = '.'.join(['page_object', obj.lower(), obj])
     context.operate = PageObject().get_instence(page)(context.driver)
     context.order = Order(context.driver)
     context.price = Price(context.driver)

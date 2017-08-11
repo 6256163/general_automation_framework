@@ -56,7 +56,7 @@ def check_list_then(context):
     for key in ['order', 'price']:
         if dic.get(key, None):
             dic[key] = store.get_value(dic[key])
-            context.table_.search(dic.pop(key))
+            context.table_.search(dic[key])
     result = context.table_.verify(**dic)
     assert not result, result
 
@@ -65,3 +65,4 @@ def check_list_then(context):
 def check_schedule_then(context):
     dic = table_to_dict(context.table)
     context.table_ = Table(context.driver, loc=(By.CSS_SELECTOR,'table.schedule-datalist'))
+    context.table_.verify(**dic)
