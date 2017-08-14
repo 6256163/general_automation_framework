@@ -29,6 +29,7 @@ def store_then(context):
 
 
 @when('fill')
+@then('fill')
 def fill_when(context):
     dic = table_to_dict(context.table)
     context.operate.fill(**dic)
@@ -64,5 +65,8 @@ def check_list_then(context):
 @then('check schedule')
 def check_schedule_then(context):
     dic = table_to_dict(context.table)
-    context.table_ = Table(context.driver, loc=(By.CSS_SELECTOR,'table.schedule-datalist'))
+    table_loc = (By.CSS_SELECTOR,'table.schedule-datalist')
+    th_loc = (By.CSS_SELECTOR, 'tr.schedule-in')
+    context.table_ = Table(context.driver, loc=table_loc, th=th_loc)
     context.table_.verify(**dic)
+

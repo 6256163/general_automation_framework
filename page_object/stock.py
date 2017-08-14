@@ -91,7 +91,7 @@ class Stock(BasePage):
             tr.find_element(By.XPATH, 'td[@data-index="{0}"]'.format(i)).click()
 
     def select_order(self, order):
-        sel = self.get_elements(By.CSS_SELECTOR, 'select.campaign_list')
+        sel = self.get_element(By.CSS_SELECTOR, 'select.campaign_list')
         select = Select(sel)
         select.select_by_visible_text(order)
 
@@ -121,12 +121,17 @@ class Stock(BasePage):
         self.wait_ajax_loading()
         sleep(3)
 
+    def cpm_set(self,cpm):
+        self.input(cpm, By.CSS_SELECTOR, 'div.cpm_set input')
+        self.click(By.CSS_SELECTOR, 'div.btnbar button.enterBtn')
+
     def add_new(self, **kwargs):
         self.click(*(By.XPATH, '//label[@for="{0}"]'.format('mode_select')))
         dic = {
             'slot': self.select_slot,
             'order': self.select_order,
-            'submit': self.submit
+            'submit': self.submit,
+            'cpm':self.cpm_set
         }
         for key, value in kwargs.items():
             if key in dic.keys():

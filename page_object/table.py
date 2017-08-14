@@ -11,15 +11,20 @@ from .base_page import BasePage
 
 
 class Table(BasePage):
-    def __init__(self, driver, loc=(By.TAG_NAME, 'table')):
+    def __init__(self, driver, loc=(By.TAG_NAME, 'table'), th=None):
         super(Table, self).__init__(driver)
         self.loc = loc
+        self.th = th
         self.columns = dict()
         self.init_table()
 
     def init_table(self):
         self.table = self.get_element(*self.loc)
-        ths = self.table.find_elements(By.TAG_NAME, 'th')
+        if self.th:
+            th = self.table.find_element(*self.th)
+            ths = self.get_line(tr=th)
+        else:
+            ths = self.table.find_elements(By.TAG_NAME, 'th')
         self.columns = dict([(v.text, i) for i, v in enumerate(ths)])
         sleep(3)
 
@@ -62,14 +67,12 @@ class Table(BasePage):
             self.search_wait(order)
 
     def verify(self, **kwargs):
-        tds = self.get_line() if filter(lambda page: page in kwargs.keys(), ['order', 'price']) \
-            else self.get_line(self.get_lines[-1])
+        tr = self.get_lines()[-1] if '广告位' in kwargs.keys() else None
+        tds = self.get_line(tr= tr)
         for (k, v) in kwargs.items():
-            if k in ['order', 'price']:
-                continue
             actual = tds[self.columns[k]].text
             if actual != v:
-                return "Expect: {0}. Actual: {1}".format(v, actual)
+                assert False, "Expect: {0}. Actual: {1}".format(v, actual)
 
 
     def search_wait(self, id_):

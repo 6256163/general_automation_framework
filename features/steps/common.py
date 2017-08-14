@@ -1,6 +1,8 @@
 # coding=utf-8
 import collections
 from behave import *
+
+from page_object import store
 from page_object.navigation import Navigation
 
 
@@ -21,3 +23,4 @@ def table_to_dict(table):
         if row.cells[1]:
             dic[row.cells[0]] = row.cells[1]
     return dic
+

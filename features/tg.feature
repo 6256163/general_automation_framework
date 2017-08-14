@@ -30,7 +30,7 @@ Feature: Order-Schedule
              |order_in_storage|field|
              |order4|订单编号|
 
-    Scenario Outline: add schedule to a pre-order
+    Scenario: add schedule to a pre-order
         When new
         And stock query
              |key|value|
@@ -44,13 +44,15 @@ Feature: Order-Schedule
              |order|order4|
              |slot|1;2;3|
              |submit|编辑|
+             |cpm |5|
         Then check schedule
              |key|value|
-             |submit|保存|
              |广告位|通用暂停|
              |平台|客户端|
-             |地域|中国.江苏.南京|
+             |地域|中国->江苏->南京|
              |下单量|1CPT|
+        And fill
+             |key|value|
+             |submit|保存|
 
 
-        Examples: Per-order
