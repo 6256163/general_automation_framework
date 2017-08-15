@@ -58,3 +58,8 @@ def before_feature(context, feature):
 def after_feature(context, feature):
     # close browser
     context.driver.quit()
+
+
+
+def before_step(context, step):
+    pass

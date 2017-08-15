@@ -37,19 +37,11 @@ class Stock(BasePage):
         # 点击日期选择器
         self.click(*(By.ID, 'filterDatepicker'))
         # 输入起止时间
-        self.input(self.int_to_date(d[0]), *(By.CSS_SELECTOR, 'input.start',))
-        self.input(self.int_to_date(d[1]), *(By.CSS_SELECTOR, 'input.end',))
+        self.input(int_to_date(d[0]), *(By.CSS_SELECTOR, 'input.start',))
+        self.input(int_to_date(d[1]), *(By.CSS_SELECTOR, 'input.end',))
         # 点击确定
         self.click(By.CSS_SELECTOR, 'button.enter')
 
-    def int_to_date(self, num):
-        try:
-            d = int(num)
-            date_ = datetime.datetime.now() + datetime.timedelta(days=d)
-            num = date_.strftime('%Y-%m-%d')
-        except ValueError:
-            pass
-        return num
 
     def select_item(self, items):
         index = int(items.split('/')[0])
@@ -136,3 +128,13 @@ class Stock(BasePage):
         for key, value in kwargs.items():
             if key in dic.keys():
                 dic[key](value)
+
+
+def int_to_date(num):
+    try:
+        d = int(num)
+        date_ = datetime.datetime.now() + datetime.timedelta(days=d)
+        num = date_.strftime('%Y-%m-%d')
+    except ValueError:
+        pass
+    return num

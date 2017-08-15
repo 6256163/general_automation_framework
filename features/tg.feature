@@ -51,8 +51,24 @@ Feature: Order-Schedule
              |平台|客户端|
              |地域|中国->江苏->南京|
              |下单量|1CPT|
+        And store
+             |order_in_storage|field|
+             |tg1|编号|
         And fill
              |key|value|
              |submit|保存|
 
+    Scenario: check schedule detail
+        Given search
+             |order_in_storage|
+             |order4          |
+        # operate order
+        And operate
+             |key|value|
+             |operation|编辑|
+        # operate tg
+        When operate
+             |key|value|
+             |operation|编辑排期/单价|
+        Then check tg detail
 

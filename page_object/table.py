@@ -41,7 +41,8 @@ class Table(BasePage):
         return tbody.find_elements(By.TAG_NAME, 'tr')
 
     def execute(self, operation):
-        tds = self.get_line()
+        tr = self.get_lines()[-1] if operation in ['删除', '编辑排期/单价'] else None
+        tds = self.get_line(tr=tr)
         tds[self.columns['操作']].find_element(By.XPATH, '//a[@title="{0}"]'.format(operation)).click()
         try:
             self.driver.switch_to.alert.text

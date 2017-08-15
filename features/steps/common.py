@@ -7,7 +7,7 @@ from page_object.navigation import Navigation
 
 
 @given('navigate')
-def navigate_given(context):
+def navigate(context):
     context.navigation = Navigation(context.driver)
     context.navigation.click_menu(table_to_dict(context.table)['menu'])
 

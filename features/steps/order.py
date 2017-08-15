@@ -14,13 +14,13 @@ from page_object.table import Table
 
 
 @when('new')
-def new_when(context):
+def new(context):
     context.operate.new()
 
 
 @then('store')
 @given('store')
-def store_then(context):
+def store(context):
     for row in context.table.rows:
         key = row.cells[0]
         field = row.cells[1]
@@ -30,7 +30,7 @@ def store_then(context):
 
 @when('fill')
 @then('fill')
-def fill_when(context):
+def fill(context):
     dic = table_to_dict(context.table)
     context.operate.fill(**dic)
 
@@ -38,21 +38,26 @@ def fill_when(context):
 @given('search')
 @when('search')
 @then('search')
-def search_given(context):
+def search(context):
     key = context.table.rows[0].cells[0]
     order_num = store.get_value(key)
     context.table_.search(order_num)
 
-
+@given('operate')
 @when('operate')
-def operate_when(context):
+def operate(context):
     dic = table_to_dict(context.table)
     context.table_.execute(dic.pop('operation'))
     context.operate.fill(**dic)
 
+@when('operate tg')
+def operate_tg(context):
+    dic = table_to_dict(context.table)
+    pass
+
 
 @then('check list')
-def check_list_then(context):
+def check_list(context):
     dic = table_to_dict(context.table)
     for key in ['order', 'price']:
         if dic.get(key, None):
@@ -63,10 +68,15 @@ def check_list_then(context):
 
 
 @then('check schedule')
-def check_schedule_then(context):
+def check_schedule(context):
     dic = table_to_dict(context.table)
     table_loc = (By.CSS_SELECTOR,'table.schedule-datalist')
     th_loc = (By.CSS_SELECTOR, 'tr.schedule-in')
     context.table_ = Table(context.driver, loc=table_loc, th=th_loc)
     context.table_.verify(**dic)
+
+
+@then('check tg detail')
+def check_tg_detail(context):
+
 
