@@ -46,9 +46,7 @@ class TG(BasePage):
             if actual != price:
                 assert False, "Expect: {0}. Actual: {1}".format(price, actual)
 
-    def date(self,dates):
-        pass
-
+    
 
     def verify(self, **kwargs):
         dic = {

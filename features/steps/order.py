@@ -78,5 +78,5 @@ def check_schedule(context):
 
 @then('check tg detail')
 def check_tg_detail(context):
-
+    pass
 
