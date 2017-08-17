@@ -2,7 +2,7 @@
 Feature: Order-Schedule
     User can new price and audit price to make it switch to correct type and state.
 
-    Background: save an order
+    Scenario: save an order
         Given navigate
              |key|value|
              |menu|order_list|
@@ -50,7 +50,7 @@ Feature: Order-Schedule
              |广告位|通用暂停|
              |平台|客户端|
              |地域|中国->江苏->南京|
-             |下单量|1CPT|
+             |下单量|5CPM|
         And store
              |order_in_storage|field|
              |tg1|编号|
@@ -59,7 +59,10 @@ Feature: Order-Schedule
              |submit|保存|
 
     Scenario: check schedule detail
-        Given search
+        Given navigate
+             |key|value|
+             |menu|order_list|
+        And search
              |order_in_storage|
              |order4          |
         # operate order
@@ -67,8 +70,13 @@ Feature: Order-Schedule
              |key|value|
              |operation|编辑|
         # operate tg
-        When operate
+        When operate tg
              |key|value|
              |operation|编辑排期/单价|
         Then check tg detail
-
+             |广告位|通用暂停|
+             |平台|客户端|
+             |地域|中国->江苏->南京|
+             |价格|0|
+             |排期|3:6:1.2.3|
+             |下单量|1|

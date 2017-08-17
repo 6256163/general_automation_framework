@@ -11,6 +11,7 @@ from page_object.order import Order
 from page_object.page_object import PageObject
 from page_object.price import Price
 from page_object.table import Table
+from page_object.tg import TG
 
 
 @when('new')
@@ -20,7 +21,7 @@ def new(context):
 
 @then('store')
 @given('store')
-def store(context):
+def store_(context):
     for row in context.table.rows:
         key = row.cells[0]
         field = row.cells[1]
@@ -53,7 +54,7 @@ def operate(context):
 @when('operate tg')
 def operate_tg(context):
     dic = table_to_dict(context.table)
-    pass
+    context.table_tg.execute(dic.pop('operation'))
 
 
 @then('check list')
@@ -72,11 +73,13 @@ def check_schedule(context):
     dic = table_to_dict(context.table)
     table_loc = (By.CSS_SELECTOR,'table.schedule-datalist')
     th_loc = (By.CSS_SELECTOR, 'tr.schedule-in')
-    context.table_ = Table(context.driver, loc=table_loc, th=th_loc)
-    context.table_.verify(**dic)
+    context.table = Table(context.driver, loc=table_loc, th=th_loc)
+    context.table.verify(**dic)
 
 
 @then('check tg detail')
 def check_tg_detail(context):
-    pass
+    dic = table_to_dict(context.table)
+    context.tg = TG(context.driver)
+    context.tg.verify(**dic)
 
