@@ -19,19 +19,19 @@ class TG(BasePage):
 
 
     def adslot(self, ads):
-        actual = self.driver.find_element(By.CSS_SELECTOR,'td.col-adslot').text
+        actual = self.driver.find_element(By.CSS_SELECTOR,'tbody td.col-adslot').text
         if actual!= ads:
             assert False, "Expect: {0}. Actual: {1}".format(ads, actual)
 
     def platform(self, platform):
-        actual = self.driver.find_element(By.CSS_SELECTOR, 'td.col-platform').text
+        actual = self.driver.find_element(By.CSS_SELECTOR, 'tbody td.col-platform').text
         if actual != platform:
             assert False, "Expect: {0}. Actual: {1}".format(platform, actual)
 
 
     def region(self, regions):
         regions = regions.split(';')
-        tds = self.driver.find_elements(By.CSS_SELECTOR, 'td.col-region')
+        tds = self.driver.find_elements(By.CSS_SELECTOR, 'tbody td.col-region')
         for (region, td) in zip(regions, tds):
             actual = td.text
             if actual != region:
@@ -40,7 +40,7 @@ class TG(BasePage):
 
     def price(self, prices):
         prices = prices.split(';')
-        tds = self.driver.find_elements(By.CSS_SELECTOR, 'td.col-price')
+        tds = self.driver.find_elements(By.CSS_SELECTOR, 'tbody td.col-price')
         for (price, td) in zip(prices, tds):
             actual = td.text
             if actual != price:
@@ -51,32 +51,39 @@ class TG(BasePage):
         start = int(d.split(';')[0])
         end = int(d.split(';')[1])
         index = d.split(';')[2].split('.')
-        for i in range(end-start):
-            dates.append(int_to_date(start+i))
+        for i in range(start, end+1):
+            dates.append(int_to_date(i))
 
-        date = map(lambda i: dates[i], index)
-        months_tds = self.driver.find_elements(By.XPATH,'/td[@data-col="month"]')
-        days_tds = self.driver.find_elements(By.XPATH,'/td[@data-col="date"]')
+        date = list(map(lambda i: dates[int(i)], index))
+        months_tds = self.driver.find_elements(By.XPATH,'//td[@data-col="month"]')
+        days_tds = self.driver.find_elements(By.XPATH,'//td[@data-col="date"]')
         for m in months_tds:
             width = int(m.get_attribute('colspan')) if m.get_attribute('colspan') else 1
             date_ = date[0:width]
             day_ths = days_tds[0:width]
+            date = date[width:]
+            days_tds = days_tds[width:]
             for d, td in zip(date_, day_ths):
                 if d[0:7]!=m.text:
                     assert False, "Expect: {0}. Actual: {1}".format(d[0:7], m.text)
-                if d[7:] != td.text:
+                if d[8:] != td.text:
                     assert False, "Expect: {0}. Actual: {1}".format(d[7:], td.text)
 
-    def delivery(self, sum):
+    def delivery(self, total):
         divs = self.driver.find_elements(By.CSS_SELECTOR,'div.val_cpm')
-        actual = sum(map(lambda ele: int(ele.text), divs))
-        if sum != actual:
-            assert False, "Expect: {0}. Actual: {1}".format(sum, actual)
+        if total.split(';')[0] == 'CPM':
+            actual = sum(map(lambda ele: int(ele.text), divs))
+            if int(total.split(';')[1]) != actual:
+                assert False, "Expect: {0}. Actual: {1}".format(total, actual)
+        else:
+            for div in divs:
+                if div.text != '1':
+                    assert False, "Expect: {0}. Actual: {1}".format(1, div.text)
 
     def verify(self, **kwargs):
         dic = {
             '广告位':self.adslot,
-            '端口':self.platform,
+            '平台':self.platform,
             '地域':self.region,
             '价格':self.price,
             '排期':self.date,

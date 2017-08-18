@@ -25,7 +25,11 @@ def store_(context):
     for row in context.table.rows:
         key = row.cells[0]
         field = row.cells[1]
-        value = context.table_.get_field(field)
+        value = ''
+        if key[0:5] in ['order','price']:
+            value = context.table_.get_field(field)
+        elif key[0:2] in ['tg']:
+            value = context.table_tg.get_field(field)
         store.set_value(key, value)
 
 
@@ -54,6 +58,9 @@ def operate(context):
 @when('operate tg')
 def operate_tg(context):
     dic = table_to_dict(context.table)
+    table_loc = (By.CSS_SELECTOR, 'table.schedule-datalist')
+    th_loc = (By.CSS_SELECTOR, 'tr.schedule-in')
+    context.table_tg = Table(context.driver, loc=table_loc, th=th_loc)
     context.table_tg.execute(dic.pop('operation'))
 
 
@@ -73,8 +80,8 @@ def check_schedule(context):
     dic = table_to_dict(context.table)
     table_loc = (By.CSS_SELECTOR,'table.schedule-datalist')
     th_loc = (By.CSS_SELECTOR, 'tr.schedule-in')
-    context.table = Table(context.driver, loc=table_loc, th=th_loc)
-    context.table.verify(**dic)
+    context.table_tg = Table(context.driver, loc=table_loc, th=th_loc)
+    context.table_tg.verify(**dic)
 
 
 @then('check tg detail')
