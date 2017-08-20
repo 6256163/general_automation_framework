@@ -80,6 +80,10 @@ class TG(BasePage):
                 if div.text != '1':
                     assert False, "Expect: {0}. Actual: {1}".format(1, div.text)
 
+    def submit(self, submit):
+        self.click(By.ID, 'enterBtn')
+
+
     def verify(self, **kwargs):
         dic = {
             '广告位':self.adslot,
@@ -87,7 +91,8 @@ class TG(BasePage):
             '地域':self.region,
             '价格':self.price,
             '排期':self.date,
-            '下单量':self.delivery
+            '下单量':self.delivery,
+            'submit':self.submit
         }
 
         for key, value in kwargs.items():

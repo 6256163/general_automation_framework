@@ -7,6 +7,7 @@ import datetime
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 
+from page_object import store
 from .base_page import BasePage
 from .selector import Selector
 
@@ -79,8 +80,17 @@ class Stock(BasePage):
         body = self.get_element(By.CSS_SELECTOR, 'tbody.ui-selectable')
         tr = body.find_elements(By.TAG_NAME, 'tr')[0]
         indexs = slot.split(';')
+        try:
+            key = int(indexs[-1])
+        except ValueError:
+            key = indexs.pop()
+        slot_list = []
         for i in indexs:
-            tr.find_element(By.XPATH, 'td[@data-index="{0}"]'.format(i)).click()
+            cell = tr.find_element(By.XPATH, 'td[@data-index="{0}"]'.format(i))
+            slot_list.append(cell.text)
+            cell.click()
+        if type(key) == 'str':
+            store.set_value(key, slot_list)
 
     def select_order(self, order):
         sel = self.get_element(By.CSS_SELECTOR, 'select.campaign_list')
@@ -128,6 +138,10 @@ class Stock(BasePage):
         for key, value in kwargs.items():
             if key in dic.keys():
                 dic[key](value)
+
+
+
+
 
 
 def int_to_date(num):

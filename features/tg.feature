@@ -80,3 +80,5 @@ Feature: Order-Schedule
              |价格|0.00|
              |排期|3;6;1.2.3|
              |下单量|CPM;5|
+             |submit|确定|
+
