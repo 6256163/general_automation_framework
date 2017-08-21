@@ -26,8 +26,9 @@ class Order(BasePage):
         self.click(*self.new_button)
 
     def select_adjust(self, adjust):
-        div = self.get_element(By.ID, 'mainBtnContainer')
-        buttons = div.find_elements(By.TAG_NAME, 'button')
+        #div = self.get_element(By.ID, 'mainBtnContainer')
+        #buttons = div.find_elements(By.TAG_NAME, 'button')
+        buttons = self.get_element(By.CSS_SELECTOR, '#mainBtnContainer button')
         for b in buttons:
             if b.text == adjust:
                 b.click()

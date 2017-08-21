@@ -29,6 +29,7 @@ def before_feature(context, feature):
     # launch browser
     if 'chrome' in feature.tags:
         context.driver = Execution({'Browser': 'chrome'}).driver
+        # context.driver = webdriver.PhantomJS('phantomjs')
 
     # login user
     context.login = Login(context.driver, url=login_url)

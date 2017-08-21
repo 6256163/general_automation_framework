@@ -36,7 +36,7 @@ class Stock(BasePage):
     def select_date(self, dates):
         d = dates.split(';')
         # 点击日期选择器
-        self.click(*(By.ID, 'filterDatepicker'))
+        self.click(By.CSS_SELECTOR, '#filterDatepicker .icon')
         # 输入起止时间
         self.input(int_to_date(d[0]), *(By.CSS_SELECTOR, 'input.start',))
         self.input(int_to_date(d[1]), *(By.CSS_SELECTOR, 'input.end',))
@@ -49,6 +49,20 @@ class Stock(BasePage):
         items = items.split('/')[1]
         selecters = self.get_elements(By.CLASS_NAME, 'adr')
         ad_selector = selecters[index].find_element(By.XPATH, '../button')
+        for item in items.split(';'):
+            ad_selector.click()
+            select = Selector(self.driver)
+            select.select(item.split('.'))
+
+    def select_adr(self, items):
+        ad_selector = self.get_elements(By.CSS_SELECTOR, 'button.sel')[0]
+        for item in items.split(';'):
+            ad_selector.click()
+            select = Selector(self.driver)
+            select.select(item.split('.'))
+
+    def select_area(self, items):
+        ad_selector = self.get_elements(By.CSS_SELECTOR, 'button.sel')[1]
         for item in items.split(';'):
             ad_selector.click()
             select = Selector(self.driver)
