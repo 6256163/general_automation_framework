@@ -11,8 +11,8 @@ Feature: Order-Schedule
              |key|value|
              |type|CPT|
              |date|3;6|
-             |adr|0/视频广告.通用位置.通用前贴|
-             |area|1/中国.江苏.南京|
+             |adr|视频广告.通用位置.通用前贴|
+             |area|中国.江苏.南京|
              |port|客户端|
         And add new
              |key|value|

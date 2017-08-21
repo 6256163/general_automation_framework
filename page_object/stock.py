@@ -68,6 +68,16 @@ class Stock(BasePage):
             select = Selector(self.driver)
             select.select(item.split('.'))
 
+    def select_content(self, items):
+        ad_selector = self.get_elements(By.CSS_SELECTOR, 'button.sel')[2]
+        for item in items.split(';'):
+            ad_selector.click()
+            select = Selector(self.driver)
+            select.select(item.split('.'))
+
+
+
+
     def select_port(self, port):
         div = self.get_elements(By.CSS_SELECTOR, 'div.ko_multipleSelectEnhanced')
         sel = div[0].find_element(By.TAG_NAME, 'select')
@@ -124,9 +134,9 @@ class Stock(BasePage):
         dic = {
             'type': self.switch_type,
             'date': self.select_date,
-            'adr': self.select_item,
-            'area': self.select_item,
-            'content': self.select_item,
+            'adr': self.select_adr,
+            'area': self.select_area,
+            'content': self.select_content,
             'port': self.select_port
         }
         for key, value in kwargs.items():
