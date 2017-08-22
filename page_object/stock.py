@@ -44,16 +44,6 @@ class Stock(BasePage):
         self.click(By.CSS_SELECTOR, 'button.enter')
 
 
-    def select_item(self, items):
-        index = int(items.split('/')[0])
-        items = items.split('/')[1]
-        selecters = self.get_elements(By.CLASS_NAME, 'adr')
-        ad_selector = selecters[index].find_element(By.XPATH, '../button')
-        for item in items.split(';'):
-            ad_selector.click()
-            select = Selector(self.driver)
-            select.select(item.split('.'))
-
     def select_adr(self, items):
         ad_selector = self.get_elements(By.CSS_SELECTOR, 'button.sel')[0]
         for item in items.split(';'):
@@ -76,13 +66,16 @@ class Stock(BasePage):
             select.select(item.split('.'))
 
 
-
-
     def select_port(self, port):
-        div = self.get_elements(By.CSS_SELECTOR, 'div.ko_multipleSelectEnhanced')
-        sel = div[0].find_element(By.TAG_NAME, 'select')
+        sel = self.get_elements(By.CSS_SELECTOR, 'div.ko_multipleSelectEnhanced select')[0]
         select = Select(sel)
         [select.select_by_visible_text(p) for p in port.split('.')]
+
+    def select_time(self, time):
+        sel = self.get_elements(By.CSS_SELECTOR, 'div.ko_multipleSelectEnhanced select')[1]
+        select = Select(sel)
+        [select.select_by_visible_text(p) for p in time.split('.')]
+
 
     def switch_mode(self, key):
 
@@ -100,21 +93,21 @@ class Stock(BasePage):
 
     def select_slot(self, slot):
         sleep(5)
-        self.click(*(By.XPATH, '//label[@for="{0}"]'.format('mode_select')))
-        body = self.get_element(By.CSS_SELECTOR, 'tbody.ui-selectable')
-        tr = body.find_elements(By.TAG_NAME, 'tr')[0]
+        self.click(*(By.XPATH, '//label[@for="mode_select"]'))
+        tr = self.get_element(By.CSS_SELECTOR, 'tbody.ui-selectable tr')
         indexs = slot.split(';')
-        try:
-            key = int(indexs[-1])
-        except ValueError:
-            key = indexs.pop()
-        slot_list = []
+        for i in indexs:
+            cell = tr.find_element(By.XPATH, 'td[@data-index="{0}"]'.format(i))
+            cell.click()
+
+    def store_slot(self, slot):
+        slot_list = list()
+        tr = self.get_element(By.CSS_SELECTOR, 'tbody.ui-selectable tr')
+        indexs = slot.split(';')
         for i in indexs:
             cell = tr.find_element(By.XPATH, 'td[@data-index="{0}"]'.format(i))
             slot_list.append(cell.text)
-            cell.click()
-        if type(key) == 'str':
-            store.set_value(key, slot_list)
+        store.set_value('slot', slot_list)
 
     def select_order(self, order):
         sel = self.get_element(By.CSS_SELECTOR, 'select.campaign_list')
@@ -143,17 +136,29 @@ class Stock(BasePage):
             if key in dic.keys():
                 dic[key](value)
 
-        self.click(*(By.CSS_SELECTOR, 'button.seld'))
+        self.click(*(By.CSS_SELECTOR, 'button.submitBtn'))
         self.wait_ajax_loading()
         sleep(3)
 
     def cpm_set(self,cpm):
+        if cpm.startswith('slot') :
+            store_slot = store.get_value('slot')
+            add_slot = cpm.split(';')[1] if len(cpm.split(';'))>1 else '0'
+            store_slot.append(add_slot)
+            cpm = str(
+                sum(
+                    list(
+                        map(int,store_slot)
+                    )
+                )
+            )
         self.input(cpm, By.CSS_SELECTOR, 'div.cpm_set input')
         self.click(By.CSS_SELECTOR, 'div.btnbar button.enterBtn')
 
     def add_new(self, **kwargs):
         self.click(*(By.XPATH, '//label[@for="{0}"]'.format('mode_select')))
         dic = {
+            'store_slot':self.store_slot,
             'slot': self.select_slot,
             'order': self.select_order,
             'submit': self.submit,
@@ -162,10 +167,6 @@ class Stock(BasePage):
         for key, value in kwargs.items():
             if key in dic.keys():
                 dic[key](value)
-
-
-
-
 
 
 def int_to_date(num):

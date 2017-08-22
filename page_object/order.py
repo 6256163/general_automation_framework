@@ -22,6 +22,7 @@ class Order(BasePage):
 
     # 新建订单
     def new(self):
+        sleep(1)
         self.wait_datalist_loading()
         self.click(*self.new_button)
 

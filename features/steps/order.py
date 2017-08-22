@@ -70,7 +70,7 @@ def check_list(context):
     for key in ['order', 'price']:
         if dic.get(key, None):
             dic[key] = store.get_value(dic[key])
-            context.table_.search(dic[key])
+            context.table_.search(dic.pop(key))
     result = context.table_.verify(**dic)
     assert not result, result
 
@@ -90,3 +90,10 @@ def check_tg_detail(context):
     context.tg = TG(context.driver)
     context.tg.verify(**dic)
 
+@when('edit schedule')
+def edit_schedule(context):
+    dic = table_to_dict(context.table)
+    table_loc = (By.CSS_SELECTOR, 'table.schedule-datalist')
+    th_loc = (By.CSS_SELECTOR, 'tr.schedule-in')
+    context.table_tg = Table(context.driver, loc=table_loc, th=th_loc)
+    context.table_tg.edit(**dic)
