@@ -23,19 +23,22 @@ def before_all(context):
     # initialize the global store
     store._init()
     store.set_value("aaa", '111')
-
+    context.config.setup_logging()
 
 def before_feature(context, feature):
     # launch browser
+
     if 'chrome' in feature.tags:
         context.driver = Execution({'Browser': 'chrome'}).driver
         # context.driver = webdriver.PhantomJS('phantomjs')
 
     # login user
     context.login = Login(context.driver, url=login_url)
-    context.login.login(**{'username': '2', 'password': '123456', 'verifycode': 'imqa'})
-
-
+    context.login.login(
+        username='2',
+        password='123456',
+        verifycode='imqa'
+    )
 
     # Navigate to feature page
     context.navigation = Navigation(context.driver)
@@ -60,7 +63,6 @@ def before_feature(context, feature):
 def after_feature(context, feature):
     # close browser
     context.driver.quit()
-
 
 
 def before_step(context, step):

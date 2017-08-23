@@ -20,7 +20,7 @@ def table_to_dict(table):
     dic = collections.OrderedDict()
     for row in table:
         # store not empty string
-        if row.cells[1]:
-            dic[row.cells[0]] = row.cells[1]
+        if row['value']:
+            dic[row['key']] = row['value']
     return dic
 
