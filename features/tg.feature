@@ -10,6 +10,7 @@ Feature: Order-Schedule
         And stock query
              |key|value|
              |type|CPT|
+             # 投放时间 date|起始日期；结束日期| 说明：根据当前时间往后推3-6天
              |date|3;6|
              |adr|视频广告.通用位置.通用前贴|
              |area|中国.江苏.南京|
@@ -78,6 +79,7 @@ Feature: Order-Schedule
              |平台|客户端|
              |地域|中国->江苏->南京|
              |价格|0.00|
+             # 排期 |起始日期；结束日期；具体第几天（从0开始）
              |排期|3;6;1.2.3|
              |下单量|CPM;5|
              |submit|确定|
