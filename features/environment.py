@@ -16,18 +16,19 @@ if parent_path not in sys.path:
     sys.path.append(parent_path)
 from page_object import store
 
-login_url = 'http://10.200.44.43/site/superentrance'  # 'http://10.28.8.102/site/superentrance'
+#login_url = 'http://10.200.44.43/site/superentrance'
+login_url = 'http://10.28.8.102/site/superentrance'
 
 
 def before_all(context):
     # initialize the global store
     store._init()
     store.set_value("aaa", '111')
-    context.config.setup_logging()
+    #context.config.setup_logging()
 
 def before_feature(context, feature):
-    # launch browser
 
+    # launch browser
     if 'chrome' in feature.tags:
         context.driver = Execution({'Browser': 'chrome'}).driver
         # context.driver = webdriver.PhantomJS('phantomjs')
@@ -39,16 +40,6 @@ def before_feature(context, feature):
         password='123456',
         verifycode='imqa'
     )
-
-    # Navigate to feature page
-    context.navigation = Navigation(context.driver)
-
-    if feature.name == "Order":
-        context.navigation.click_menu('order_list')
-    elif feature.name == 'Price':
-        context.navigation.click_menu('price_list')
-    else:
-        context.navigation.click_menu('order_list')
 
     # Load page module
     obj = feature.name[0:5]

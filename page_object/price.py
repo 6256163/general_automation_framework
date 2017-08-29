@@ -14,7 +14,11 @@ from page_object.table import Table
 class Price(BasePage):
     def __init__(self, driver):
         super(Price, self).__init__(driver)
-        self.wait_datalist_loading()
+
+    def __getattribute__(self, item):
+        if item == 'new':
+            self.wait_datalist_loading()
+
 
     new_button = (By.LINK_TEXT, '新增价格政策')
 

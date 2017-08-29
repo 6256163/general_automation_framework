@@ -1,6 +1,12 @@
 @chrome
 Feature: Order
     User can new order and audit order to make it switch to correct type and state.
+
+    Background: Navigate to Order list page
+        Given navigate
+             |key|value|
+             |menu|order_list|
+
     Scenario Outline: Create a new order
         When new
         And stock query

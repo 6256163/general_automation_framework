@@ -15,7 +15,10 @@ from .base_page import BasePage
 class Order(BasePage):
     def __init__(self, driver):
         super(Order, self).__init__(driver)
-        self.wait_datalist_loading()
+
+    def __getattribute__(self, item):
+        if item == 'new':
+            self.wait_datalist_loading()
 
     # 通用元素定位信息
     new_button = (By.LINK_TEXT, '我要下单')
@@ -27,8 +30,6 @@ class Order(BasePage):
         self.click(*self.new_button)
 
     def select_adjust(self, adjust):
-        #div = self.get_element(By.ID, 'mainBtnContainer')
-        #buttons = div.find_elements(By.TAG_NAME, 'button')
         buttons = self.get_element(By.CSS_SELECTOR, '#mainBtnContainer button')
         for b in buttons:
             if b.text == adjust:
@@ -45,7 +46,7 @@ class Order(BasePage):
         select = Selector(self.driver)
         select.search(adv)
         sleep(1)
-        order_productLine = self.get_element(By.ID,'order_productLine')
+        order_productLine = self.get_element(By.ID, 'order_productLine')
         while not order_productLine.text:
             sleep(1)
 

@@ -7,26 +7,11 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.wait import WebDriverWait
 
+from page_object.base_table import BaseTable
 from .base_page import BasePage
 
 
-class Table(BasePage):
-    def __init__(self, driver, loc=(By.TAG_NAME, 'table'), th=None):
-        super(Table, self).__init__(driver)
-        self.loc = loc
-        self.th = th
-        self.columns = dict()
-        self.init_table()
-
-    def init_table(self):
-        self.table = self.get_element(*self.loc)
-        if self.th:
-            th = self.table.find_element(*self.th)
-            ths = self.get_line(tr=th)
-        else:
-            ths = self.table.find_elements(By.TAG_NAME, 'th')
-        self.columns = dict([(v.text, i) for i, v in enumerate(ths)])
-        sleep(3)
+class Table(BaseTable):
 
     def get_line(self, tr = None):
         if not tr:
@@ -45,7 +30,6 @@ class Table(BasePage):
         tds = self.get_line(tr=tr)
         tds[self.columns['操作']].find_element(By.XPATH, '//a[@title="{0}"]'.format(operation)).click()
         try:
-            self.driver.switch_to.alert.text
             self.driver.switch_to.alert.accept()
             self.driver.switch_to.default_content()
         except NoAlertPresentException:

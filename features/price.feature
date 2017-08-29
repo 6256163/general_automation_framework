@@ -2,6 +2,11 @@
 Feature: Price
     User can new price and audit price to make it switch to correct type and state.
 
+    Background: Navigate to Order list page
+        Given navigate
+             |key|value|
+             |menu|price_list|
+
     Scenario Outline: Create a new price
         When new
         And fill

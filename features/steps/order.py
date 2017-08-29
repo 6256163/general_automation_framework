@@ -60,7 +60,7 @@ def operate_tg(context):
     dic = table_to_dict(context.table)
     table_loc = (By.CSS_SELECTOR, 'table.schedule-datalist')
     th_loc = (By.CSS_SELECTOR, 'tr.schedule-in')
-    context.table_tg = Table(context.driver, loc=table_loc, th=th_loc)
+    context.table_tg = Table(context.driver, table=table_loc, th=th_loc)
     context.table_tg.execute(dic.pop('operation'))
 
 
@@ -80,7 +80,7 @@ def check_schedule(context):
     dic = table_to_dict(context.table)
     table_loc = (By.CSS_SELECTOR,'table.schedule-datalist')
     th_loc = (By.CSS_SELECTOR, 'tr.schedule-in')
-    context.table_tg = Table(context.driver, loc=table_loc, th=th_loc)
+    context.table_tg = Table(context.driver, table=table_loc, th=th_loc)
     context.table_tg.verify(**dic)
 
 
@@ -95,5 +95,5 @@ def edit_schedule(context):
     dic = table_to_dict(context.table)
     table_loc = (By.CSS_SELECTOR, 'table.schedule-datalist')
     th_loc = (By.CSS_SELECTOR, 'tr.schedule-in')
-    context.table_tg = Table(context.driver, loc=table_loc, th=th_loc)
+    context.table_tg = Table(context.driver, table=table_loc, th=th_loc)
     context.table_tg.edit(**dic)
