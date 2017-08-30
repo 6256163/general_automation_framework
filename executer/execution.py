@@ -5,7 +5,7 @@ import os
 import platform
 
 from selenium import webdriver
-from page_object.page_object import PageObject
+from page_object import PageObject
 import setting
 from .action import Action
 from .expect import Expect

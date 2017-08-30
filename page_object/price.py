@@ -18,7 +18,7 @@ class Price(BasePage):
     def __getattribute__(self, item):
         if item == 'new':
             self.wait_datalist_loading()
-
+        return super().__getattribute__(self, item)
 
     new_button = (By.LINK_TEXT, '新增价格政策')
 

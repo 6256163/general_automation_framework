@@ -1,15 +1,13 @@
 # coding=utf-8
 from __future__ import absolute_import
+
 import datetime
 from time import sleep
 
-from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 
-from page_object.selector import Selector
-from page_object.table import Table
-from .base_page import BasePage
+from page_object.base_page import BasePage
 
 
 class Order(BasePage):
@@ -19,6 +17,7 @@ class Order(BasePage):
     def __getattribute__(self, item):
         if item == 'new':
             self.wait_datalist_loading()
+        return object.__getattribute__(self, item)
 
     # 通用元素定位信息
     new_button = (By.LINK_TEXT, '我要下单')
@@ -42,6 +41,7 @@ class Order(BasePage):
         Select(sel).select_by_value(type)
 
     def select_adv(self, adv):
+        from page_object.selector import Selector
         self.get_element(By.XPATH, '//button[@title="选择"]').click()
         select = Selector(self.driver)
         select.search(adv)

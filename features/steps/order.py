@@ -8,7 +8,7 @@ from page_object import store
 from features.steps.common import *
 from features.steps.stock import *
 from page_object.order import Order
-from page_object.page_object import PageObject
+from page_object import PageObject
 from page_object.price import Price
 from page_object.table import Table
 from page_object.tg import TG

@@ -1,7 +1,7 @@
 # coding=utf-8
 from __future__ import absolute_import
 
-
+"""
 class PageObject(object):
 
     # 动态获取page对象
@@ -14,3 +14,4 @@ class PageObject(object):
         # 获取类
         cl = getattr(mo,path[-1])
         return cl
+"""

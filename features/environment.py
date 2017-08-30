@@ -6,7 +6,7 @@ from executer.execution import Execution
 from page_object.login import Login
 from page_object.navigation import Navigation
 from page_object.order import Order
-from page_object.page_object import PageObject
+from page_object import PageObject
 from page_object.price import Price
 from page_object.stock import Stock
 from page_object.table import Table
