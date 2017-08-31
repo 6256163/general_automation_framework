@@ -16,8 +16,8 @@ if parent_path not in sys.path:
     sys.path.append(parent_path)
 from page_object import store
 
-login_url = 'http://10.200.44.43/site/superentrance'
-#login_url = 'http://10.28.8.102/site/superentrance'
+#login_url = 'http://10.200.44.43/site/superentrance'
+login_url = 'http://10.28.8.102/site/superentrance'
 
 
 def before_all(context):

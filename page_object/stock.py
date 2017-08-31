@@ -146,12 +146,12 @@ class Stock(BasePage):
 
     def query(self, **kwargs):
         dic = {
-            'type': self.switch_type,
-            'date': self.select_date,
-            'adr': self.select_adr,
-            'area': self.select_area,
-            'content': self.select_content,
-            'port': self.select_port
+            '类型': self.switch_type,
+            '日期': self.select_date,
+            '广告位': self.select_adr,
+            '地域': self.select_area,
+            '内容': self.select_content,
+            '端口': self.select_port
         }
         for key, value in kwargs.items():
             if key in dic.keys():

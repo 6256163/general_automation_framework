@@ -5,17 +5,17 @@ Feature: Order
     Background: Navigate to Order list page
         Given navigate
              |key|value|
-             |menu|order_list|
+             |菜单|order_list|
 
     Scenario Outline: Create a new order
         When new
         And stock query
              |key|value|
-             |type|<type>|
-             |date|<date>|
-             |adr|<adr>|
-             |area|<area>|
-             |port|<port>|
+             |类型|<type>|
+             |日期|<date>|
+             |广告位|<adr>|
+             |地域|<area>|
+             |端口|<port>|
         And add new
              |key|value|
              |slot|<slot>|
