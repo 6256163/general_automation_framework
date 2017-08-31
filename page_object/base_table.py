@@ -21,7 +21,7 @@ class BaseTable(BasePage):
         self.ths = None  # self.table.find_element(*th) if th else th
         self.columns = dict()
 
-    def __getattribute__(self):
+    def __getattribute__(self, item):
         if not self.table:
             self.table = self.get_element(*self.table_loc)
             self.ths = self.table.find_element(*self.th_loc)

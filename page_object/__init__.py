@@ -1,7 +1,3 @@
-import inspect
-import importlib
-from inspect import isclass, ismodule
-
 
 class PageObject(object):
     # 动态获取page对象

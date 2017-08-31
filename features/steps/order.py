@@ -1,15 +1,9 @@
 # coding=utf-8
-from time import sleep
-
 from behave import *
 from selenium.webdriver.common.by import By
-
 from page_object import store
 from features.steps.common import *
 from features.steps.stock import *
-from page_object.order import Order
-from page_object import PageObject
-from page_object.price import Price
 from page_object.table import Table
 from page_object.tg import TG
 
@@ -18,7 +12,7 @@ from page_object.tg import TG
 def new(context):
     context.operate.new()
 
-
+@when('store')
 @then('store')
 @given('store')
 def store_(context):

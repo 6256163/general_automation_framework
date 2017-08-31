@@ -6,6 +6,7 @@ from page_object import store
 from page_object.navigation import Navigation
 
 
+@when('navigate')
 @given('navigate')
 def navigate(context):
     context.navigation = Navigation(context.driver)

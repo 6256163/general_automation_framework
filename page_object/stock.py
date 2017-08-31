@@ -77,6 +77,27 @@ class Stock(BasePage):
         [select.select_by_visible_text(p) for p in time.split('.')]
 
 
+    def select_exam(self, exam):
+        if exam == '0':
+            self.click(By.XPATH, '//input[@value="0", @name="followingExamType"]')
+        else:
+            self.click(By.XPATH, '//input[@value="1", @name="followingExamType"]')
+            exam = exam.split(';')
+            [self.click(By.XPATH,'//ul[@class="followingExam_items"]//input[@value="{0}"]'.format(i)) for i in exam]
+            if '-2' in exam:
+                self.input('11',By.CSS_SELECTOR,'div.followingExam_customCRT input')
+            if '-1' in exam:
+                self.input('其他',By.CSS_SELECTOR,'div.followingExam_customTxt input')
+
+    def select_throw(self,throw):
+        sel = self.get_element(By.XPATH, '//select[@data-bind="value: throwForm"]')
+        select = Select(sel)
+        select.deselect_by_visible_text(throw)
+
+    def select_tracker(self,tracker):
+        pass
+
+
     def switch_mode(self, key):
 
         mode = {
