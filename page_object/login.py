@@ -44,5 +44,6 @@ class Login(BasePage):
         self.wait_ajax_loading()
 
     def logout(self):
+        self.click(By.CSS_SELECTOR,'div.myaccount')
         self.click(By.ID,'logout')
-        sleep(2)
+        self.click(By.CSS_SELECTOR,'div[role="dialog"] button.system-dialog-yesBtn')
