@@ -27,6 +27,13 @@ def store_(context):
         store.set_value(key, value)
 
 
+@when('store order')
+def store_order(context):
+    for row in context.table:
+        key = row['orderno']
+        value = context.order.get_orderno()
+        store.set_value(key, value)
+
 @when('fill')
 @then('fill')
 def fill(context):

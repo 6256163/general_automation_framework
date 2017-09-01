@@ -5,30 +5,30 @@ Feature: Order-Schedule
     Scenario: check schedule detail
         Given navigate
              |key|value|
-             |menu|order_list|
+             |菜单|order_list|
         When new
         And stock query
              |key|value|
-             |type|CPT|
+             |类型|CPT|
              # 投放时间 date|起始日期；结束日期| 说明：根据当前时间往后推3-6天
-             |date|3;6|
-             |adr|视频广告.通用位置.通用前贴|
-             |area|中国.江苏.南京|
-             |port|客户端|
-             |exam|   |
-             |throw|   |
-             |tracker|   |
+             |日期|3;6|
+             |广告位|视频广告.通用位置.通用前贴|
+             |地域|中国.江苏.南京|
+             |端口|客户端|
+             |考核|1;2;3;4;-2;-1|
+             |投放方式|3|
+             |监测|mz.ee.2;adbug.ba.4|
         And add new
              |key|value|
              |slot|1;2;3|
              |submit|加入|
+        And store order
+             |orderno|
+             |order4|
         And fill
              |key|value|
              |adv|六间房|
              |submit|提交|
-        And store
-             |order_in_storage|field|
-             |order4|订单编号|
         And logout
         And login
              |key|value|

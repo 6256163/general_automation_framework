@@ -79,9 +79,9 @@ class Stock(BasePage):
 
     def select_exam(self, exam):
         if exam == '0':
-            self.click(By.XPATH, '//input[@value="0", @name="followingExamType"]')
+            self.click(By.XPATH, '//input[@value="0"][@name="followingExamType"]')
         else:
-            self.click(By.XPATH, '//input[@value="1", @name="followingExamType"]')
+            self.click(By.XPATH, '//input[@value="1"][@name="followingExamType"]')
             exam = exam.split(';')
             [self.click(By.XPATH,'//ul[@class="followingExam_items"]//input[@value="{0}"]'.format(i)) for i in exam]
             if '-2' in exam:
@@ -92,10 +92,28 @@ class Stock(BasePage):
     def select_throw(self,throw):
         sel = self.get_element(By.XPATH, '//select[@data-bind="value: throwForm"]')
         select = Select(sel)
-        select.deselect_by_visible_text(throw)
+        select.select_by_value(throw)
+
+
 
     def select_tracker(self,tracker):
-        pass
+        trackers = tracker.split(';')
+        for t in trackers:
+            t= t.split('.')
+            # select parent tracker
+            self.click(By.CSS_SELECTOR, 'div.tracker_item input[value="{0}"]'.format(t[0]))
+            # select child tracker
+            self.click(By.CSS_SELECTOR,
+                        'div.tracker_item_more_{0} div.tracker_item_product div.mcpp-list'.format(t[0]))
+            sleep(0.5)
+            self.click(By.CSS_SELECTOR, 'div.mcpp-wrapper input[value="{0}:{1}"]'.format(t[0],t[1]))
+            sleep(0.5)
+            # select tracker position
+            self.click(By.CSS_SELECTOR,
+                        'div.tracker_item_more_{0} div.tracker_item_position div.mcpp-list'.format(t[0]))
+            sleep(0.5)
+            self.click(By.CSS_SELECTOR, 'div.mcpp-wrapper input[value="{0}:{1}"]'.format(t[0], t[2]))
+
 
 
     def switch_mode(self, key):
@@ -151,7 +169,10 @@ class Stock(BasePage):
             '广告位': self.select_adr,
             '地域': self.select_area,
             '内容': self.select_content,
-            '端口': self.select_port
+            '端口': self.select_port,
+            '监测':self.select_tracker,
+            '投放方式':self.select_throw,
+            '考核':self.select_exam
         }
         for key, value in kwargs.items():
             if key in dic.keys():

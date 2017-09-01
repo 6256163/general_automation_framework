@@ -65,6 +65,12 @@ class Order(BasePage):
             pass
         self.driver.execute_script('document.getElementById("order_payDate").value="{0}"'.format(date))
 
+
+    def get_orderno(self):
+        value = self.driver.find_element(By.XPATH,'//input[@name="order[orderno]"]').get_attribute('value')
+        return value
+
+
     def submit(self, submit):
         self.click(By.XPATH, '//input[@value="{0}"]'.format(submit))
         self.confirm_dialog()

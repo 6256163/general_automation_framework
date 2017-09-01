@@ -20,14 +20,14 @@ Feature: Order
              |key|value|
              |slot|<slot>|
              |submit|加入|
+        And store order
+             |orderno|
+             |<order_num>|
         And fill
              |key|value|
              |adv|<adv>|
              |submit|<submit>|
-        Then store
-             |order_in_storage|field|
-             |<order_num>|订单编号|
-        And check list
+        Then check list
              |key|value|
              |order|<order_num>|
              |类型|<类型>|

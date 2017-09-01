@@ -1,4 +1,5 @@
 # coding=utf-8
+from __future__ import absolute_import
 import collections
 from behave import *
 
@@ -9,8 +10,8 @@ from page_object.navigation import Navigation
 @when('navigate')
 @given('navigate')
 def navigate(context):
-    context.navigation = Navigation(context.driver)
-    context.navigation.click_menu(table_to_dict(context.table)['菜单'])
+    dic = table_to_dict(context.table)
+    context.navigation.navigate(**dic)
 
 
 def sub_dict(dic, sub):

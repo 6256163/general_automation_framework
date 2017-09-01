@@ -65,3 +65,11 @@ class Navigation(BasePage):
             except:
                 for m in menus:
                     self.click(*m)
+
+    def navigate(self, **kwargs):
+        dic = {
+            '菜单': self.click_menu
+        }
+        for key, value in kwargs.items():
+            if key in dic.keys():
+                dic[key](value)

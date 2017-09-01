@@ -16,8 +16,8 @@ if parent_path not in sys.path:
     sys.path.append(parent_path)
 from page_object import store
 
-#login_url = 'http://10.200.44.43/site/superentrance'
-login_url = 'http://10.28.8.102/site/superentrance'
+login_url = 'http://10.200.44.43/site/superentrance'
+#login_url = 'http://10.28.8.102/site/superentrance'
 
 
 def before_all(context):
@@ -45,6 +45,7 @@ def before_feature(context, feature):
     obj = feature.name[0:5]
     page = '.'.join(['page_object', obj.lower(), obj])
     context.operate = PageObject().get_instence(page)(context.driver)
+    context.navigation = Navigation(context.driver)
     context.order = Order(context.driver)
     context.price = Price(context.driver)
     context.table_ = Table(context.driver)
