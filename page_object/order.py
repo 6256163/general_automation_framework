@@ -67,24 +67,30 @@ class Order(BasePage):
 
 
     def get_orderno(self):
-        value = self.driver.find_element(By.XPATH,'//input[@name="order[orderno]"]').get_attribute('value')
-        return value
+        input_eles = self.driver.find_elements(By.XPATH,'//input[@name="order[orderno]"]')
+        if len(input_eles):
+            return input_eles[0].get_attribute('value')
+        else:
+            return None
 
 
     def submit(self, submit):
         self.click(By.XPATH, '//input[@value="{0}"]'.format(submit))
+        if self.get_orderno():
+            sleep(10)
         self.confirm_dialog()
+        self.wait_datalist_loading()
 
     def fill(self, **kwargs):
 
         dic = {
-            'adjust': self.select_adjust,
-            'type': self.select_type,
-            'adv': self.select_adv,
-            'amount': self.input_amount,
-            'cost': self.input_cost,
-            'pay_date': self.input_pay_date,
-            'submit': self.submit
+            '调整': self.select_adjust,
+            '类型': self.select_type,
+            '广告主': self.select_adv,
+            '金额': self.input_amount,
+            '成本': self.input_cost,
+            '预计支付': self.input_pay_date,
+            '提交': self.submit
         }
 
         for key, value in kwargs.items():

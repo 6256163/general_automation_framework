@@ -13,19 +13,17 @@ from page_object.base_page import BasePage
 
 
 class BaseTable(BasePage):
-    def __init__(self, driver, table=(By.TAG_NAME, 'table'), th=(By.NAME, 'th')):
+    def __init__(self, driver, table=(By.TAG_NAME, 'table'), th=(By.TAG_NAME, 'th')):
         super(BaseTable, self).__init__(driver)
         self.table_loc = table
         self.th_loc = th
-        self.table = None
-        self.ths = None  # self.table.find_element(*th) if th else th
-        self.columns = dict()
 
-    def __getattribute__(self, item):
-        if not self.table:
-            self.table = self.get_element(*self.table_loc)
-            self.ths = self.table.find_element(*self.th_loc)
-            self.init_table()
+    def __getattr__(self, item):
+        if item == 'table':
+            return self.get_element(*self.table_loc)
+        if item == 'ths':
+            return self.table.find_elements(*self.th_loc)
+        if item == 'columns':
+            return dict([(v.text, i) for i, v in enumerate(self.ths)])
 
-        self.columns = dict([(v.text, i) for i, v in enumerate(self.ths)])
-        sleep(3)
+

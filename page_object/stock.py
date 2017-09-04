@@ -102,12 +102,14 @@ class Stock(BasePage):
             t= t.split('.')
             # select parent tracker
             self.click(By.CSS_SELECTOR, 'div.tracker_item input[value="{0}"]'.format(t[0]))
+            sleep(0.5)
             # select child tracker
-            self.click(By.CSS_SELECTOR,
+            if t[1]:
+                self.click(By.CSS_SELECTOR,
                         'div.tracker_item_more_{0} div.tracker_item_product div.mcpp-list'.format(t[0]))
-            sleep(0.5)
-            self.click(By.CSS_SELECTOR, 'div.mcpp-wrapper input[value="{0}:{1}"]'.format(t[0],t[1]))
-            sleep(0.5)
+                sleep(0.5)
+                self.click(By.CSS_SELECTOR, 'div.mcpp-wrapper input[value="{0}:{1}"]'.format(t[0],t[1]))
+                sleep(0.5)
             # select tracker position
             self.click(By.CSS_SELECTOR,
                         'div.tracker_item_more_{0} div.tracker_item_position div.mcpp-list'.format(t[0]))
@@ -201,10 +203,10 @@ class Stock(BasePage):
         self.click(*(By.XPATH, '//label[@for="{0}"]'.format('mode_select')))
         dic = {
             'store_slot':self.store_slot,
-            'slot': self.select_slot,
-            'order': self.select_order,
-            'submit': self.submit,
-            'cpm':self.cpm_set
+            '排期': self.select_slot,
+            '订单': self.select_order,
+            '下单': self.submit,
+            '投放量':self.cpm_set
         }
         for key, value in kwargs.items():
             if key in dic.keys():

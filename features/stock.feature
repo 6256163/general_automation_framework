@@ -9,21 +9,21 @@ Feature: Order-Stock
         When new
         And stock query
              |key|value|
-             |type|<type>|
-             |date|<date>|
-             |adr|<adr>|
-             |area|<area>|
-             |port|<port>|
+             |类型|<type>|
+             |日期|<date>|
+             |广告位|<adr>|
+             |地域|<area>|
+             |端口|<port>|
         And add new
              |key|value|
              |store_slot|<slot>|
-             |slot|<slot>|
-             |submit|<submit>|
-             |cpm|<cpm>|
+             |排期|<slot>|
+             |下单|<submit>|
+             |投放量|<cpm>|
         And fill
              |key|value|
-             |adv|<adv>|
-             |submit|提交|
+             |广告主|<adv>|
+             |提交|提交|
         Then check list
              |key|value|
              |是否超量|<是否超量>|

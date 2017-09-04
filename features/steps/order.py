@@ -53,8 +53,14 @@ def search(context):
 @when('operate')
 def operate(context):
     dic = table_to_dict(context.table)
+    if 'order' in dic.keys():
+        value = store.get_value(dic.pop('order'))
+    elif 'price' in dic.keys():
+        value = store.get_value(dic.pop('price'))
+    else:
+        value = ''
+    context.table_.search(value)
     context.table_.execute(dic.pop('operation'))
-    context.operate.fill(**dic)
 
 @when('operate tg')
 def operate_tg(context):
@@ -80,9 +86,9 @@ def check_list(context):
 def check_schedule(context):
     dic = table_to_dict(context.table)
     table_loc = (By.CSS_SELECTOR,'table.schedule-datalist')
-    th_loc = (By.CSS_SELECTOR, 'tr.schedule-in')
+    th_loc = (By.XPATH, '//tbody/tr[1]/td')
     context.table_tg = Table(context.driver, table=table_loc, th=th_loc)
-    context.table_tg.verify(**dic)
+    context.table_tg.verify_tg(**dic)
 
 
 @then('check tg detail')

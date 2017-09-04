@@ -61,7 +61,6 @@ class BasePage(object):
             buttons = dialog[0].find_elements(By.TAG_NAME, 'button')
             for b in buttons:
                 if b.text in ["关闭","确定"]:
-                    sleep(5)
                     b.click()
                     break
 

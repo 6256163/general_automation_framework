@@ -80,7 +80,8 @@ class TG(BasePage):
     def submit(self, submit):
         self.click(By.ID, 'enterBtn')
 
-    def verify(self, **kwargs):
+
+    def verify_ta(self, **kwargs):
         dic = {
             '广告位': self.adslot,
             '平台': self.platform,
@@ -88,7 +89,7 @@ class TG(BasePage):
             '价格': self.price,
             '排期': self.date,
             '下单量': self.delivery,
-            'submit': self.submit
+            '确认': self.submit
         }
 
         for key, value in kwargs.items():

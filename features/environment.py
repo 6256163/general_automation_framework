@@ -57,5 +57,8 @@ def after_feature(context, feature):
     context.driver.quit()
 
 
-def before_step(context, step):
-    pass
+def before_scenario(context, scenario):
+    if 'need_background ' in scenario.tags:
+        context.if_background = True
+    else:
+        context.if_background = False

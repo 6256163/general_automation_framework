@@ -2,73 +2,76 @@
 Feature: Order-Schedule
     User can new price and audit price to make it switch to correct type and state.
 
-    Scenario: check schedule detail
+    Scenario Outline: check schedule detail
         Given navigate
              |key|value|
              |菜单|order_list|
         When new
         And stock query
              |key|value|
-             |类型|CPT|
+             |类型|<类型>|
              # 投放时间 date|起始日期；结束日期| 说明：根据当前时间往后推3-6天
              |日期|3;6|
-             |广告位|视频广告.通用位置.通用前贴|
+             |广告位|<广告位>|
              |地域|中国.江苏.南京|
-             |端口|客户端|
-             |考核|1;2;3;4;-2;-1|
-             |投放方式|3|
-             |监测|mz.ee.2;adbug.ba.4|
+             |端口|<端口>|
+             |考核|<考核>|
+             |投放方式|<投放方式>|
+             |监测|<监测>|
         And add new
              |key|value|
-             |slot|1;2;3|
-             |submit|加入|
+             |排期|1;2;3|
+             |下单|加入|
+             |投放量|111|
         And store order
              |orderno|
-             |order4|
+             |<orderno>|
         And fill
              |key|value|
-             |adv|六间房|
-             |submit|提交|
+             |广告主|<广告主>|
+             |提交|提交|
         And logout
         And login
              |key|value|
-             |username||
-             |password||
-             |code    ||
+             |username|12070106|
+             |password|123456|
+             |verifycode|imqa|
         And navigate
              |key|value|
-             |menu|order_list|
+             |菜单|order_list|
         And search
              |order_in_storage|
-             |order4          |
+             |<orderno>|
         And operate
              |key|value|
-             |operation|审批|
+             |操作|审批|
         Then check schedule
              |key|value|
-             |广告位|通用暂停|
-             |平台|客户端|
+             |广告位|<广告位_排期>|
+             |平台|<端口>|
              |地域|中国->江苏->南京|
-             |下单量|5CPM|
-             |分量类型|   |
-             |分量明细|   |
+             |分量类型|<分量类型>|
+             |分量明细|<分量明细>|
+        Examples: test data
+             |类型|广告位|端口|考核|投放方式|监测|orderno|广告主|广告位_排期|分量类型|分量明细|
+             |CPM|视频广告.通用位置.通用前贴|客户端|0|1|nrc..1|order4|百胜|通用前贴|1;0||
 
 
     Scenario: add schedule to a pre-order
         When new
         And stock query
              |key|value|
-             |type|CPM|
-             |date|3;6|
-             |adr|0/视频广告.通用位置.通用暂停|
-             |area|1/中国.江苏.南京|
-             |port|客户端|
+             |类型|CPM|
+             |日期|3;6|
+             |广告位|0/视频广告.通用位置.通用暂停|
+             |地域|1/中国.江苏.南京|
+             |端口|客户端|
         And add new
              |key|value|
-             |order|order4|
-             |slot|1;2;3|
-             |submit|编辑|
-             |cpm |5|
+             |订单|order4|
+             |排期|1;2;3|
+             |下单|编辑|
+             |投放量|5|
         Then check schedule
              |key|value|
              |广告位|通用暂停|
@@ -80,23 +83,23 @@ Feature: Order-Schedule
              |tg1|编号|
         And fill
              |key|value|
-             |submit|保存|
+             |提交|保存|
 
     Scenario: check schedule detail
         Given navigate
              |key|value|
-             |menu|order_list|
+             |菜单|order_list|
         And search
              |order_in_storage|
              |order4          |
         # operate order
         And operate
              |key|value|
-             |operation|编辑|
+             |操作|编辑|
         # operate tg
         When operate tg
              |key|value|
-             |operation|编辑排期/单价|
+             |操作|编辑排期/单价|
         Then check tg detail
              |广告位|通用暂停|
              |平台|客户端|
@@ -105,5 +108,5 @@ Feature: Order-Schedule
              # 排期 |起始日期；结束日期；具体第几天（从0开始）
              |排期|3;6;1.2.3|
              |下单量|CPM;5|
-             |submit|确定|
+             |确认|确定|
 

@@ -15,15 +15,11 @@ class Table(BaseTable):
 
     def get_line(self, tr = None):
         if not tr:
-            table = self.get_element(*self.loc)
-            tbody = table.find_element(By.TAG_NAME, 'tbody')
-            tr = tbody.find_element(By.TAG_NAME, 'tr')
+            tr = self.table.find_element(By.XPATH, '//tbody//tr')
         return tr.find_elements(By.TAG_NAME, 'td')
 
     def get_lines(self):
-        table = self.get_element(*self.loc)
-        tbody = table.find_element(By.TAG_NAME, 'tbody')
-        return tbody.find_elements(By.TAG_NAME, 'tr')
+        return self.table.find_elements(By.XPATH, '//tbody//tr')
 
     def execute(self, operation):
         tr = self.get_lines()[-1] if operation in ['删除', '编辑排期/单价'] else None
@@ -39,10 +35,10 @@ class Table(BaseTable):
 
     def get_field(self, field):
         try:
-            self.init_table()
             return self.get_line()[self.columns[field]].text
         except KeyError:
             pass
+
     def search(self, order):
         if self.get_line()[1].text != order:
             input = self.get_element(By.CSS_SELECTOR, 'input.searchTxt')
@@ -51,22 +47,33 @@ class Table(BaseTable):
             input.send_keys(Keys.ENTER)
             self.search_wait(order)
 
+    # verify for data list
     def verify(self, **kwargs):
-        tr = self.get_lines()[-1] if '广告位' in kwargs.keys() else None
-        tds = self.get_line(tr= tr)
+        tds = self.get_line()
         for (k, v) in kwargs.items():
             actual = tds[self.columns[k]].text
             if actual != v:
                 assert False, "Expect: {0}. Actual: {1}".format(v, actual)
 
+    def verify_tg(self, **kwargs):
+        tr = self.table.find_element(By.XPATH,'//tbody/tr[2]')
+        tds = self.get_line(tr=tr)
+        for (k, v) in kwargs.items():
+            actual = tds[self.columns[k]].text
+            if k=='分量类型':
+                index = v.split(';')
+                v = '{0}网盟,{1}外采'.format(
+                    '可' if int(index[0]) else '不可',
+                    '可' if int(index[1]) else '不可'
+                )
+            if k == '分量明细':
+                pass
+            if actual != v:
+                assert False, "Expect: {0}. Actual: {1}".format(v, actual)
 
     def search_wait(self, id_):
         sleep(3)
-        table = self.get_element(*self.loc)
-        tbody = table.find_element(By.TAG_NAME, 'tbody')
-        while len(tbody.find_elements(By.TAG_NAME,'tr')) != 1 or tbody.find_element(By.TAG_NAME, 'tr').find_elements(By.TAG_NAME, 'td')[1].text != id_:
-            table = self.get_element(*self.loc)
-            tbody = table.find_element(By.TAG_NAME, 'tbody')
+        while len(self.table.find_elements(By.XPATH,'//tbody//tr')) != 1 or self.table.find_element(By.XPATH, '//tr[1]//td[2]').text != id_:
             sleep(1)
 
 

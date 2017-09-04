@@ -18,12 +18,11 @@ class Price(BasePage):
     def __getattribute__(self, item):
         if item == 'new':
             self.wait_datalist_loading()
-        return super().__getattribute__(self, item)
+        return object.__getattribute__(self, item)
 
     new_button = (By.LINK_TEXT, '新增价格政策')
 
     def new(self):
-        self.wait_datalist_loading()
         self.click(*self.new_button)
 
     def get_button(self, btn_text):
@@ -96,14 +95,14 @@ class Price(BasePage):
 
     def fill(self, **kwargs):
         dic = {
-            'adv':self.select_adv,
-            'date':self.select_date,
-            'adr':self.select_adr,
-            'area':self.select_area,
-            'port':self.select_port,
-            'price':self.input_price,
-            'type':self.select_type,
-            'submit':self.submit,
+            '广告主':self.select_adv,
+            '生效时间':self.select_date,
+            '广告位':self.select_adr,
+            '地域':self.select_area,
+            '端口':self.select_port,
+            '价格':self.input_price,
+            '购买类型':self.select_type,
+            '提交':self.submit,
         }
 
         for key, value in kwargs.items():

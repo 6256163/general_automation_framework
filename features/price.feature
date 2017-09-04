@@ -5,20 +5,20 @@ Feature: Price
     Background: Navigate to Order list page
         Given navigate
              |key|value|
-             |menu|price_list|
+             |菜单|price_list|
 
     Scenario Outline: Create a new price
         When new
         And fill
             |key|value|
-            |adv|<adv>|
-            |date|<date>|
-            |adr |<adr>|
-            |area|<area>|
-            |port|<port>|
-            |price|<price>|
-            |type |<type>|
-            |submit|<submit>|
+            |广告主|<adv>|
+            |生效时间|<date>|
+            |广告位|<adr>|
+            |地域|<area>|
+            |端口|<port>|
+            |价格|<price>|
+            |购买类型|<type>|
+            |提交|<submit>|
         Then store
              |order_in_storage|field|
              |<price_num>|价格政策ID|
@@ -32,16 +32,16 @@ Feature: Price
       
       
     Scenario Outline: audit a price to complete
-        Given search
-             |order_in_storage|
-             |<price>|
         When operate
              |key|value|
+             |price|<price>|
              |operation|<operation>|
-             |submit|<submit>|
+        And fill
+             |key|value|
+             |提交|<submit>|
         Then check list
              |key|value|
-             |price|price1|
+             |price|<price>|
              |状态|<state>|
         Examples: Per-order
              |price|operation|submit|state|
@@ -52,16 +52,16 @@ Feature: Price
              |price1|审批|审批|已生成|
 
 
-        Scenario Outline: edit a price and save
-        Given search
-             |order_in_storage|
-             |price1|
+    Scenario Outline: edit a price and save
         When operate
              |key|value|
-             |price|<price>|
-             |adr|<adr>|
+             |price|price1|
              |operation|<operation>|
-             |submit|<submit>|
+        And fill
+             |key|value|
+             |广告位|<adr>|
+             |价格|<price>|
+             |提交|<submit>|
         Then check list
              |key|value|
              |price|price1|
@@ -69,5 +69,5 @@ Feature: Price
         Examples: Per-order
              |operation|submit|state|adr|price|
              |编辑|保存|编辑中|;视频广告.通用位置.通用前贴|40.200|
-             |提交||审核中|||
+             |提交||编辑中|||
 

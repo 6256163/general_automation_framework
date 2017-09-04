@@ -18,15 +18,15 @@ Feature: Order
              |端口|<port>|
         And add new
              |key|value|
-             |slot|<slot>|
-             |submit|加入|
+             |排期|<slot>|
+             |下单|加入|
         And store order
              |orderno|
              |<order_num>|
         And fill
              |key|value|
-             |adv|<adv>|
-             |submit|<submit>|
+             |广告主|<adv>|
+             |提交|<submit>|
         Then check list
              |key|value|
              |order|<order_num>|
@@ -41,16 +41,16 @@ Feature: Order
 
 
     Scenario Outline: audit a pre-order to complete
-        Given search
-             |order_in_storage|
-             |order1          |
         When operate
              |key|value|
-             |amount|<amount>|
-             |cost|<cost>|
-             |pay_date|<pay_date>|
+             |order|order1|
              |operation|<operation>|
-             |submit|<submit>|
+        And fill
+             |key|value|
+             |金额|<amount>|
+             |成本|<cost>|
+             |预计支付|<pay_date>|
+             |提交|<submit>|
         Then check list
              |key|value|
              |order|order1|
@@ -68,16 +68,16 @@ Feature: Order
 
 
     Scenario Outline: adjust an order to complete
-        Given search
-             |order_in_storage|
-             |order2       |
         When operate
              |key|value|
-             |amount|<amount>|
-             |cost|<cost>|
-             |pay_date|<pay_date>|
+             |order|order2|
              |operation|<operation>|
-             |submit|<submit>|
+        And fill
+             |key|value|
+             |金额|<amount>|
+             |成本|<cost>|
+             |预计支付|<pay_date>|
+             |提交|<submit>|
         Then check list
              |key|value|
              |order|order2|
@@ -98,16 +98,16 @@ Feature: Order
              |审批|审批|调整|已生成||||
 
     Scenario Outline: cancel an order
-        Given search
-             |order_in_storage|
-             |order3          |
         When operate
              |key|value|
-             |amount|<amount>|
-             |cost|<cost>|
-             |pay_date|<pay_date>|
+             |order|order3|
              |operation|<operation>|
-             |submit|<submit>|
+        And fill
+             |key|value|
+             |金额|<amount>|
+             |成本|<cost>|
+             |预计支付|<pay_date>|
+             |提交|<submit>|
         Then check list
              |key|value|
              |order|order3|
@@ -133,17 +133,17 @@ Feature: Order
 
 
     Scenario Outline: adjust an adjusted order
-        Given search
-             |order_in_storage|
-             |order2        |
         When operate
              |key|value|
-             |amount|<amount>|
-             |cost|<cost>|
-             |pay_date|<pay_date>|
-             |adjust  |<adjust>  |
+             |order|order2|
              |operation|<operation>|
-             |submit|<submit>|
+        And fill
+             |key|value|
+             |金额|<amount>|
+             |成本|<cost>|
+             |预计支付|<pay_date>|
+             |调整|<adjust>  |
+             |提交|<submit>|
         Then check list
              |key|value|
              |order|order2|
@@ -165,12 +165,15 @@ Feature: Order
              |order1         |
         When operate
              |key|value|
-             |amount|<amount>|
-             |cost|<cost>|
-             |pay_date|<pay_date>|
-             |adjust  |<adjust>  |
+             |order|order1|
              |operation|<operation>|
-             |submit|<submit>|
+        And fill
+             |key|value|
+             |金额|<amount>|
+             |成本|<cost>|
+             |预计支付|<pay_date>|
+             |调整|<adjust>  |
+             |提交|<submit>|
         Then check list
              |key|value|
              |order|order1|
@@ -189,13 +192,13 @@ Feature: Order
 
 
     Scenario Outline: cancel an adjusted order
-        Given search
-             |order_in_storage|
-             |order1         |
         When operate
              |key|value|
+             |order|order1|
              |operation|<operation>|
-             |submit|<submit>|
+        And fill
+             |key|value|
+             |提交|<submit>|
         Then check list
              |key|value|
              |order|order1|
