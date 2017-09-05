@@ -29,7 +29,7 @@ class Order(BasePage):
         self.click(*self.new_button)
 
     def select_adjust(self, adjust):
-        buttons = self.get_element(By.CSS_SELECTOR, '#mainBtnContainer button')
+        buttons = self.get_elements(By.CSS_SELECTOR, '#mainBtnContainer button')
         for b in buttons:
             if b.text == adjust:
                 b.click()
@@ -76,7 +76,7 @@ class Order(BasePage):
 
     def submit(self, submit):
         self.click(By.XPATH, '//input[@value="{0}"]'.format(submit))
-        if submit == '提交':
+        if self.get_orderno():
             sleep(10)
         self.confirm_dialog()
         self.wait_datalist_loading()
