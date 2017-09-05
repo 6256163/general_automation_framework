@@ -29,11 +29,7 @@ class Order(BasePage):
         self.click(*self.new_button)
 
     def select_adjust(self, adjust):
-        buttons = self.get_elements(By.CSS_SELECTOR, '#mainBtnContainer button')
-        for b in buttons:
-            if b.text == adjust:
-                b.click()
-                break
+        self.click(By.XPATH, '//button[contains(text(),"{0}")]'.format(adjust))
         self.confirm_dialog()
 
     def select_type(self, type):
