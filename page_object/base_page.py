@@ -1,19 +1,15 @@
 # coding=utf-8
 from __future__ import absolute_import
 
-from time import sleep
-
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
-
-from executer.operation import Operation
 
 
 class BasePage(object):
     def __init__(self, driver):
         self.driver = driver
-        self.ope = Operation(driver=driver)
 
     # 调用方法
     def perform(self, func, **kwargs):
@@ -37,20 +33,24 @@ class BasePage(object):
         return self.driver.title
 
     # 调用接口方法获取单个元素
-    def get_element(self, *args):
-        return self.ope.get_element(*args)
+    def get_element(self, by, value):
+        try:
+            WebDriverWait(self.driver, 10).until(lambda driver: driver.find_element(by,value).is_displayed())
+            return self.driver.find_element(by,value)
+        except NoSuchElementException(msg=u"Fail to find element: {0} {1}".format(by, value)):
+            assert False, u"Fail to find element: {0} {1}".format(by, value)
 
     # 调用接口方法获取多个元素
-    def get_elements(self, *args):
-        return self.ope.get_elements(*args)
+    def get_elements(self, by, value):
+        return self.driver.find_elements(by, value)
 
     # 点击元素
-    def click(self, *args):
-        WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(args)).click()
+    def click(self, by, value):
+        WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((by, value,))).click()
 
     # 内容输入
-    def input(self, input, *args):
-        target = self.get_element(*args)
+    def input(self, input, by, value):
+        target = self.get_element(by, value)
         target.clear()
         target.send_keys(input)
 

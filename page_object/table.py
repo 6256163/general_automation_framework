@@ -1,6 +1,9 @@
 # coding=utf-8
 from __future__ import absolute_import
-from time import sleep
+
+import datetime
+from time import sleep, time
+import re
 
 from selenium.common.exceptions import StaleElementReferenceException, NoAlertPresentException
 from selenium.webdriver.common.by import By
@@ -40,7 +43,7 @@ class Table(BaseTable):
             pass
 
     def search(self, order):
-        if self.get_line()[1].text != order:
+        if self.get_line()[1].text != order and order:
             input = self.get_element(By.CSS_SELECTOR, 'input.searchTxt')
             input.clear()
             input.send_keys(order)
@@ -56,7 +59,7 @@ class Table(BaseTable):
                 assert False, "Expect: {0}. Actual: {1}".format(v, actual)
 
     def verify_tg(self, **kwargs):
-        tr = self.table.find_element(By.XPATH,'//tbody/tr[2]')
+        tr = self.table.find_element(By.XPATH,'./tbody/tr[2]')
         tds = self.get_line(tr=tr)
         for (k, v) in kwargs.items():
             actual = tds[self.columns[k]].text
@@ -67,13 +70,19 @@ class Table(BaseTable):
                     '可' if int(index[1]) else '不可'
                 )
             if k == '分量明细':
-                pass
-            if actual != v:
+                num_list = re.findall(r'(\d+)', actual)
+                actual = sum(list(map(int,num_list)))
+            if str(actual) != str(v):
                 assert False, "Expect: {0}. Actual: {1}".format(v, actual)
 
     def search_wait(self, id_):
         sleep(3)
+        start= datetime.datetime.now()
         while len(self.table.find_elements(By.XPATH,'//tbody//tr')) != 1 or self.table.find_element(By.XPATH, '//tr[1]//td[2]').text != id_:
             sleep(1)
+            end = datetime.datetime.now()
+            delta = end - start
+            if delta.total_seconds() >10:
+                raise TimeoutError
 
 

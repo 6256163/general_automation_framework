@@ -76,7 +76,7 @@ class Order(BasePage):
 
     def submit(self, submit):
         self.click(By.XPATH, '//input[@value="{0}"]'.format(submit))
-        if self.get_orderno():
+        if submit == '提交':
             sleep(10)
         self.confirm_dialog()
         self.wait_datalist_loading()

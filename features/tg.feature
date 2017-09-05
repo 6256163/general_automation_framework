@@ -1,6 +1,14 @@
 @chrome
 Feature: Order-Schedule
     User can new price and audit price to make it switch to correct type and state.
+    Background: Login
+        When logout
+        And login
+             |key|value|
+             |username|2|
+             |password|123456|
+             |verifycode|imqa|
+
 
     Scenario Outline: check schedule detail
         Given navigate
@@ -11,16 +19,17 @@ Feature: Order-Schedule
              |key|value|
              |类型|<类型>|
              # 投放时间 date|起始日期；结束日期| 说明：根据当前时间往后推3-6天
-             |日期|3;6|
+             |日期|0;0|
              |广告位|<广告位>|
              |地域|中国.江苏.南京|
              |端口|<端口>|
+             |时段|<时段>|
              |考核|<考核>|
              |投放方式|<投放方式>|
              |监测|<监测>|
         And add new
              |key|value|
-             |排期|1;2;3|
+             |排期|0|
              |下单|加入|
              |投放量|111|
         And store order
@@ -39,12 +48,10 @@ Feature: Order-Schedule
         And navigate
              |key|value|
              |菜单|order_list|
-        And search
-             |order_in_storage|
-             |<orderno>|
         And operate
              |key|value|
-             |操作|审批|
+             |order|<orderno>|
+             |operation|审批|
         Then check schedule
              |key|value|
              |广告位|<广告位_排期>|
@@ -53,8 +60,19 @@ Feature: Order-Schedule
              |分量类型|<分量类型>|
              |分量明细|<分量明细>|
         Examples: test data
-             |类型|广告位|端口|考核|投放方式|监测|orderno|广告主|广告位_排期|分量类型|分量明细|
-             |CPM|视频广告.通用位置.通用前贴|客户端|0|1|nrc..1|order4|百胜|通用前贴|1;0||
+             |类型|orderno|广告位|端口|时段|考核|投放方式|监测|广告主|广告位_排期|分量类型|分量明细|
+             |CPM|order4|视频广告.通用位置.通用前贴|客户端||0|1|nrc..1|百胜|通用前贴|0;0|111|
+             |CPM|order4|视频广告.通用位置.通用前贴|客户端||0|1|reachmax..1|宝洁|通用前贴|0;0|111|
+             |CPM|order4|网站页面广告.首页.网站首页弹窗|客户端||0|1|nrc..1|英超俱乐部|网站首页弹窗|0;0||
+             |CPM|order4|视频广告.通用位置.通用前贴|网站||0|1|nrc..1|英超俱乐部|通用前贴|0;0|111|
+             |CPM|order4|视频广告.通用位置.通用前贴|客户端||0|3||英超俱乐部|通用前贴|1;0|110|
+             |CPM|order4|视频广告.通用位置.通用前贴|客户端||0|2||英超俱乐部|通用前贴|0;0|111|
+             |CPM|order4|视频广告.通用位置.通用前贴|客户端||0|1|nrc..1|英超俱乐部|通用前贴|1;1|110|
+             |CPM|order4|视频广告.通用位置.通用前贴|客户端||0|1|nrc..2|英超俱乐部|通用前贴|1;0|111|
+             |CPM|order4|视频广告.通用位置.通用前贴|客户端||0|1||英超俱乐部|通用前贴|1;1|110|
+             |CPM|order4|视频广告.通用位置.通用前贴|客户端|1;3;5|0|1||英超俱乐部|通用前贴|1;0|110|
+             |CPM|order4|视频广告.通用位置.通用前贴|客户端||1|1||三七玩|通用前贴|0;0|111|
+             |CPM|order4|视频广告.通用位置.通用前贴|客户端||0|1||三七玩|通用前贴|1;1|110|
 
 
     Scenario: add schedule to a pre-order
@@ -63,8 +81,8 @@ Feature: Order-Schedule
              |key|value|
              |类型|CPM|
              |日期|3;6|
-             |广告位|0/视频广告.通用位置.通用暂停|
-             |地域|1/中国.江苏.南京|
+             |广告位|视频广告.通用位置.通用暂停|
+             |地域|中国.江苏.南京|
              |端口|客户端|
         And add new
              |key|value|
@@ -89,13 +107,11 @@ Feature: Order-Schedule
         Given navigate
              |key|value|
              |菜单|order_list|
-        And search
-             |order_in_storage|
-             |order4          |
         # operate order
         And operate
              |key|value|
-             |操作|编辑|
+             |order|order4|
+             |operation|编辑|
         # operate tg
         When operate tg
              |key|value|

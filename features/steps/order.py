@@ -86,7 +86,7 @@ def check_list(context):
 def check_schedule(context):
     dic = table_to_dict(context.table)
     table_loc = (By.CSS_SELECTOR,'table.schedule-datalist')
-    th_loc = (By.XPATH, '//tbody/tr[1]/td')
+    th_loc = (By.XPATH, './tbody/tr[1]/td')
     context.table_tg = Table(context.driver, table=table_loc, th=th_loc)
     context.table_tg.verify_tg(**dic)
 

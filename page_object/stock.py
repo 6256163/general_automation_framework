@@ -69,12 +69,12 @@ class Stock(BasePage):
     def select_port(self, port):
         sel = self.get_elements(By.CSS_SELECTOR, 'div.ko_multipleSelectEnhanced select')[0]
         select = Select(sel)
-        [select.select_by_visible_text(p) for p in port.split('.')]
+        [select.select_by_visible_text(p) for p in port.split(';')]
 
     def select_time(self, time):
         sel = self.get_elements(By.CSS_SELECTOR, 'div.ko_multipleSelectEnhanced select')[1]
         select = Select(sel)
-        [select.select_by_visible_text(p) for p in time.split('.')]
+        [select.select_by_value(p) for p in time.split(';')]
 
 
     def select_exam(self, exam):
@@ -171,6 +171,7 @@ class Stock(BasePage):
             '广告位': self.select_adr,
             '地域': self.select_area,
             '内容': self.select_content,
+            '时段':self.select_time,
             '端口': self.select_port,
             '监测':self.select_tracker,
             '投放方式':self.select_throw,

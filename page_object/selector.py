@@ -48,8 +48,7 @@ class Selector(BasePage):
         search_input.clear()
         search_input.send_keys(adv)
         search_input.send_keys(Keys.ENTER)
-        while adv not in self.driver.find_element(By.XPATH,'//tbody[last()]/tr/td[3]').text:
-            sleep(1)
+        self.get_element(By.XPATH,'//tbody[last()]/tr/td[3][contains(text(),"{0}")]'.format(adv))
         self.confirm()
 
 
