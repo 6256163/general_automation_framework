@@ -27,7 +27,8 @@ class Table(BaseTable):
     def execute(self, operation):
         tr = self.get_lines()[-1] if operation in ['删除', '编辑排期/单价'] else None
         tds = self.get_line(tr=tr)
-        tds[self.columns['操作']].find_element(By.XPATH, '//a[@title="{0}"]'.format(operation)).click()
+        btn = tds[self.columns['操作']].find_element(By.XPATH, '//a[@title="{0}"]'.format(operation))
+        btn.click()
         try:
             self.driver.switch_to.alert.accept()
             self.driver.switch_to.default_content()

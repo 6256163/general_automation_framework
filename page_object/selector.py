@@ -28,7 +28,7 @@ class Selector(BasePage):
             self.driver.find_element(By.XPATH, '//button[@title="清空"]').click()
             items.pop()
         for item in items:
-            item_a = self.driver.find_element(By.LINK_TEXT, item)
+            item_a = self.get_element(By.LINK_TEXT, item)
             item_i = item_a.find_element(By.XPATH, '../i')
             if not first:
                 first = item_i

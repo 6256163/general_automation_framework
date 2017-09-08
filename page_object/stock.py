@@ -135,11 +135,8 @@ class Stock(BasePage):
     def select_slot(self, slot):
         sleep(5)
         self.click(*(By.XPATH, '//label[@for="mode_select"]'))
-        tr = self.get_element(By.CSS_SELECTOR, 'tbody.ui-selectable tr')
-        indexs = slot.split(';')
-        for i in indexs:
-            cell = tr.find_element(By.XPATH, 'td[@data-index="{0}"]'.format(i))
-            cell.click()
+        [self.click(By.CSS_SELECTOR,'tbody.ui-selectable tr td[data-index="{0}"]'.format(i))
+         for i in slot.split(';')]
 
     def store_slot(self, slot):
         slot_list = list()

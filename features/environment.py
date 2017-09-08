@@ -1,8 +1,11 @@
 # coding=utf-8
 from __future__ import unicode_literals
 import os
-import sys
+import sys, platform
 
+from selenium import webdriver
+
+import setting
 from executer.execution import Execution
 from page_object import PageObject
 from page_object.login import Login
@@ -29,10 +32,29 @@ def before_all(context):
 
 
 def before_feature(context, feature):
+    if platform.platform().startswith("Win"):
+        suffix = '.exe'
+    else:
+        suffix = ''
     # launch browser
     if 'chrome' in feature.tags:
-        context.driver = Execution({'Browser': 'chrome'}).driver
+        opt = webdriver.ChromeOptions()
+        opt.add_argument('--start-maximized')
+        opt.add_argument('--lang=zh-CN')
+        context.driver = webdriver.Remote("http://0.0.0.0:32770/wd/hub", opt.to_capabilities().copy())
+        context.driver.set_window_size(1440, 900)
+
+        # driver_path = os.path.join(setting.BROWSER_DRIVER_FOLDER, 'chromedriver' + suffix)
+        # os.environ["webdriver.chrome.driver"] = driver_path
+        # context.driver = webdriver.Chrome(driver_path)
+        # context.driver = Execution({'Browser': 'chrome'}).driver
         # context.driver = webdriver.PhantomJS('phantomjs')
+
+    try:
+        context.driver.maximize_window()
+    except:
+        pass
+
 
     # login user
     context.login = Login(context.driver, url=login_url)
@@ -41,6 +63,7 @@ def before_feature(context, feature):
         password='123456',
         verifycode='imqa'
     )
+    context.driver.save_screenshot('/Users/tianzhang/Downloads/google111.png')
 
     # Load page module
     obj = feature.name[0:5]

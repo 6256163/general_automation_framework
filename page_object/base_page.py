@@ -1,7 +1,9 @@
 # coding=utf-8
 from __future__ import absolute_import
 
-from selenium.common.exceptions import NoSuchElementException
+from time import sleep
+
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
@@ -37,8 +39,10 @@ class BasePage(object):
         try:
             WebDriverWait(self.driver, 10).until(lambda driver: driver.find_element(by,value).is_displayed())
             return self.driver.find_element(by,value)
-        except NoSuchElementException(msg=u"Fail to find element: {0} {1}".format(by, value)):
+        except NoSuchElementException as e:
             assert False, u"Fail to find element: {0} {1}".format(by, value)
+        except TimeoutException as e:
+            assert False, u"Timeout to find element: {0} {1}".format(by, value)
 
     # 调用接口方法获取多个元素
     def get_elements(self, by, value):
@@ -65,24 +69,24 @@ class BasePage(object):
                     break
 
     def wait_ajax_loading(self):
-        self.wait_('div.ajaxloading', 'div.ajaxloading_mask')
+        self.wait_('div.ajaxloading_mask')
 
     def wait_create_table(self):
         self.wait_('div.autoInfoIndicator')
 
     def wait_datalist_loading(self):
-        self.wait_('div.datalist_loading_mask', 'div.datalist_loading')
+        self.wait_('div.datalist_loading_mask')
 
     def wait_grid_table_loading(self):
         self.wait_('div#grid_table_loading')
 
     def wait_(self, *css_selectors):
         for css in css_selectors:
-            while self.driver.find_element(By.CSS_SELECTOR, css):
-                while len(self.driver.find_elements(By.CSS_SELECTOR, css)):
-                    try:
-                        if not self.driver.find_element(By.CSS_SELECTOR, css).is_displayed():
-                            break
-                    except Exception as e:
-                        pass
-                break
+            sleep(1)
+            while len(self.get_elements(By.CSS_SELECTOR, css)):
+                try:
+                    if not self.get_elements(By.CSS_SELECTOR, css)[0].is_displayed():
+                        break
+                except Exception as e:
+                    pass
+            break
