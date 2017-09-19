@@ -36,6 +36,9 @@ class Order(BasePage):
         sel = self.get_element(By.ID, 'order_orderType')
         Select(sel).select_by_value(type)
 
+    def select_name(self, name):
+        self.input(name,By.ID,'order_orderName')
+
     def select_adv(self, adv):
         from page_object.selector import Selector
         self.get_element(By.XPATH, '//button[@title="选择"]').click()
@@ -82,6 +85,7 @@ class Order(BasePage):
         dic = {
             '调整': self.select_adjust,
             '类型': self.select_type,
+            '名称': self.select_name,
             '广告主': self.select_adv,
             '金额': self.input_amount,
             '成本': self.input_cost,
