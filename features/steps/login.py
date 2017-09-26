@@ -17,3 +17,9 @@ def logout(context):
 def login(context):
     dic = table_to_dict(context.table)
     context.login.login(**dic)
+
+@when('switch system')
+@given('switch system')
+def switch_system(context):
+    dic = table_to_dict(context.table)
+    context.login.switch_system(**dic)

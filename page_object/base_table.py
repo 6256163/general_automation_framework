@@ -4,6 +4,7 @@ from __future__ import absolute_import
 from time import sleep
 
 from selenium.common.exceptions import NoSuchElementException, WebDriverException, StaleElementReferenceException
+from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -24,6 +25,12 @@ class BaseTable(BasePage):
         if item == 'ths':
             return self.table.find_elements(*self.th_loc)
         if item == 'columns':
-            return dict([(v.text, i) for i, v in enumerate(self.ths)])
-
-
+            ths = self.ths
+            l = list()
+            action = ActionChains(self.driver)
+            for i, v in enumerate(ths):
+                hover = action.move_to_element(v)
+                hover.perform()
+                l.append((v.text, i,))
+            dic = dict(l)
+            return dic

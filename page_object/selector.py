@@ -48,7 +48,10 @@ class Selector(BasePage):
         search_input.clear()
         search_input.send_keys(adv)
         search_input.send_keys(Keys.ENTER)
-        self.get_element(By.XPATH,'//tbody[last()]/tr/td[3][contains(text(),"{0}")]'.format(adv))
+        sleep(1)
+        self.driver.find_element(By.XPATH,
+                                 '//tbody[last()]/tr/td[3][contains(text(),"{0}")]/..//input[@name="items"]'.format(
+                                     adv)).click()
         self.confirm()
 
 

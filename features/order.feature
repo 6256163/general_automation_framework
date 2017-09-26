@@ -3,9 +3,13 @@ Feature: Order
     User can new order and audit order to make it switch to correct type and state.
 
     Background: Navigate to Order list page
+        Given switch system
+             |key|value|
+             |type|视频|
         Given navigate
              |key|value|
              |菜单|order_list|
+
 
     Scenario Outline: Create a new order
         When new
@@ -37,8 +41,8 @@ Feature: Order
         Examples: order number
              |order_num|submit|type|date|adr|area|port|slot|name|adv|类型|状态|
              |order1|提交|CPT|0;0|视频广告.通用位置.通用前贴|中国.江苏.南京|客户端|0|111|六间房|询量|审批中|
-             |order2|提交|CPT|0;0|视频广告.通用位置.通用暂停|中国.江苏.南京|客户端|0|222|六间房|询量|审批中|
-             |order3|提交|CPT|0;0|视频广告.通用位置.通用前贴||客户端|0|333|六间房|询量|审批中|
+             #|order2|提交|CPT|0;0|视频广告.通用位置.通用暂停|中国.江苏.南京|客户端|0|222|六间房|询量|审批中|
+             #|order3|提交|CPT|0;0|视频广告.通用位置.通用前贴||客户端|0|333|六间房|询量|审批中|
 
 
     Scenario Outline: audit a pre-order to complete

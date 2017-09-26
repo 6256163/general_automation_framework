@@ -6,6 +6,7 @@ from time import sleep, time
 import re
 
 from selenium.common.exceptions import StaleElementReferenceException, NoAlertPresentException
+from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.wait import WebDriverWait
@@ -28,13 +29,15 @@ class Table(BaseTable):
         tr = self.get_lines()[-1] if operation in ['删除', '编辑排期/单价'] else None
         tds = self.get_line(tr=tr)
         btn = tds[self.columns['操作']].find_element(By.XPATH, '//a[@title="{0}"]'.format(operation))
+        ActionChains(self.driver).move_to_element(btn).perform()
         btn.click()
+
         try:
             self.driver.switch_to.alert.accept()
             self.driver.switch_to.default_content()
         except NoAlertPresentException:
-            self.confirm_dialog()
             if operation in ['撤销', '提交']:
+                self.confirm_dialog()
                 self.wait_ajax_loading()
 
     def get_field(self, field):

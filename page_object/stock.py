@@ -18,7 +18,6 @@ class Stock(BasePage):
 
     def switch_type(self, type):
 
-        self.wait_ajax_loading()
         if type.upper() == 'CPT':
             stock_type = 'CPT库存报表'
         elif type.upper() == 'CPM':
@@ -45,21 +44,21 @@ class Stock(BasePage):
 
 
     def select_adr(self, items):
-        ad_selector = self.get_elements(By.CSS_SELECTOR, 'button.sel')[0]
+        ad_selector = self.driver.find_element(By.XPATH,'//input[@data-bind="value: adSlot.ids"]/following-sibling::button')
         for item in items.split(';'):
             ad_selector.click()
             select = Selector(self.driver)
             select.select(item.split('.'))
 
     def select_area(self, items):
-        ad_selector = self.get_elements(By.CSS_SELECTOR, 'button.sel')[1]
+        ad_selector = self.driver.find_element(By.XPATH, '//input[@data-bind="value: region.ids"]/following-sibling::button')
         for item in items.split(';'):
             ad_selector.click()
             select = Selector(self.driver)
             select.select(item.split('.'))
 
     def select_content(self, items):
-        ad_selector = self.get_elements(By.CSS_SELECTOR, 'button.sel')[2]
+        ad_selector = self.driver.find_element(By.XPATH, '//input[@data-bind="value: content.ids"]/following-sibling::button')
         for item in items.split(';'):
             ad_selector.click()
             select = Selector(self.driver)
@@ -67,14 +66,17 @@ class Stock(BasePage):
 
 
     def select_port(self, port):
-        sel = self.get_elements(By.CSS_SELECTOR, 'div.ko_multipleSelectEnhanced select')[0]
-        select = Select(sel)
-        [select.select_by_visible_text(p) for p in port.split(';')]
+        btn = self.driver.find_element(By.XPATH, '//li[@data-search-term="客户端"]/ancestor::td//button')
+        btn.click()
+        [self.get_element(By.XPATH, '//li[@data-search-term="{0}"]'.format(p)).click() for p in port.split(';')]
+        btn.click()
+
 
     def select_time(self, time):
-        sel = self.get_elements(By.CSS_SELECTOR, 'div.ko_multipleSelectEnhanced select')[1]
-        select = Select(sel)
-        [select.select_by_value(p) for p in time.split(';')]
+        btn = self.driver.find_element(By.XPATH, '//li[@data-search-term="01:00 ~ 02:00"]/ancestor::td//button')
+        btn.click()
+        [btn.find_element(By.XPATH, 'ancestor::td//input[@value="{0}"]'.format(p)).click() for p in time.split(';')]
+        btn.click()
 
 
     def select_exam(self, exam):
@@ -174,6 +176,7 @@ class Stock(BasePage):
             '投放方式':self.select_throw,
             '考核':self.select_exam
         }
+        self.wait_ajax_loading()
         for key, value in kwargs.items():
             if key in dic.keys():
                 dic[key](value)

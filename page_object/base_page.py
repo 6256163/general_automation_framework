@@ -4,14 +4,19 @@ from __future__ import absolute_import
 from time import sleep
 
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
+from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
+
+from page_object.resources.resources import Resources
 
 
 class BasePage(object):
     def __init__(self, driver):
         self.driver = driver
+        self.res = Resources()
+
 
     # 调用方法
     def perform(self, func, **kwargs):
@@ -50,6 +55,8 @@ class BasePage(object):
 
     # 点击元素
     def click(self, by, value):
+        ac = ActionChains(self.driver)
+        ac.move_to_element(self.get_element(by,value)).perform()
         WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((by, value,))).click()
 
     # 内容输入

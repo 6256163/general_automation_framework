@@ -95,7 +95,7 @@ def check_schedule(context):
 def check_tg_detail(context):
     dic = table_to_dict(context.table)
     context.tg = TG(context.driver)
-    context.tg.verify(**dic)
+    context.tg.verify_ta(**dic)
 
 @when('edit schedule')
 def edit_schedule(context):
@@ -104,3 +104,22 @@ def edit_schedule(context):
     th_loc = (By.CSS_SELECTOR, 'tr.schedule-in')
     context.table_tg = Table(context.driver, table=table_loc, th=th_loc)
     context.table_tg.edit(**dic)
+
+
+@given('store audit graph')
+def store_audit_graph(context):
+    dic = table_to_dict(context.table)
+    key = dic.pop('key')
+    value = context.audit.get_audit_num(**dic)
+    store.set_value(key, value)
+
+
+@then('check audit graph')
+def check_audit_graph(context):
+    dic = table_to_dict(context.table)
+    keys = dic.pop('key').split(';')
+    expect = int(store.get_value(keys[0]))+int(keys[1])
+    actual = int(context.audit.get_audit_num(**dic))
+    assert expect==actual, "expect = {0}, actual = {1}".format(expect,actual)
+
+

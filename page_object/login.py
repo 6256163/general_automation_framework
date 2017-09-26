@@ -48,3 +48,12 @@ class Login(BasePage):
         self.click(By.CSS_SELECTOR,'div.myaccount')
         self.click(By.ID,'logout')
         self.click(By.CSS_SELECTOR,'div[role="dialog"] button.system-dialog-yesBtn')
+
+
+    def switch_system(self, **kwargs):
+        sleep(3)
+        self.click(By.CSS_SELECTOR, 'div.myaccount')
+        btn = self.get_elements(By.ID,'systemType')[0]
+        if kwargs['type'] in btn.text:
+            btn.click()
+        self.wait_ajax_loading()

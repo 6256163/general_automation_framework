@@ -8,7 +8,9 @@ from selenium import webdriver
 import setting
 from executer.execution import Execution
 from page_object import PageObject
+from page_object.audit import Audit
 from page_object.login import Login
+from page_object.mail import Mail
 from page_object.navigation import Navigation
 from page_object.order import Order
 from page_object.price import Price
@@ -20,7 +22,7 @@ if parent_path not in sys.path:
     sys.path.append(parent_path)
 from page_object import store
 
-login_url = 'http://10.200.44.43/site/superentrance'
+login_url = 'http://10.200.44.60/site/superentrance'
 # login_url = 'http://10.28.8.102/site/superentrance'
 
 
@@ -38,15 +40,16 @@ def before_feature(context, feature):
         suffix = ''
     # launch browser
     if 'chrome' in feature.tags:
-        opt = webdriver.ChromeOptions()
-        opt.add_argument('--start-maximized')
-        opt.add_argument('--lang=zh-CN')
-        context.driver = webdriver.Remote("http://0.0.0.0:32770/wd/hub", opt.to_capabilities().copy())
-        context.driver.set_window_size(1440, 900)
+        # opt = webdriver.ChromeOptions()
+        # opt.add_argument('--start-maximized')
+        # opt.add_argument('--lang=zh-CN')
+        # context.driver = webdriver.Remote("http://0.0.0.0:32770/wd/hub", opt.to_capabilities().copy())
+        # context.driver.set_window_size(1650, 1050)
 
-        # driver_path = os.path.join(setting.BROWSER_DRIVER_FOLDER, 'chromedriver' + suffix)
-        # os.environ["webdriver.chrome.driver"] = driver_path
-        # context.driver = webdriver.Chrome(driver_path)
+        driver_path = os.path.join(setting.BROWSER_DRIVER_FOLDER, 'chromedriver' + suffix)
+        os.environ["webdriver.chrome.driver"] = driver_path
+        context.driver = webdriver.Chrome(driver_path)
+
         # context.driver = Execution({'Browser': 'chrome'}).driver
         # context.driver = webdriver.PhantomJS('phantomjs')
 
@@ -55,7 +58,6 @@ def before_feature(context, feature):
     except:
         pass
 
-
     # login user
     context.login = Login(context.driver, url=login_url)
     context.login.login(
@@ -63,17 +65,17 @@ def before_feature(context, feature):
         password='123456',
         verifycode='imqa'
     )
-    context.driver.save_screenshot('/Users/tianzhang/Downloads/google111.png')
+    # context.driver.save_screenshot('/Users/tianzhang/Downloads/google111.png')
+
 
     # Load page module
-    obj = feature.name[0:5]
-    page = '.'.join(['page_object', obj.lower(), obj])
-    context.operate = PageObject().get_instence(page)(context.driver)
     context.navigation = Navigation(context.driver)
     context.order = Order(context.driver)
     context.price = Price(context.driver)
     context.table_ = Table(context.driver)
     context.stock = Stock(context.driver)
+    context.audit = Audit(context.driver)
+    context.mail = Mail(context.driver)
 
 
 def after_feature(context, feature):

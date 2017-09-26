@@ -1,5 +1,4 @@
 # coding=utf-8
-import pymysql
 import datetime
 from time import sleep
 
