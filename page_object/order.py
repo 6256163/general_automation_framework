@@ -27,7 +27,8 @@ class Order(BasePage):
         self.click(*self.res.order.NEW)
 
     def select_adjust(self, adjust):
-        self.click(*self.res.order.ADJUST)
+        btn = self.get_element(By.XPATH, '//button[contains(text(), "调整排期和单价")]'.format(adjust))
+        self.driver.execute_script("arguments[0].click();", btn)
         self.confirm_dialog()
 
     def special_flow(self,*args):
@@ -84,17 +85,16 @@ class Order(BasePage):
             return None
 
     def submit(self, submit):
+        btn = self.get_element(By.XPATH, '//input[@value = "{0}"]'.format(submit))
+        self.driver.execute_script("arguments[0].click();", btn)
         if submit == '提交':
-            self.click(By.XPATH, '//input[@value = "提交"]')
-            sleep(15)
-        else:
-            self.click(By.XPATH, '//input[@value = "{0}"]'.format(submit))
-
+            sleep(30)
         self.confirm_dialog()
         self.wait_datalist_loading()
 
     def fill(self, **kwargs):
 
+        # 按照字典顺序执行方法
         dic = {
             '调整': self.select_adjust,
             '类型': self.select_type,

@@ -55,6 +55,7 @@ class BasePage(object):
 
     # 点击元素
     def click(self, by, value):
+        # self.driver.execute_script("arguments[0].click();", self.get_element(by,value))
         ac = ActionChains(self.driver)
         ac.move_to_element(self.get_element(by,value)).perform()
         WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((by, value,))).click()
