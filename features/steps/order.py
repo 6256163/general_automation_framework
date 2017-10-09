@@ -62,6 +62,13 @@ def operate(context):
     context.table_.search(value)
     context.table_.execute(dic.pop('operation'))
 
+
+@when('audit {times}')
+def operate_times(context, times):
+    [(operate(context),fill(context)) for i in range(int(times))]
+
+
+
 @when('operate tg')
 def operate_tg(context):
     dic = table_to_dict(context.table)
@@ -82,13 +89,26 @@ def check_list(context):
     assert not result, result
 
 
+def init_schedule_table(context):
+    table_loc = (By.CSS_SELECTOR, 'table.schedule-datalist')
+    th_loc = (By.XPATH, './tbody/tr[1]/td')
+    context.table_tg = Table(context.driver, table=table_loc, th=th_loc)
+
+
 @then('check schedule')
 def check_schedule(context):
     dic = table_to_dict(context.table)
-    table_loc = (By.CSS_SELECTOR,'table.schedule-datalist')
-    th_loc = (By.XPATH, './tbody/tr[1]/td')
-    context.table_tg = Table(context.driver, table=table_loc, th=th_loc)
+    init_schedule_table(context)
     context.table_tg.verify_tg(**dic)
+
+
+@when('store tg colunm')
+def store_tg_colunm(context):
+    dic = table_to_dict(context.table)
+    init_schedule_table(context)
+    key = dic.pop('key')
+    value = context.table_tg.get_tg_value(dic['column'])
+    store.set_value(key,value)
 
 
 @then('check tg detail')
@@ -96,6 +116,7 @@ def check_tg_detail(context):
     dic = table_to_dict(context.table)
     context.tg = TG(context.driver)
     context.tg.verify_ta(**dic)
+
 
 @when('edit schedule')
 def edit_schedule(context):

@@ -11,6 +11,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.wait import WebDriverWait
 
+from page_object import store
 from page_object.base_table import BaseTable
 from .base_page import BasePage
 
@@ -63,11 +64,9 @@ class Table(BaseTable):
                 assert False, "Expect: {0}. Actual: {1}".format(v, actual)
 
     def verify_tg(self, **kwargs):
-        tr = self.table.find_element(By.XPATH,'./tbody/tr[2]')
-        tds = self.get_line(tr=tr)
-        for (k, v) in kwargs.items():
-            actual = tds[self.columns[k]].text
-            if k=='分量类型':
+        for (k,v) in kwargs.items():
+            actual = self.get_tg_value(k)
+            if k == '分量类型':
                 index = v.split(';')
                 v = '{0}网盟,{1}外采'.format(
                     '可' if int(index[0]) else '不可',
@@ -75,9 +74,33 @@ class Table(BaseTable):
                 )
             if k == '分量明细':
                 num_list = re.findall(r'(\d+)', actual)
-                actual = sum(list(map(int,num_list)))
+                actual = sum(list(map(int, num_list)))
             if str(actual) != str(v):
                 assert False, "Expect: {0}. Actual: {1}".format(v, actual)
+
+        # tr = self.table.find_element(By.XPATH,'./tbody/tr[2]')
+        # tds = self.get_line(tr=tr)
+        # for (k, v) in kwargs.items():
+        #     actual = tds[self.columns[k]].text
+        #     if k=='分量类型':
+        #         index = v.split(';')
+        #         v = '{0}网盟,{1}外采'.format(
+        #             '可' if int(index[0]) else '不可',
+        #             '可' if int(index[1]) else '不可'
+        #         )
+        #     if k == '分量明细':
+        #         num_list = re.findall(r'(\d+)', actual)
+        #         store.set_value('component_detail', list(map(int,num_list)))
+        #         actual = sum(list(map(int,num_list)))
+        #
+        #     if str(actual) != str(v):
+        #         assert False, "Expect: {0}. Actual: {1}".format(v, actual)
+
+    def get_tg_value(self, k):
+        tr = self.table.find_element(By.XPATH, './tbody/tr[2]')
+        tds = self.get_line(tr=tr)
+        actual = tds[self.columns[k]].text
+        return actual
 
     def search_wait(self, id_):
         sleep(3)

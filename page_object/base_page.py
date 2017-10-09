@@ -90,7 +90,7 @@ class BasePage(object):
 
     def wait_(self, *css_selectors):
         for css in css_selectors:
-            sleep(1)
+            sleep(3)
             while len(self.get_elements(By.CSS_SELECTOR, css)):
                 try:
                     if not self.get_elements(By.CSS_SELECTOR, css)[0].is_displayed():

@@ -1,4 +1,6 @@
 # coding=utf-8
+import re
+
 from behave import *
 from features.steps.common import *
 from page_object import store
@@ -17,3 +19,11 @@ def add_new(context):
         if dic.get(key, None):
             dic[key] = store.get_value(dic[key])
     context.stock.add_new(**dic)
+
+
+
+@then('check stock')
+def check_stock(context):
+    dic = table_to_dict(context.table)
+    result = context.stock.check_stock(**dic)
+    assert not result, result

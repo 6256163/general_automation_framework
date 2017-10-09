@@ -1,6 +1,7 @@
 # coding=utf-8
 from __future__ import absolute_import
 
+import re
 from time import sleep
 
 import datetime
@@ -137,8 +138,8 @@ class Stock(BasePage):
     def select_slot(self, slot):
         sleep(5)
         self.click(*(By.XPATH, '//label[@for="mode_select"]'))
-        [self.click(By.CSS_SELECTOR,'tbody.ui-selectable tr td[data-index="{0}"]'.format(i))
-         for i in slot.split(';')]
+        [self.click(By.CSS_SELECTOR,'tbody.ui-selectable tr td[data-index="{0}"]'.format(i)) for i in slot.split(';')]
+
 
     def store_slot(self, slot):
         slot_list = list()
@@ -148,6 +149,12 @@ class Stock(BasePage):
             cell = tr.find_element(By.XPATH, 'td[@data-index="{0}"]'.format(i))
             slot_list.append(cell.text)
         store.set_value('slot', slot_list)
+
+
+    def get_slot(self, d):
+        tr = self.get_element(By.CSS_SELECTOR, 'tbody.ui-selectable tr')
+        cell = tr.find_element(By.XPATH, 'td[@data-index="{0}"]'.format(d))
+        return cell.text
 
     def select_order(self, order):
         sel = self.get_element(By.CSS_SELECTOR, 'select.campaign_list')
@@ -162,6 +169,16 @@ class Stock(BasePage):
         }
         btn = self.get_element(By.ID, map[submit])
         btn.click()
+
+
+    def check_stock(self, **kwargs):
+        actual = int(self.get_slot(kwargs['slot']))
+        stock = sum(list(map(int,store.get_value('slot'))))
+        amount = re.match(r'站内流量：(.*?[1-9])CPM', store.get_value(kwargs['component'])).group(1)
+        expect = int(stock) - int(amount)
+        if expect - actual not in [1,0]:
+            return '{0},{1},{2}'.format(stock, amount, actual)
+
 
     def query(self, **kwargs):
         dic = {
@@ -203,7 +220,7 @@ class Stock(BasePage):
     def add_new(self, **kwargs):
         self.click(*(By.XPATH, '//label[@for="{0}"]'.format('mode_select')))
         dic = {
-            'store_slot':self.store_slot,
+            '存储排期库存':self.store_slot,
             '排期': self.select_slot,
             '订单': self.select_order,
             '下单': self.submit,
