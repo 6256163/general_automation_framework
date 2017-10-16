@@ -29,7 +29,10 @@ class Table(BaseTable):
     def execute(self, operation):
         tr = self.get_lines()[-1] if operation in ['删除', '编辑排期/单价'] else None
         tds = self.get_line(tr=tr)
-        btn = tds[self.columns['操作']].find_element(By.XPATH, '//a[@title="{0}"]'.format(operation))
+        try:
+            btn = tds[self.columns['操作']].find_element(By.XPATH, '//a[@title="{0}"]'.format(operation))
+        except Exception as e:
+            assert False, e
         ActionChains(self.driver).move_to_element(btn).perform()
         btn.click()
 
@@ -97,7 +100,10 @@ class Table(BaseTable):
         #         assert False, "Expect: {0}. Actual: {1}".format(v, actual)
 
     def get_tg_value(self, k):
-        tr = self.table.find_element(By.XPATH, './tbody/tr[2]')
+        try:
+            tr = self.table.find_element(By.XPATH, './tbody/tr[2]')
+        except Exception as e:
+            assert False, e
         tds = self.get_line(tr=tr)
         actual = tds[self.columns[k]].text
         return actual

@@ -59,8 +59,10 @@ def operate(context):
         value = store.get_value(dic.pop('price'))
     else:
         value = ''
-    context.table_.search(value)
-    context.table_.execute(dic.pop('operation'))
+    opreation = dic.pop('operation', False)
+    if opreation:
+        context.table_.search(value)
+        context.table_.execute(opreation)
 
 
 @when('audit {times}')
@@ -144,3 +146,7 @@ def check_audit_graph(context):
     assert expect==actual, "expect = {0}, actual = {1}".format(expect,actual)
 
 
+@then('check order content')
+def check_order_content(context):
+    dic = table_to_dict(context.table)
+    context.order.check_content(**dic)

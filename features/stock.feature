@@ -1,8 +1,8 @@
 @chrome
 Feature: Order-Stock
-    User can new price and audit price to make it switch to correct type and state.
+    The stock can reduce correctly according to the order
 
-    Scenario Outline: check schedule detail
+    Scenario Outline: check the stock reduce
         Given switch system
              |key|value|
              |type|视频|
@@ -16,7 +16,7 @@ Feature: Order-Stock
              # 投放时间 date|起始日期；结束日期| 说明：根据当前时间往后推3-6天
              |日期|0;0|
              |广告位|<广告位>|
-             #|地域|全国.江苏.南京|
+             |地域|中国.上海|
              |端口|<端口>|
              |时段|<时段>|
              |考核|<考核>|
@@ -90,7 +90,7 @@ Feature: Order-Stock
              # 投放时间 date|起始日期；结束日期| 说明：根据当前时间往后推3-6天
              |日期|0;0|
              |广告位|<广告位>|
-             #|地域|全国.江苏.南京|
+             |地域|中国.上海|
              |端口|<端口>|
              |时段|<时段>|
              |考核|<考核>|

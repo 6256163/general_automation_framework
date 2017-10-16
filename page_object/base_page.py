@@ -43,7 +43,9 @@ class BasePage(object):
     def get_element(self, by, value):
         try:
             WebDriverWait(self.driver, 10).until(lambda driver: driver.find_element(by,value).is_displayed())
-            return self.driver.find_element(by,value)
+            e = self.driver.find_element(by,value)
+            self.driver.execute_script("window.scroll(0, {0})".format(e.location['y']))
+            return e
         except NoSuchElementException as e:
             assert False, u"Fail to find element: {0} {1}".format(by, value)
         except TimeoutException as e:
@@ -56,9 +58,13 @@ class BasePage(object):
     # 点击元素
     def click(self, by, value):
         # self.driver.execute_script("arguments[0].click();", self.get_element(by,value))
-        ac = ActionChains(self.driver)
-        ac.move_to_element(self.get_element(by,value)).perform()
-        WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((by, value,))).click()
+        #ac = ActionChains(self.driver)
+        #ac.move_to_element(self.get_element(by,value)).perform()
+        self.get_element(by,value)
+        try:
+            WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((by, value,))).click()
+        except Exception as e:
+            assert False, e
 
     # 内容输入
     def input(self, input, by, value):

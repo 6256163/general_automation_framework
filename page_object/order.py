@@ -1,5 +1,6 @@
 # coding=utf-8
 from __future__ import absolute_import
+from functools import partialmethod, partial
 
 import datetime
 from time import sleep
@@ -85,12 +86,14 @@ class Order(BasePage):
             return None
 
     def submit(self, submit):
-        btn = self.get_element(By.XPATH, '//input[@value = "{0}"]'.format(submit))
-        self.driver.execute_script("arguments[0].click();", btn)
+        #btn = self.get_element(By.XPATH, '//input[@value = "{0}"]'.format(submit))
+        #self.driver.execute_script("arguments[0].click();", btn)
+        self.click(By.XPATH, '//input[@value = "{0}"]'.format(submit))
         if submit == '提交':
             sleep(30)
         self.confirm_dialog()
         self.wait_datalist_loading()
+
 
     def fill(self, **kwargs):
 
@@ -110,6 +113,29 @@ class Order(BasePage):
             '提交': self.submit
         }
 
+
         for key, value in kwargs.items():
             if key in dic.keys():
                 dic[key](value)
+
+    def check(self, value, xpath=''):
+        actual = self.get_element(By.XPATH,
+                                  '//td[contains(text(),"{0}")]/following-sibling::td[1]'.format(xpath)).text
+        assert value == actual, 'Expect: {0}. Actual: {1}'.format(value, actual)
+
+    def check_content(self, **kwargs):
+
+        _check = self.check
+        dic = {
+            '名称': partial(_check, xpath='订单名称：'),
+            '广告主': partial(_check, xpath='广告主：'),
+
+
+        }
+
+        for key, value in kwargs.items():
+            if key in dic.keys():
+                dic[key](value)
+
+
+
