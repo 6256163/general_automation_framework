@@ -1,15 +1,9 @@
 # coding=utf-8
 from __future__ import absolute_import
 
-from time import sleep
-
-from selenium.common.exceptions import NoSuchElementException, WebDriverException, StaleElementReferenceException
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
-from executer.operation import Operation
 from page_object.base_page import BasePage
 
 

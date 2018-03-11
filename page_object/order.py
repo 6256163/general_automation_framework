@@ -25,7 +25,7 @@ class Order(BasePage):
     def new(self):
         sleep(1)
         self.wait_datalist_loading()
-        self.click(*self.res.order.NEW)
+        self.click(By.LINK_TEXT, '我要下单')
 
     def select_adjust(self, adjust):
         btn = self.get_element(By.XPATH, '//button[contains(text(), "调整排期和单价")]'.format(adjust))
@@ -36,18 +36,18 @@ class Order(BasePage):
         self.click(By.ID, 'order_IsSpecialFlowFlag_0')
 
     def select_type(self, type):
-        sel = self.get_element(*self.res.order.ORDER_TYPE)
+        sel = self.get_element(By.ID, 'order_orderType')
         Select(sel).select_by_value(type)
 
     def select_name(self, name):
-        self.input(name, *self.res.order.ORDER_NAME)
+        self.input(name, By.ID,'order_orderName')
 
     def select_adv(self, adv):
-        self.get_element(*self.res.order.ADV).click()
+        self.get_element(By.XPATH, '//button[ @ title = "选择"]').click()
         select = Selector(self.driver)
         select.search(adv)
         sleep(1)
-        order_productLine = self.get_element(*self.res.order.PRODUCT_LINE)
+        order_productLine = self.get_element(By.ID, 'order_productLine')
         while not order_productLine.text:
             sleep(1)
 
@@ -55,10 +55,10 @@ class Order(BasePage):
         Select(self.get_element(By.ID, 'order_assignAE')).select_by_visible_text(AE)
 
     def input_amount(self, amount):
-        self.input(amount, *self.res.order.AMOUNT)
+        self.input(amount, By.ID, 'order_orderAmount')
 
     def input_cost(self, cost):
-        self.input(cost, *self.res.order.COST)
+        self.input(cost, By.ID, 'order_orderCost')
 
     def input_pay_date(self, date):
         try:
@@ -67,7 +67,7 @@ class Order(BasePage):
             date = date_.strftime('%Y-%m-%d')
         except ValueError:
             pass
-        self.driver.execute_script(self.res.order.PAY_DATE.format(date))
+        self.driver.execute_script('document.getElementById("order_payDate").value = "{0}"'.format(date))
 
     def next(self, next):
         self.click(By.ID, 'next_yes')
@@ -79,7 +79,7 @@ class Order(BasePage):
         sleep(1)
 
     def get_orderno(self):
-        input_eles = self.driver.find_elements(*self.res.order.ORDER_NUM)
+        input_eles = self.driver.find_elements('xpath', '//input[@name = "order[orderno]"]')
         if len(input_eles):
             return input_eles[0].get_attribute('value')
         else:

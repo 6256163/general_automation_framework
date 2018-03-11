@@ -5,9 +5,6 @@ import sys, platform
 
 from selenium import webdriver
 
-import setting
-from executer.execution import Execution
-from page_object import PageObject
 from page_object.audit import Audit
 from page_object.login import Login
 from page_object.mail import Mail
@@ -46,7 +43,7 @@ def before_feature(context, feature):
         # context.driver = webdriver.Remote("http://0.0.0.0:32770/wd/hub", opt.to_capabilities().copy())
         # context.driver.set_window_size(1650, 1050)
 
-        driver_path = os.path.join(setting.BROWSER_DRIVER_FOLDER, 'chromedriver' + suffix)
+        driver_path = os.path.join('./browser_driver', 'chromedriver' + suffix)
         os.environ["webdriver.chrome.driver"] = driver_path
         context.driver = webdriver.Chrome(driver_path)
 

@@ -45,7 +45,7 @@ class Stock(BasePage):
 
 
     def select_adr(self, items):
-        ad_selector = self.driver.find_element(By.XPATH,'//input[@data-bind="value: adSlot.ids"]/following-sibling::button')
+        ad_selector = self.get_element(By.XPATH,'//input[@data-bind="value: adSlot.ids"]/following-sibling::button')
         for item in items.split(';'):
             ad_selector.click()
             select = Selector(self.driver)
@@ -67,17 +67,15 @@ class Stock(BasePage):
 
 
     def select_port(self, port):
-        btn = self.driver.find_element(By.XPATH, '//li[@data-search-term="客户端"]/ancestor::td//button')
-        btn.click()
+        self.get_element(By.XPATH, '//li[@data-search-term="客户端"]/ancestor::td//button').click()
         [self.get_element(By.XPATH, '//li[@data-search-term="{0}"]'.format(p)).click() for p in port.split(';')]
-        btn.click()
+        self.get_element(By.XPATH, '//li[@data-search-term="客户端"]/ancestor::td//button').click()
 
 
     def select_time(self, time):
-        btn = self.driver.find_element(By.XPATH, '//li[@data-search-term="01:00 ~ 02:00"]/ancestor::td//button')
-        btn.click()
-        [btn.find_element(By.XPATH, 'ancestor::td//input[@value="{0}"]'.format(p)).click() for p in time.split(';')]
-        btn.click()
+        self.get_element(By.XPATH, '//li[@data-search-term="01:00 ~ 02:00"]/ancestor::td//button').click()
+        [self.get_element(By.XPATH, 'ancestor::td//input[@value="{0}"]'.format(t)).click() for t in time.split(';')]
+        self.get_element(By.XPATH, '//li[@data-search-term="01:00 ~ 02:00"]/ancestor::td//button').click()
 
 
     def select_exam(self, exam):
@@ -91,6 +89,7 @@ class Stock(BasePage):
                 self.input('11',By.CSS_SELECTOR,'div.followingExam_customCRT input')
             if '-1' in exam:
                 self.input('其他',By.CSS_SELECTOR,'div.followingExam_customTxt input')
+
 
     def select_throw(self,throw):
         sel = self.get_element(By.XPATH, '//select[@data-bind="value: throwForm"]')
@@ -130,10 +129,6 @@ class Stock(BasePage):
         sleep(5)
         self.click(*(By.XPATH, '//label[@for="{0}"]'.format(mode[key])))
 
-    mode = {
-        '下单': 'mode_select',
-        '查询': 'mode_view'
-    }
 
     def select_slot(self, slot):
         sleep(5)
@@ -218,7 +213,7 @@ class Stock(BasePage):
         self.click(By.CSS_SELECTOR, 'div.btnbar button.enterBtn')
 
     def add_new(self, **kwargs):
-        self.click(*(By.XPATH, '//label[@for="{0}"]'.format('mode_select')))
+        self.click(*(By.XPATH, '//label[@for="mode_select"]'))
         dic = {
             '存储排期库存':self.store_slot,
             '排期': self.select_slot,
