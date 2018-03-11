@@ -6,27 +6,18 @@ from testcase import Testcase
 
 
 class Result(object):
-    def __init__(self, starttime, result_folder):
-        """
-        :param starttime: test start time
-        :param result_folder: test result folder
-        """
+    def __init__(self, starttime):
         self.time = starttime
-        self.result_folder=result_folder
         self.result = {
             'time': self.time,
             'machine': socket.gethostname(),
             'modules': {}
         }
 
-    def set_result(self, tc_result, tc_name, tc_module, log_file):
-        """
-        :param tc_result: execution result
-        :param tc_name: tc file name
-        :param tc_module: tc folder name as module name
-        :param log_file: log file path
-        :return: 
-        """
+    def set_result(self, tc_path, tc_result):
+        tc = Testcase()
+        tc_module = tc.get_tc_module(tc_path)
+        tc_name = tc.get_tc_name(tc_path)
         module_level = '.'.join(tc_module)
         if not module_level in self.result['modules'].keys():
             self.result['modules'][module_level] = {'pass': 0, 'fail': 0}
@@ -35,7 +26,7 @@ class Result(object):
             self.result['modules'][module_level]['pass'] += 1
         else:
             self.result['modules'][module_level]['fail'] += 1
-        with open(log_file, 'r') as log:
+        with open(Logger(tc_path, self.time).get_log_file(), 'r') as log:
             self.result['modules'][module_level]['results'].append(
                 {'result': tc_result, 'test_case': tc_name, 'log': '<br/>'.join(log.readlines())})
 

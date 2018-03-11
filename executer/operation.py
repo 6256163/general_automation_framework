@@ -1,13 +1,11 @@
 # coding=utf-8
-from __future__ import absolute_import
-
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 
 
 class Operation(object):
-    def __init__(self, csv = None, driver = None):
+    def __init__(self, csv, driver = None):
         self.driver = driver
         self.csv = csv
 
@@ -23,16 +21,6 @@ class Operation(object):
             return self.driver.find_element(**loc)
         except NoSuchElementException(msg=u"Fail to find element: {0} {1}".format(loc['by'], loc['value'])):
             assert False, u"Fail to find element: {0} {1}".format(loc['by'], loc['value'])
-
-    def get_elements(self, by, value):
-        """
-        :param by: By.ID,By.name,By.link_text ...
-        :param value: value for By.ID,By.name,By.link_text ...
-        :return: WebElement object
-        """
-        loc = self.get_loc(by, value)
-        return self.driver.find_elements(**loc)
-
 
     def get_property_value(self, by, value, property):
         """
@@ -56,17 +44,17 @@ class Operation(object):
             return {'by': By.XPATH, 'value': value}
         elif by.upper() == "ID":
             return {'by': By.ID, 'value': value}
-        elif by.upper() in ["CSS_SELECTOR", "CSS SELECTOR"]:
+        elif by.upper() == "CSS_SELECTOR":
             return {'by': By.CSS_SELECTOR, 'value': value}
-        elif by.upper() in ["TAG_NAME", "TAG NAME"]:
+        elif by.upper() == "TAG_NAME":
             return {'by': By.TAG_NAME, 'value': value}
-        elif by.upper() in ["LINK_TEXT", "LINK TEXT"] :
+        elif by.upper() == "LINK_TEXT":
             return {'by': By.LINK_TEXT, 'value': value}
         elif by.upper() == "NAME":
             return {'by': By.NAME, 'value': value}
-        elif by.upper() in ["CLASS_NAME", "CLASS NAME"]:
+        elif by.upper() == "CLASS_NAME":
             return {'by': By.CLASS_NAME, 'value': value}
-        elif by.upper() in ["PARTIAL_LINK_TEXT","PARTIAL LINK TEXT"]:
+        elif by.upper() == "PARTIAL_LINK_TEXT":
             return {'by': By.PARTIAL_LINK_TEXT, 'value': value}
         else:
             pass

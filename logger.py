@@ -2,26 +2,22 @@
 import logging
 import os
 
+import setting
+
 from testcase import Testcase
 
 
 class Logger(object):
 
-    def __init__(self, tc_path, time, log_folder):
-        """
-        :param tc_path: testcase file path
-        :param time: test start time
-        :param log_folder: log folder path
-        """
+    def __init__(self, tc_path, time ):
         self.test_time = time
         self.tc_path = tc_path
-        self.log_folder = log_folder
 
 
     def get_log_file(self):
         # 创建log路径 /test_log/日期/模块名称/模块名称/用例名称.log
         tc = Testcase()
-        log_path = os.path.join(self.log_folder, self.test_time, *tc.get_tc_module(self.tc_path))
+        log_path = os.path.join(setting.LOG_FOLDER, self.test_time, *tc.get_tc_module(self.tc_path))
         if not os.path.exists(log_path):
             os.makedirs(log_path)
         tc_file = os.path.basename(self.tc_path)

@@ -2,14 +2,14 @@
 import codecs
 import os
 import re
+
 import setting
 
 
 class Testcase(object):
-    def __init__(self, tc_folder = setting.TESTCASE_FOLDER):
-        self.folder = tc_folder
+    def __init__(self):
+        self.folder = setting.TESTCASE_FOLDER
 
-    # 获取指定路径下csv文件
     def get_csv_list(self, dir=None, file_list=list()):
         """
         :param dir: testcase folder path
@@ -19,7 +19,7 @@ class Testcase(object):
         if dir == None:
             dir = self.folder
         if os.path.isfile(dir):
-            file_list.append(dir)
+            file_list.append((dir))
         elif os.path.isdir(dir):
             for s in os.listdir(dir):
                 # 如果需要忽略某些文件夹，使用以下代码
@@ -29,8 +29,6 @@ class Testcase(object):
                 self.get_csv_list(newDir, file_list)
         return sorted(file_list)
 
-
-    # 逐行读取csv
     def get_line(self, path):
         csv_datas = list()
         # 读取当前csv
@@ -39,7 +37,6 @@ class Testcase(object):
                 csv_datas.append(line.strip('\n').strip('\r').split(','))
         return csv_datas[1:]
 
-    # 每一行与关键字拼装
     def get_steps(self, path):
         """
         :param path: csv file path
@@ -55,16 +52,14 @@ class Testcase(object):
                 steps.append(dict(zip(csv_datas[0], data)))
         return steps
 
+    pattern = re.compile(setting.TESTCASE_FOLDER + "(.*?)" + ".csv")
 
-    # 获取文件夹路径，做为模块名称
     def get_tc_module(self, path):
-        pattern = re.compile(self.folder + "(.*?)" + ".csv")
-        tc_module = pattern.search(path).groups()[0].split(os.sep)[1:-1]
+        tc_module = self.pattern.search(path).groups()[0].split(os.sep)[1:-1]
         if not tc_module:
             tc_module.append('Null')
         return tc_module
 
-    # 获取csv文件名
     def get_tc_name(self, path):
         return os.path.basename(path)
 
